@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="mysheet.css">
+   <script src="bootstrap/jquery.js"></script>
+  <script src="bootstrap/bootstrap.min.js"></script>
+  <script src="bootstrap/bootstrap.js"></script>
+
+  <style>
+    .fixed-foot{
+        width: 100%;
+        position: fixed;
+        background: #333;
+        padding: 10px 0;
+        color: #fff;
+    	bottom: 0;
+    }
+  </style>
+  </head>
+<body>
+  <header>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+  <!-- Brand -->
+  <a class="navbar-brand" href="#">miniSat</a>
+
+  <!-- Links -->
+  <ul class="navbar-nav">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Host</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="#">All Host</a>
+      <a class="dropdown-item" href="#">Create Host</a>
+      <a class="dropdown-item" href="#">Operating System</a>
+    </div>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Host Group</a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="#"> Host Group </a>
+      </div>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"> Infrastructure </a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="#"> Compute Resource </a>
+        <a class="dropdown-item" href="#"> Profile </a>
+        <a class="dropdown-item" href="#"> Subnet </a>
+      </div>
+    </li>
+    <!-- Dropdown -->
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+        Content 
+        </a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="#">Product</a>
+        <a class="dropdown-item" href="#">View</a>
+        <a class="dropdown-item" href="#">Activation Key</a>
+        <a class="dropdown-item" href="#">Life Cycle Environmnet</a>
+      </div>
+    </li>
+  </ul>
+</nav>
+</header>
+
+
+{% block content %}
+{% endblock %}
+
+<footer>
+<div class="fixed-foot">
+  <div class="container"> <center>Copyright &copy; 2017</center>
+  </div>
+</div>
+</footer>
+
+
+</body>
+</html>
