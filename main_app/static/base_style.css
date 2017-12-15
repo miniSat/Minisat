@@ -1,0 +1,8 @@
+.fixed-foot{
+        width: 100%;
+        position: relative;
+        background: #333;
+        padding: 10px 0;
+        color: #fff;
+    	bottom: 0;
+    }
