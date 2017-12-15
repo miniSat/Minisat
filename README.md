@@ -4,13 +4,13 @@ Web interface for MiniSat.
 MiniSat is a centralize web interface to provision virtual machine and run docker container on remote hosts.
 
 ### How to run MiniSatUI
-- Create your python3 virtual enviroment
+- Create your python3 virtual environment
 ```sh
-python -m venv <enviroment_name>
+python3 -m venv <environment_name>
 ```
-- Activate virtual enviroment
+- Activate virtual environment
 ```sh
-source <enviroment_name>/bin/activate
+source <environment_name>/bin/activate
 ```
 - Install dependency using pip
 ```sh
