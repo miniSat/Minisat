@@ -6,4 +6,4 @@ def home(request):
     return render(request, 'home.html')
 
 def compute_resource(request):
-    return render(request,'compute_resource.html')
+    return render(request,'compute_resource.html',{'title_name':'Create New Compute Resource'})
