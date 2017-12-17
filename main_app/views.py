@@ -4,3 +4,6 @@ from django.shortcuts import render
 
 def home(request):
     return render(request, 'home.html')
+
+def compute_resource(request):
+    return render(request,'compute_resource.html')
