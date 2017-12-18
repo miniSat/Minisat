@@ -1,0 +1,16 @@
+{% extends 'form_template.html' %}
+{% block form_content %}
+
+    <form action="post_profile" method="post">
+      {% csrf_token %}
+        {{compute_resource_name}}
+      {% for field in form %}
+        <div class="form-group">
+          {{ field.label_tag }}<br>
+          {{ field }}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+{% endblock %}
