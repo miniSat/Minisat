@@ -2,7 +2,8 @@ from django.views.generic import TemplateView
 from django.shortcuts import render
 from .forms import compute_resource_form,profile_form
 from django.http import HttpResponseRedirect
-from main_app.models import compute_resource
+from .models import compute_resource_model
+
 
 # Create your views here.
 
@@ -19,11 +20,10 @@ def post_data(request):
         form.save(commit=True)
     return HttpResponseRedirect('/')
 
+
 def profile(request):
     form = profile_form()
-    #compute_resource_name = compute_resource
-    #print(compute_resource_name)
-    return render(request,'profile.html',{'title_name':'Profile', 'form':form })
+    return render(request,'profile.html',{'title_name':'Profile', 'form':form})
 
 def post_profile(request):
     form = profile_form(request.POST)
