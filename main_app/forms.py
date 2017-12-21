@@ -1,13 +1,13 @@
 from django import forms
-from .models import compute_resource,profile
+from .models import *
 
 class compute_resource_form(forms.ModelForm):
     class Meta:
-        model = compute_resource
-        fields = ['name', 'ip_address', 'root_password']
+        model = compute_resource_model
+        fields = '__all__'
 
 
 class profile_form(forms.ModelForm):
     class Meta:
-        model = profile
-        fields = ['profile_name','ram','cpus','disk_size']
+        model = profile_model
+        fields = '__all__'
