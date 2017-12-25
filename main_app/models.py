@@ -25,4 +25,14 @@ class profile_model(models.Model):
     def __str__(self):
         return self.profile_name
 
+#Model for create host
+class create_host_model(models.Model):
+    profile_names = profile_model.objects.values_list("profile_name",flat=True)
+    profile_names = list(zip(profile_names,profile_names))
+    vm_name = models.CharField(max_length=15)
+    vm_os = models.CharField(max_length=15)
+    select_vm_profile = models.CharField(max_length=10,choices=profile_names,default=None)
+
+    def __str__(self):
+        return self.vm_name
 
