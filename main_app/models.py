@@ -4,7 +4,7 @@ from django import forms
 
 
 #Model for Compute_resources
-class compute_resource_model(models.Model):
+class Compute_resource_model(models.Model):
     name = models.CharField(max_length=10)
     ip_address = models.CharField(max_length=15)
     root_password = models.CharField(max_length=20)
@@ -12,8 +12,9 @@ class compute_resource_model(models.Model):
     def __str__(self):
         return self.name
 
+
 #Model for profile
-class profile_model(models.Model):
+class Profile_model(models.Model):
     newlist=compute_resource_model.objects.values_list("name",flat=True)
     newlist=list(zip(newlist,newlist))
     profile_name = models.CharField(max_length=10)
@@ -25,8 +26,9 @@ class profile_model(models.Model):
     def __str__(self):
         return self.profile_name
 
+
 #Model for create host
-class create_host_model(models.Model):
+class Create_host_model(models.Model):
     profile_names = profile_model.objects.values_list("profile_name",flat=True)
     profile_names = list(zip(profile_names,profile_names))
     vm_name = models.CharField(max_length=15)
@@ -36,7 +38,9 @@ class create_host_model(models.Model):
     def __str__(self):
         return self.vm_name
 
-class operating_system_model(models.Model):
+
+#Model for operating_system
+class Operating_system_model(models.Model):
     os_name = models.CharField(max_length=15)
     os_location = models.CharField(max_length=100)
 
