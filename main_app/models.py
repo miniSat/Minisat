@@ -36,3 +36,9 @@ class create_host_model(models.Model):
     def __str__(self):
         return self.vm_name
 
+class operating_system_model(models.Model):
+    os_name = models.CharField(max_length=15)
+    os_location = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.os_name
