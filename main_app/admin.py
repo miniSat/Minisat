@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import compute_resource_model,profile_model,create_host_model,operating_system_model
+from .models import (compute_resource_model,
+                     create_host_model,
+                     operating_system_model,
+                     profile_model)
 # Register your models here.
 
 admin.site.register(compute_resource_model)
