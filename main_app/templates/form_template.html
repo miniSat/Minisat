@@ -6,9 +6,26 @@
 </div>
 <div class="col-md-4 col-lg-4"></div>
 <div class="jumbotron col-md-4 col-lg-4">
-    {% block form_content %}
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item active">
+            <a class="nav-link active" href="#profile" role="tab" data-toggle="tab">Create New</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#buzz" role="tab" data-toggle="tab">View Existing</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="profile">
+            {% block form_content %}
 
-    {% endblock %}
+            {% endblock %}
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="buzz">
+            {% block exist_content %}
+
+            {% endblock %}
+        </div>
+    </div>
 </div>
 <div class="col-md-4 col-lg-4"></div>
 {% endblock %}

@@ -12,3 +12,24 @@
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 {% endblock %}
+
+{% block exist_content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>IP Address</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for obj in compute_obj %}
+    <tr>
+      <th scope="row">{{ obj.id }}</th>
+      <td>{{ obj.name }}</td>
+      <td>{{ obj.ip_address }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
