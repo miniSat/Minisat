@@ -1,18 +1,21 @@
 from django import forms
 from .models import *
 
+
 class compute_resource_form(forms.ModelForm):
     class Meta:
-        model = compute_resource_model
+        model = Compute_resource_model
         fields = '__all__'
+
 
 
 class profile_form(forms.ModelForm):
     class Meta:
-        model = profile_model
+        model = Profile_model
         fields = '__all__'
+
 
 class create_host_form(forms.ModelForm):
     class Meta:
-        model = create_host_model
+        model = Create_host_model
         fields = '__all__'
