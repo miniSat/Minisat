@@ -11,3 +11,8 @@ class profile_form(forms.ModelForm):
     class Meta:
         model = profile_model
         fields = '__all__'
+
+class create_host_form(forms.ModelForm):
+    class Meta:
+        model = create_host_model
+        fields = '__all__'
