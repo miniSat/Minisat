@@ -77,7 +77,7 @@ def post_create_host(request):
         os_details = list(Operating_system_model.objects.filter(os_name=form_os).values_list()[0])
         *not_imp3, location_url = os_details
         final_cmd = 'virt-install --connect qemu+ssh://root@'+compute_ip+'/system --name '+form_vm+' --ram '+str(ram) \
-                   + '--vcpus '+str(cpus)+' --disk path=/var/lib/libvirt/images/'+form_vm+'.qcow2,bus=virtio,size='+str(disk_size)+' --location '+location_url+' --network bridge:virbr0'
+                   + ' --vcpus '+str(cpus)+' --disk path=/var/lib/libvirt/images/'+form_vm+'.qcow2,bus=virtio,size='+str(disk_size)+' --location '+location_url+' --network bridge:virbr0'
     return render(request, 'create_host.html', {'final_cmd': final_cmd})
 
 
