@@ -25,7 +25,8 @@ def home(request):
 
 def compute_resource(request):
     form = Compute_resource_form()
-    return render(request, 'compute_resource.html', {'title_name': 'Create New Compute Resource', 'form': form})
+    compute_resource_list = Compute_resource_model.objects.all()
+    return render(request, 'compute_resource.html', {'title_name': 'Create New Compute Resource', 'form': form, 'compute_obj':compute_resource_list})
 
 
 def post_data(request):
