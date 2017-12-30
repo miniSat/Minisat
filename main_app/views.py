@@ -26,7 +26,7 @@ def home(request):
 def compute_resource(request):
     form = Compute_resource_form()
     compute_resource_list = Compute_resource_model.objects.all()
-    return render(request, 'compute_resource.html', {'title_name': 'Create New Compute Resource', 'form': form, 'compute_obj':compute_resource_list})
+    return render(request, 'compute_resource.html', {'title_name': 'Create New Compute Resource', 'form': form, 'compute_obj': compute_resource_list})
 
 
 def post_data(request):
@@ -38,7 +38,8 @@ def post_data(request):
 
 def profile(request):
     form = Profile_form()
-    return render(request, 'profile.html', {'title_name': 'Profile', 'form': form})
+    profile_list = Profile_model.objects.all()
+    return render(request, 'profile.html', {'title_name': 'Profile', 'form': form, 'profile_obj': profile_list})
 
 
 def post_profile(request):

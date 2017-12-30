@@ -6,7 +6,7 @@ from django import forms
 #Model for Compute_resources
 class Compute_resource_model(models.Model):
     name = models.CharField(max_length=10)
-    ip_address = models.CharField("IP Address",max_length=15)
+    ip_address = models.CharField("IP Address", max_length=15)
     root_password = models.CharField(max_length=20)
 
     def __str__(self):
