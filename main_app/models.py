@@ -15,8 +15,8 @@ class Compute_resource_model(models.Model):
 
 #Model for profile
 class Profile_model(models.Model):
-    newlist= Compute_resource_model.objects.values_list("name", flat=True)
-    newlist= list(zip(newlist, newlist))
+    newlist = Compute_resource_model.objects.values_list("name", flat=True)
+    newlist = list(zip(newlist, newlist))
     profile_name = models.CharField(max_length=10)
     ram = models.IntegerField("RAM(GiB)")
     cpus = models.IntegerField("CPUs")

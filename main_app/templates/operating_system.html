@@ -13,3 +13,24 @@
     </form>
 
 {% endblock %}
+
+{% block exist_content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for obj in os_obj %}
+    <tr>
+      <th scope="row">{{ obj.id }}</th>
+      <td>{{ obj.os_name }}</td>
+      <td>{{ obj.os_location }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

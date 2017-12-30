@@ -26,7 +26,8 @@ def home(request):
 def compute_resource(request):
     form = Compute_resource_form()
     compute_resource_list = Compute_resource_model.objects.all()
-    return render(request, 'compute_resource.html', {'title_name': 'Create New Compute Resource', 'form': form, 'compute_obj': compute_resource_list})
+    return render(request, 'compute_resource.html', {'title_name': 'Create New Compute Resource', 'form': form,
+                                                     'compute_obj': compute_resource_list})
 
 
 def post_data(request):
@@ -56,7 +57,8 @@ def create_host(request):
 
 def operating_system(request):
     form = Operating_system_form()
-    return render(request, 'operating_system.html', {'title_name':'Add Operating System', 'form':form})
+    operating_system_list = Operating_system_model.objects.all()
+    return render(request, 'operating_system.html', {'title_name': 'Add Operating System', 'form': form, 'os_obj': operating_system_list})
 
 
 def post_operating_system(request):
