@@ -2,7 +2,7 @@ FROM python:alpine
 
 WORKDIR /minisat
 
-ADD minisat/ /minisat
+ADD . /minisat
 
 RUN pip install -r requirements.txt
 
