@@ -5,7 +5,7 @@ from .models import (
                      Create_host_model,
                      Operating_system_model,
                      Profile_model,
-                     newContainer
+                     Container_model
                     )
 # Register your models here.
 
@@ -13,4 +13,4 @@ admin.site.register(Compute_resource_model)
 admin.site.register(Profile_model)
 admin.site.register(Create_host_model)
 admin.site.register(Operating_system_model)
-admin.site.register(newContainer)
+admin.site.register(Container_model)

@@ -51,7 +51,7 @@ class Create_host_model(models.Model):
 
 
 # Model for new container
-class newContainer(models.Model):
+class Container_model(models.Model):
     newlist = Compute_resource_model.objects.values_list("name", flat=True)
     newlist = list(zip(newlist, newlist))
     select_compute_resource = models.CharField("Select Compute Resource",max_length=15,choices=newlist,default=None)
