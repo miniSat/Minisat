@@ -10,5 +10,7 @@ urlpatterns = [
     path('create_host', views.create_host, name="create_host"),
     path('post_create_host', views.post_create_host, name="post_create_host"),
     path('operating_system', views.operating_system, name="operating_system"),
-    path('post_operating_system', views.post_operating_system, name='post_operating_system')
+    path('post_operating_system', views.post_operating_system, name='post_operating_system'),
+    path('new_container', views.new_container, name="new_container"),
+    path('post_new_container', views.post_new_container, name='post_new_container'),
 ]

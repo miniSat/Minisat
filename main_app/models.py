@@ -50,4 +50,16 @@ class Create_host_model(models.Model):
         return self.vm_name
 
 
+# Model for new container
+class newContainer(models.Model):
+    newlist = Compute_resource_model.objects.values_list("name", flat=True)
+    newlist = list(zip(newlist, newlist))
+    select_compute_resource = models.CharField("Select Compute Resource",max_length=15,choices=newlist,default=None)
+    image_name = models.CharField("Image Name", max_length=20)
+    tag_name = models.CharField("Tag", max_length=20)
+    container_name = models.CharField("Container Name", max_length=20)
+    command = models.CharField("Command",max_length=15)
+    entry_point = models.CharField("Entry Point", max_length=15)
+
+
 

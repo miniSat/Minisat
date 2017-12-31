@@ -4,7 +4,8 @@ from .forms import (
                     Compute_resource_form,
                     Create_host_form,
                     Profile_form,
-                    Operating_system_form
+                    Operating_system_form,
+                    newContainerform
                     )
 from django.http import (
                          HttpResponseRedirect,
@@ -85,4 +86,13 @@ def post_create_host(request):
     return render(request, 'create_host.html', {'final_cmd': final_cmd})
 
 
+def new_container(request):
+    form = newContainerform
+    return render(request, 'new_container.html', {'title_name':"New Container", 'form':form})
 
+
+def post_new_container(request):
+    form = newContainerform(request.POST)
+    if form.is_valid():
+        form.save(commit=True)
+    return HttpResponseRedirect('/')
