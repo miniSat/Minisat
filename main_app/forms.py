@@ -24,3 +24,9 @@ class Operating_system_form(forms.ModelForm):
     class Meta:
         model = Operating_system_model
         fields = '__all__'
+
+
+class newContainerform(forms.ModelForm):
+    class Meta:
+        model = Container_model
+        fields = '__all__'
