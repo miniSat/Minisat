@@ -2,3 +2,11 @@
 margin-top:0px;
 padding:10px;
 }
+.well {
+border:1px solid blue;
+background : #e9edfb;
+}
+
+.text-size{
+font-size : 16px;
+}
