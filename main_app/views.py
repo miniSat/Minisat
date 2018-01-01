@@ -27,7 +27,7 @@ def home(request):
 def compute_resource(request):
     form = Compute_resource_form()
     compute_resource_list = Compute_resource_model.objects.all()
-    return render(request, 'compute_resource.html', {'title_name': 'Create New Compute Resource', 'form': form,
+    return render(request, 'infrastructure/compute_resource.html', {'title_name': 'Create New Compute Resource', 'form': form,
                                                      'compute_obj': compute_resource_list})
 
 
@@ -41,7 +41,7 @@ def post_data(request):
 def profile(request):
     form = Profile_form()
     profile_list = Profile_model.objects.all()
-    return render(request, 'profile.html', {'title_name': 'Profile', 'form': form, 'profile_obj': profile_list})
+    return render(request, 'infrastructure/profile.html', {'title_name': 'Profile', 'form': form, 'profile_obj': profile_list})
 
 
 def post_profile(request):
@@ -53,13 +53,13 @@ def post_profile(request):
 
 def create_host(request):
     form = Create_host_form()
-    return render(request, 'create_host.html', {'title_name': 'Create A New Host', 'form': form})
+    return render(request, 'host/create_host.html', {'title_name': 'Create A New Host', 'form': form})
 
 
 def operating_system(request):
     form = Operating_system_form()
     operating_system_list = Operating_system_model.objects.all()
-    return render(request, 'operating_system.html', {'title_name': 'Add Operating System', 'form': form, 'os_obj': operating_system_list})
+    return render(request, 'host/operating_system.html', {'title_name': 'Add Operating System', 'form': form, 'os_obj': operating_system_list})
 
 
 def post_operating_system(request):
@@ -88,7 +88,7 @@ def post_create_host(request):
 
 def new_container(request):
     form = newContainerform
-    return render(request, 'new_container.html', {'title_name':"New Container", 'form':form})
+    return render(request, 'containers/new_container.html', {'title_name':"New Container", 'form':form})
 
 
 def post_new_container(request):
