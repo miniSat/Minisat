@@ -1,12 +1,13 @@
 from django.views.generic import TemplateView
-import docker
+import docker, os
 from django.shortcuts import render
 from .forms import (
                     Compute_resource_form,
                     Create_host_form,
                     Profile_form,
                     Operating_system_form,
-                    newContainerform
+                    newContainerform,
+                    Local_image_form
                     )
 from django.http import (
                          HttpResponseRedirect,
@@ -100,6 +101,7 @@ def post_new_container(request):
 
 
 def local_images(request):
+    form = Local_image_form
     images_list = {}
     client = docker.from_env()
     for i in range(0,len(client.images.list())):
@@ -111,4 +113,16 @@ def local_images(request):
             image.attrs["Created"].split("T")[0]
         ]
     print(images_list)
-    return render(request, 'containers/local_images.html', {'title_name': "Local Docker Images", "images_list":images_list})
+    return render(request, 'containers/local_images.html', {'title_name': "Local Docker Images", "images_list":images_list, 'form':form})
+
+
+def post_docker_image(request):
+    client = docker.from_env()
+    form = Local_image_form(request.POST)
+    if form.is_valid():
+        docker_text = form.cleaned_data['dockerfile']
+        image_name = form.cleaned_data['image_name']+":"+form.cleaned_data['tag_name']
+        with open(os.path.join("main_app/templates/containers", "Dockerfile"),"w") as fobj:
+            fobj.write(docker_text)
+        client.images.build(path="main_app/templates/containers/", tag=image_name)
+    return HttpResponseRedirect('/')

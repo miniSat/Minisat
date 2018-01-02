@@ -62,4 +62,10 @@ class Container_model(models.Model):
     entry_point = models.CharField("Entry Point", max_length=15)
 
 
+# Model for Local Images
+class Local_image_model(models.Model):
+    dockerfile = models.TextField("Write Dockerfile here")
+    image_name = models.CharField("Image Name", max_length=20)
+    tag_name = models.CharField("Tag", max_length=20, default="latest")
+
 

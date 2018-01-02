@@ -14,4 +14,5 @@ urlpatterns = [
     path('new_container', views.new_container, name="new_container"),
     path('post_new_container', views.post_new_container, name='post_new_container'),
     path('local_images', views.local_images, name='local_images'),
+    path('post_docker_image', views.post_docker_image, name="post_docker_image"),
 ]

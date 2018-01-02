@@ -1,7 +1,15 @@
 {% extends 'form_template.html' %}
 
-{% block form_content %}
 
+{% block form_content %}
+  <form action="post_docker_image" method="post">
+    {% csrf_token %}
+    {{ form.image_name.label_tag }} {{ form.image_name }} {{ form.tag_name.label_tag }} {{ form.tag_name }} <button type="submit" style="float: right;" class="btn btn-primary">Create</button>
+    <br><br>
+    {{form.dockerfile.label_tag}}
+    {{form.dockerfile}}
+    <br><br>
+  </form>
 {% endblock %}
 
 {% block exist_content %}
@@ -18,10 +26,10 @@
   <tbody>
     {% for key, values in images_list.items %}
     <tr>
-        <td>{{ key }}</td>
-        {% for v in values %}
-          <td>{{ v }}</td>
-        {% endfor %}
+      <td>{{ key }}</td>
+      {% for v in values %}
+        <td>{{ v }}</td>
+      {% endfor %}
     </tr>
     {% endfor %}
   </tbody>
