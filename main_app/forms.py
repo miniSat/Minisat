@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import TextInput
 from .models import *
 
 
@@ -6,7 +7,6 @@ class Compute_resource_form(forms.ModelForm):
     class Meta:
         model = Compute_resource_model
         fields = '__all__'
-
 
 
 class Profile_form(forms.ModelForm):

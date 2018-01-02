@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView
+import docker
 from django.shortcuts import render
 from .forms import (
                     Compute_resource_form,
@@ -96,3 +97,18 @@ def post_new_container(request):
     if form.is_valid():
         form.save(commit=True)
     return HttpResponseRedirect('/')
+
+
+def local_images(request):
+    images_list = {}
+    client = docker.from_env()
+    for i in range(0,len(client.images.list())):
+        image = client.images.list()[i]
+        images_list[image.attrs["Id"].split(":")[1][:10]] = [
+            image.attrs["RepoTags"][0].split(":")[0],
+            image.attrs["RepoTags"][0].split(":")[1],
+            str(image.attrs["Size"])[:-6],
+            image.attrs["Created"].split("T")[0]
+        ]
+    print(images_list)
+    return render(request, 'containers/local_images.html', {'title_name': "Local Docker Images", "images_list":images_list})

@@ -1,0 +1,29 @@
+{% extends 'form_template.html' %}
+
+{% block form_content %}
+
+{% endblock %}
+
+{% block exist_content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Image ID</th>
+      <th>Repository</th>
+      <th>Tag</th>
+      <th>Size(MiB)</th>
+      <th>Created</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, values in images_list.items %}
+    <tr>
+        <td>{{ key }}</td>
+        {% for v in values %}
+          <td>{{ v }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

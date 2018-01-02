@@ -3,7 +3,7 @@ from django import forms
 # Create your models here.
 
 
-#Model for Compute_resources
+# Model for Compute_resources
 class Compute_resource_model(models.Model):
     name = models.CharField(max_length=10)
     ip_address = models.CharField("IP Address", max_length=15)
@@ -13,7 +13,7 @@ class Compute_resource_model(models.Model):
         return self.name
 
 
-#Model for profile
+# Model for profile
 class Profile_model(models.Model):
     newlist = Compute_resource_model.objects.values_list("name", flat=True)
     newlist = list(zip(newlist, newlist))
@@ -27,7 +27,7 @@ class Profile_model(models.Model):
         return self.profile_name
 
 
-#Model for operating_system
+# Model for operating_system
 class Operating_system_model(models.Model):
     os_name = models.CharField("OS Name", max_length=15)
     os_location = models.CharField("OS Location", max_length=100)
@@ -36,7 +36,7 @@ class Operating_system_model(models.Model):
         return self.os_name
 
 
-#Model for create host
+# Model for create host
 class Create_host_model(models.Model):
     profile_names = Profile_model.objects.values_list("profile_name", flat=True)
     profile_names = list(zip(profile_names, profile_names))
