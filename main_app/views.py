@@ -36,6 +36,10 @@ def compute_resource(request):
 def post_data(request):
     form = Compute_resource_form(request.POST)
     if form.is_valid():
+        getssh = "sshpass -p " + form.cleaned_data["root_password"] + " ssh-copy-id root@" + form.cleaned_data[
+            "ip_address"] + ' -o "StrictHostKeyChecking no" '
+        os.system(getssh)
+        print(getssh)
         form.save(commit=True)
     return HttpResponseRedirect('/')
 
@@ -85,7 +89,9 @@ def post_create_host(request):
         *not_imp3, location_url = os_details
         final_cmd = 'virt-install --connect qemu+ssh://root@'+compute_ip+'/system --name '+form_vm+' --ram '+str(ram) \
                    + ' --vcpus '+str(cpus)+' --disk path=/var/lib/libvirt/images/'+form_vm+'.qcow2,bus=virtio,size='+str(disk_size)+' --location '+location_url+' --network bridge:virbr0'
-    return render(request, 'create_host.html', {'final_cmd': final_cmd})
+
+    os.system(final_cmd)
+    return HttpResponseRedirect('/')
 
 
 def new_container(request):
@@ -112,7 +118,6 @@ def local_images(request):
             str(image.attrs["Size"])[:-6],
             image.attrs["Created"].split("T")[0]
         ]
-    print(images_list)
     return render(request, 'containers/local_images.html', {'title_name': "Local Docker Images", "images_list":images_list, 'form':form})
 
 
