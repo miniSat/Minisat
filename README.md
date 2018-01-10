@@ -7,6 +7,16 @@ Web interface for MiniSat.
 
 MiniSat is a centralize web interface to provision virtual machine and run docker container on remote hosts.
 
+
+### Dependencies
+```sh
+sudo dnf install qemu-kvm qemu-img virt-manager libvirt libvirt-python libvirt-client virt-install virt-viewer -y
+```
+
+```sh
+ssh-keygen -q -t rsa -f ~/.ssh/id_rsa -N "" 
+```
+
 ### How to run MiniSatUI
 - Create your python3 virtual environment
 ```sh
