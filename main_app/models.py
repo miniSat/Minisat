@@ -15,13 +15,11 @@ class Compute_resource_model(models.Model):
 
 # Model for profile
 class Profile_model(models.Model):
-    newlist = Compute_resource_model.objects.values_list("name", flat=True)
-    newlist = list(zip(newlist, newlist))
     profile_name = models.CharField(max_length=10)
     ram = models.IntegerField("RAM(MiB)")
     cpus = models.IntegerField("CPUs")
     disk_size = models.IntegerField("Disk Size(GiB)")
-    select_compute = models.CharField(max_length=10, choices=newlist, default=None)
+    # select_compute = models.CharField(max_length=10, choices=newlist, default=None)
 
     def __str__(self):
         return self.profile_name
@@ -38,6 +36,8 @@ class Operating_system_model(models.Model):
 
 # Model for create host
 class Create_host_model(models.Model):
+    newlist = Compute_resource_model.objects.values_list("name", flat=True)
+    newlist = list(zip(newlist, newlist))
     profile_names = Profile_model.objects.values_list("profile_name", flat=True)
     profile_names = list(zip(profile_names, profile_names))
     os_name = Operating_system_model.objects.values_list("os_name", flat=True)
@@ -45,6 +45,7 @@ class Create_host_model(models.Model):
     vm_name = models.CharField(max_length=15)
     vm_os = models.CharField(max_length=15,choices=os_name, default=None)
     select_vm_profile = models.CharField(max_length=10, choices=profile_names, default=None)
+    select_compute = models.CharField(max_length=10, choices=newlist, default=None)
 
     def __str__(self):
         return self.vm_name
