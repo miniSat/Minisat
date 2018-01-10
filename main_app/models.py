@@ -18,7 +18,7 @@ class Profile_model(models.Model):
     newlist = Compute_resource_model.objects.values_list("name", flat=True)
     newlist = list(zip(newlist, newlist))
     profile_name = models.CharField(max_length=10)
-    ram = models.IntegerField("RAM(GiB)")
+    ram = models.IntegerField("RAM(MiB)")
     cpus = models.IntegerField("CPUs")
     disk_size = models.IntegerField("Disk Size(GiB)")
     select_compute = models.CharField(max_length=10, choices=newlist, default=None)
