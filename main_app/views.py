@@ -16,7 +16,8 @@ from django.http import (
 from .models import (
                     Compute_resource_model,
                     Profile_model,
-                    Operating_system_model
+                    Operating_system_model,
+                    Create_host_model
                     )
 
 
@@ -39,8 +40,12 @@ def post_data(request):
         getssh = "sshpass -p " + form.cleaned_data["root_password"] + " ssh-copy-id root@" + form.cleaned_data[
             "ip_address"] + ' -o "StrictHostKeyChecking no" '
         os.system(getssh)
-        print(getssh)
-        form.save(commit=True)
+        compute = Compute_resource_model(
+            name = form.cleaned_data["name"],
+            ip_address = form.cleaned_data["ip_address"],
+            root_password = form.cleaned_data["root_password"]
+        )
+        compute.save()
     return HttpResponseRedirect('/')
 
 
@@ -53,13 +58,25 @@ def profile(request):
 def post_profile(request):
     form = Profile_form(request.POST)
     if form.is_valid():
-        form.save(commit=True)
+        profile = Profile_model(
+            profile_name = form.cleaned_data["profile_name"],
+            ram = form.cleaned_data["ram"],
+            cpus = form.cleaned_data["cpus"],
+            disk_size = form.cleaned_data["disk_size"]
+        )
+        profile.save()
     return HttpResponseRedirect('/')
 
 
 def create_host(request):
     form = Create_host_form()
-    return render(request, 'host/create_host.html', {'title_name': 'Create A New Host', 'form': form})
+    compute_name = Compute_resource_model.objects.values_list("name", flat=True)
+    compute_name = list(zip(compute_name, compute_name))
+    profile_name = Profile_model.objects.values_list("profile_name", flat=True)
+    profile_name = list(zip(profile_name, profile_name))
+    os_name = Operating_system_model.objects.values_list("os_name", flat=True)
+    os_name = list(zip(os_name, os_name))
+    return render(request, 'host/create_host.html', {'title_name': 'Create A New Host', 'form': form, 'os_name':os_name, 'compute_name':compute_name, 'profile_name':profile_name})
 
 
 def operating_system(request):
@@ -71,26 +88,35 @@ def operating_system(request):
 def post_operating_system(request):
     form = Operating_system_form(request.POST)
     if form.is_valid():
-        form.save(commit=True)
+        operating_sys = Operating_system_model(
+            os_name = form.cleaned_data["os_name"],
+            os_location = form.cleaned_data["os_location"]
+        )
+        operating_sys.save()
     return HttpResponseRedirect('/')
 
 
 def post_create_host(request):
     form = Create_host_form(request.POST)
     if form.is_valid():
-        form_vm = form.cleaned_data['vm_name']
-        form_os = form.cleaned_data['vm_os']
-        form_profile = form.cleaned_data['select_vm_profile']
-        form_compute = form.cleaned_data['select_compute']
-        profile_details = list(Profile_model.objects.filter(profile_name=form_profile).values_list()[0])
-        *not_imp1, ram, cpus, disk_size = profile_details
-        compute_details = list(Compute_resource_model.objects.filter(name=form_compute).values_list()[0])
-        *not_imp2, compute_ip, compute_passwd = compute_details
-        os_details = list(Operating_system_model.objects.filter(os_name=form_os).values_list()[0])
-        *not_imp3, location_url = os_details
-        final_cmd = 'virt-install --connect qemu+ssh://root@'+compute_ip+'/system --name '+form_vm+' --ram '+str(ram) \
-                   + ' --vcpus '+str(cpus)+' --disk path=/var/lib/libvirt/images/'+form_vm+'.qcow2,bus=virtio,size='+str(disk_size)+' --location '+location_url+' --network bridge:virbr0 &'
-    os.system(final_cmd)
+        create_host = Create_host_model(
+            vm_name = form.data['vm_name'],
+            vm_os = form.data['vm_os'],
+            select_vm_profile = form.data['select_vm_profile'],
+            select_compute = form.data['select_compute']
+        )
+        # form_profile = form.cleaned_data['select_vm_profile']
+        # form_compute = form.cleaned_data['select_compute']
+        # profile_details = list(Profile_model.objects.filter(profile_name=form_profile).values_list()[0])
+        # *not_imp1, ram, cpus, disk_size = profile_details
+        # compute_details = list(Compute_resource_model.objects.filter(name=form_compute).values_list()[0])
+        # *not_imp2, compute_ip, compute_passwd = compute_details
+        # os_details = list(Operating_system_model.objects.filter(os_name=form_os).values_list()[0])
+        # *not_imp3, location_url = os_details
+        # final_cmd = 'virt-install --connect qemu+ssh://root@'+compute_ip+'/system --name '+form_vm+' --ram '+str(ram) \
+        #            + ' --vcpus '+str(cpus)+' --disk path=/var/lib/libvirt/images/'+form_vm+'.qcow2,bus=virtio,size='+str(disk_size)+' --location '+location_url+' --network bridge:virbr0 &'
+    # os.system(final_cmd)
+        create_host.save()
     return HttpResponseRedirect('/')
 
 
