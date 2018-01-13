@@ -48,9 +48,7 @@ class Create_host_model(models.Model):
 
 # Model for new container
 class Container_model(models.Model):
-    # newlist = Compute_resource_model.objects.values_list("name", flat=True)
-    # newlist = list(zip(newlist, newlist))
-    # select_compute_resource = models.CharField("Select Compute Resource",max_length=15,choices=newlist,default=None)
+
     image_name = models.CharField("Image Name", max_length=20)
     tag_name = models.CharField("Tag", max_length=20)
     container_name = models.CharField("Container Name", max_length=20)
