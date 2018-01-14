@@ -19,7 +19,7 @@ from .models import (
                     Operating_system_model,
                     Create_host_model
                     )
-
+from main_app.modules import vm_manage as vm
 
 # Create your views here.
 
@@ -105,17 +105,25 @@ def post_create_host(request):
             select_vm_profile = form.data['select_vm_profile'],
             select_compute = form.data['select_compute']
         )
-        # form_profile = form.cleaned_data['select_vm_profile']
-        # form_compute = form.cleaned_data['select_compute']
-        # profile_details = list(Profile_model.objects.filter(profile_name=form_profile).values_list()[0])
-        # *not_imp1, ram, cpus, disk_size = profile_details
-        # compute_details = list(Compute_resource_model.objects.filter(name=form_compute).values_list()[0])
-        # *not_imp2, compute_ip, compute_passwd = compute_details
-        # os_details = list(Operating_system_model.objects.filter(os_name=form_os).values_list()[0])
-        # *not_imp3, location_url = os_details
+        #'''
+        form_profile = form.cleaned_data['select_vm_profile']
+        form_compute = form.cleaned_data['select_compute']
+        profile_details = list(Profile_model.objects.filter(profile_name=create_host.select_vm_profile).values_list()[0])
+        *not_imp1, ram, cpus, disk_size = profile_details
+        
+        compute_details = list(Compute_resource_model.objects.filter(name=create_host.select_compute).values_list()[0])
+        *not_imp2, compute_ip, compute_passwd = compute_details
+        
+        os_details = list(Operating_system_model.objects.filter(os_name=create_host.vm_os).values_list()[0])
+        *not_imp3, location_url = os_details
         # final_cmd = 'virt-install --connect qemu+ssh://root@'+compute_ip+'/system --name '+form_vm+' --ram '+str(ram) \
         #            + ' --vcpus '+str(cpus)+' --disk path=/var/lib/libvirt/images/'+form_vm+'.qcow2,bus=virtio,size='+str(disk_size)+' --location '+location_url+' --network bridge:virbr0 &'
-    # os.system(final_cmd)
+        # os.system(final_cmd)
+
+        #print(compute_ip, create_host.vm_name, ram, cpus, disk_size, location_url)
+        #print(create_host.select_vm_profile, create_host.vm_name, create_host.vm_os, create_host.select_compute)
+
+        vm.vm_create(compute_ip, create_host.vm_name, ram, cpus, disk_size, location_url)
         create_host.save()
     return HttpResponseRedirect('/')
 
