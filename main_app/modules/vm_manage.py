@@ -18,5 +18,3 @@ def isOnline(host):
     else:
         print("offline")
 
-isOnline("google.com")
-#vm_create("172.22.26.202", "test", 2048, 2, 30, "http://172.22.26.203/repos/fedora25/")
