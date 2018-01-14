@@ -2,3 +2,4 @@ main_app/__pycache__
 main_app/migrations/__pycache__
 mini/__pycache__
 .idea
+main_app/modules/__pycache__
