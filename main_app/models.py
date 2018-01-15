@@ -48,12 +48,15 @@ class Create_host_model(models.Model):
 
 # Model for new container
 class Container_model(models.Model):
-
+    select_compute = models.CharField(max_length=20)
     image_name = models.CharField("Image Name", max_length=20)
     tag_name = models.CharField("Tag", max_length=20)
     container_name = models.CharField("Container Name", max_length=20)
     command = models.CharField("Command",max_length=15)
     entry_point = models.CharField("Entry Point", max_length=15)
+
+    def __str__(self):
+        return self.container_name
 
 
 # Model for Local Images
