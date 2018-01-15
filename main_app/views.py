@@ -138,7 +138,9 @@ def post_create_host(request):
 
 def new_container(request):
     form = newContainerform
-    return render(request, 'containers/new_container.html', {'title_name': "New Container", 'form': form})
+    compute_name = Compute_resource_model.objects.values_list("name", flat=True)
+    compute_name = list(zip(compute_name, compute_name))
+    return render(request, 'containers/new_container.html', {'title_name': "New Container", 'form': form, 'compute_name':compute_name})
 
 
 def post_new_container(request):
