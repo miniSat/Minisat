@@ -1,13 +1,14 @@
 from django.contrib import admin
 
 from .models import (
-                     Compute_resource_model,
-                     Create_host_model,
-                     Operating_system_model,
-                     Profile_model,
-                     Container_model,
-                     Local_image_model
-                    )
+    Compute_resource_model,
+    Create_host_model,
+    Operating_system_model,
+    Profile_model,
+    Container_model,
+    Local_image_model
+)
+
 # Register your models here.
 
 admin.site.register(Compute_resource_model)

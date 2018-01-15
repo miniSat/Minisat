@@ -1,5 +1,7 @@
 from django.db import models
 from django import forms
+
+
 # Create your models here.
 
 
@@ -19,7 +21,6 @@ class Profile_model(models.Model):
     ram = models.IntegerField()
     cpus = models.IntegerField()
     disk_size = models.IntegerField()
-
 
     def __str__(self):
         return self.profile_name
@@ -41,18 +42,16 @@ class Create_host_model(models.Model):
     select_vm_profile = models.CharField(max_length=10)
     select_compute = models.CharField(max_length=10)
 
-
     def __str__(self):
         return self.vm_name
 
 
 # Model for new container
 class Container_model(models.Model):
-
     image_name = models.CharField("Image Name", max_length=20)
     tag_name = models.CharField("Tag", max_length=20)
     container_name = models.CharField("Container Name", max_length=20)
-    command = models.CharField("Command",max_length=15)
+    command = models.CharField("Command", max_length=15)
     entry_point = models.CharField("Entry Point", max_length=15)
 
 
@@ -61,5 +60,3 @@ class Local_image_model(models.Model):
     dockerfile = models.TextField("Write Dockerfile here")
     image_name = models.CharField("Image Name", max_length=20)
     tag_name = models.CharField("Tag", max_length=20, default="latest")
-
-
