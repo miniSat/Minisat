@@ -34,10 +34,13 @@ class Operating_system_form(forms.Form):
     os_location = forms.CharField(label="Location", max_length=100)
 
 
-class newContainerform(forms.ModelForm):
-    class Meta:
-        model = Container_model
-        fields = '__all__'
+class newContainerform(forms.Form):
+    select_compute = forms.CharField(label="Compute", max_length=20)
+    image_name = forms.CharField(label="Image Name", max_length=20)
+    tag_name = forms.CharField(label="Tag", max_length=20)
+    container_name = forms.CharField(label="Container Name", max_length=20)
+    command = forms.CharField(label="Command", max_length=15)
+    entry_point = forms.CharField(label="Entry Point", max_length=15)
 
 
 class Local_image_form(forms.ModelForm):
