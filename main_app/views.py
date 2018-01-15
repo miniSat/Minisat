@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView
-import docker, os
+import docker
+import os as OS
 from django.shortcuts import render
 from .forms import (
                     Compute_resource_form,
@@ -39,7 +40,7 @@ def post_data(request):
     if form.is_valid():
         getssh = "sshpass -p " + form.cleaned_data["root_password"] + " ssh-copy-id root@" + form.cleaned_data[
             "ip_address"] + ' -o "StrictHostKeyChecking no" '
-        os.system(getssh)
+        OS.system(getssh)
         compute = Compute_resource_model(
             name = form.cleaned_data["name"],
             ip_address = form.cleaned_data["ip_address"],
@@ -98,6 +99,10 @@ def post_operating_system(request):
 
 def post_create_host(request):
     form = Create_host_form(request.POST)
+    os = form.data['vm_os']
+    prof = form.data['select_vm_profile']
+    comp = form.data['select_compute']
+    print(os+" "+prof+" "+comp)
     if form.is_valid():
         create_host = Create_host_model(
             vm_name = form.data['vm_name'],
@@ -105,15 +110,29 @@ def post_create_host(request):
             select_vm_profile = form.data['select_vm_profile'],
             select_compute = form.data['select_compute']
         )
+<<<<<<< HEAD
+        profile_details = list(Profile_model.objects.filter(profile_name=prof).values_list()[0])
+        *not_imp1, ram, cpus, disk_size = profile_details
+        compute_details = list(Compute_resource_model.objects.filter(name=comp).values_list()[0])
+        *not_imp2, compute_ip, compute_passwd = compute_details
+        os_details = list(Operating_system_model.objects.filter(os_name=os).values_list()[0])
+        *not_imp3, location_url = os_details
+        final_cmd = "virt-install --connect qemu+ssh://root@"+compute_ip+"/system --name "+os+" --ram "+str(ram) + \
+                    " --vcpus "+str(cpus)+" --disk path=/var/lib/libvirt/images/"+os+".qcow2,bus=virtio,size="+ \
+                    str(disk_size)+" --location "+location_url+" --network bridge:virbr0 &"
+        # os.system(final_cmd)
+        #print(type(final_cmd))
+        OS.system(str(final_cmd))
+=======
         #'''
         form_profile = form.cleaned_data['select_vm_profile']
         form_compute = form.cleaned_data['select_compute']
         profile_details = list(Profile_model.objects.filter(profile_name=create_host.select_vm_profile).values_list()[0])
         *not_imp1, ram, cpus, disk_size = profile_details
-        
+
         compute_details = list(Compute_resource_model.objects.filter(name=create_host.select_compute).values_list()[0])
         *not_imp2, compute_ip, compute_passwd = compute_details
-        
+
         os_details = list(Operating_system_model.objects.filter(os_name=create_host.vm_os).values_list()[0])
         *not_imp3, location_url = os_details
         # final_cmd = 'virt-install --connect qemu+ssh://root@'+compute_ip+'/system --name '+form_vm+' --ram '+str(ram) \
@@ -124,13 +143,16 @@ def post_create_host(request):
         #print(create_host.select_vm_profile, create_host.vm_name, create_host.vm_os, create_host.select_compute)
 
         vm.vm_create(compute_ip, create_host.vm_name, ram, cpus, disk_size, location_url)
+>>>>>>> 3593ada9cd4be7c59bd33f40e0ccc14d991f2668
         create_host.save()
     return HttpResponseRedirect('/')
 
 
 def new_container(request):
     form = newContainerform
-    return render(request, 'containers/new_container.html', {'title_name':"New Container", 'form':form})
+    compute_name = Compute_resource_model.objects.values_list("name", flat=True)
+    compute_name = list(zip(compute_name, compute_name))
+    return render(request, 'containers/new_container.html', {'title_name':"New Container", 'form':form, 'compute_name': compute_name})
 
 
 def post_new_container(request):
@@ -161,7 +183,7 @@ def post_docker_image(request):
     if form.is_valid():
         docker_text = form.cleaned_data['dockerfile']
         image_name = form.cleaned_data['image_name']+":"+form.cleaned_data['tag_name']
-        with open(os.path.join("main_app/templates/containers", "Dockerfile"),"w") as fobj:
+        with open(OS.path.join("main_app/templates/containers", "Dockerfile"),"w") as fobj:
             fobj.write(docker_text)
         client.images.build(path="main_app/templates/containers/", tag=image_name)
     return HttpResponseRedirect('/')
