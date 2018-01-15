@@ -1,6 +1,12 @@
 from django import forms
-from django.forms import Textarea, TextInput
-from .models import *
+from django.forms import (
+    Textarea,
+    TextInput
+)
+from .models import (
+    Container_model,
+    Local_image_model
+)
 
 
 class Compute_resource_form(forms.Form):
@@ -21,6 +27,7 @@ class Create_host_form(forms.Form):
     vm_os = forms.CharField(label="VM OS")
     select_vm_profile = forms.CharField(label="VM Profile")
     select_compute = forms.CharField(label="Compute")
+
 
 class Operating_system_form(forms.Form):
     os_name = forms.CharField(label="Name", max_length=15)
