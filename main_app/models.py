@@ -55,6 +55,9 @@ class Container_model(models.Model):
     command = models.CharField("Command",max_length=15)
     entry_point = models.CharField("Entry Point", max_length=15)
 
+    def __str__(self):
+        return self.container_name
+
 
 # Model for Local Images
 class Local_image_model(models.Model):

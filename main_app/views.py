@@ -40,11 +40,11 @@ def post_data(request):
     if form.is_valid():
         getssh = "sshpass -p " + form.cleaned_data["root_password"] + " ssh-copy-id root@" + form.cleaned_data[
             "ip_address"] + ' -o "StrictHostKeyChecking no" '
-        OS.system(getssh)
+        os.system(getssh)
         compute = Compute_resource_model(
-            name = form.cleaned_data["name"],
-            ip_address = form.cleaned_data["ip_address"],
-            root_password = form.cleaned_data["root_password"]
+            name=form.cleaned_data["name"],
+            ip_address=form.cleaned_data["ip_address"],
+            root_password=form.cleaned_data["root_password"]
         )
         compute.save()
     return HttpResponseRedirect('/')
@@ -99,21 +99,18 @@ def post_operating_system(request):
 
 def post_create_host(request):
     form = Create_host_form(request.POST)
-    os = form.data['vm_os']
-    prof = form.data['select_vm_profile']
-    comp = form.data['select_compute']
-    print(os+" "+prof+" "+comp)
     if form.is_valid():
         create_host = Create_host_model(
-            vm_name = form.data['vm_name'],
-            vm_os = form.data['vm_os'],
-            select_vm_profile = form.data['select_vm_profile'],
-            select_compute = form.data['select_compute']
+            vm_name=form.data['vm_name'],
+            vm_os=form.data['vm_os'],
+            select_vm_profile=form.data['select_vm_profile'],
+            select_compute=form.data['select_compute']
         )
-        #'''
+        # '''
         form_profile = form.cleaned_data['select_vm_profile']
         form_compute = form.cleaned_data['select_compute']
-        profile_details = list(Profile_model.objects.filter(profile_name=create_host.select_vm_profile).values_list()[0])
+        profile_details = list(
+            Profile_model.objects.filter(profile_name=create_host.select_vm_profile).values_list()[0])
         *not_imp1, ram, cpus, disk_size = profile_details
 
         compute_details = list(Compute_resource_model.objects.filter(name=create_host.select_compute).values_list()[0])
@@ -125,8 +122,8 @@ def post_create_host(request):
         #            + ' --vcpus '+str(cpus)+' --disk path=/var/lib/libvirt/images/'+form_vm+'.qcow2,bus=virtio,size='+str(disk_size)+' --location '+location_url+' --network bridge:virbr0 &'
         # os.system(final_cmd)
 
-        #print(compute_ip, create_host.vm_name, ram, cpus, disk_size, location_url)
-        #print(create_host.select_vm_profile, create_host.vm_name, create_host.vm_os, create_host.select_compute)
+        # print(compute_ip, create_host.vm_name, ram, cpus, disk_size, location_url)
+        # print(create_host.select_vm_profile, create_host.vm_name, create_host.vm_os, create_host.select_compute)
 
         vm.vm_create(compute_ip, create_host.vm_name, ram, cpus, disk_size, location_url)
         create_host.save()
