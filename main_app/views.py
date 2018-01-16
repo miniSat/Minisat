@@ -18,7 +18,8 @@ from .models import (
     Compute_resource_model,
     Profile_model,
     Operating_system_model,
-    Create_host_model
+    Create_host_model,
+    Container_model
 )
 from main_app.modules import vm_manage as vm
 from main_app.modules import kickstart
@@ -50,6 +51,9 @@ def post_data(request):
             root_password=form.cleaned_data["root_password"]
         )
         compute.save()
+        add_docker_machine = "docker-machine create --driver generic --generic-ip-address " + compute.ip_address + " --generic-ssh-user root --generic-ssh-key ~/.ssh/id_rsa " + compute.name
+        result = os.system(add_docker_machine)
+        print(result)
     return HttpResponseRedirect('/')
 
 
@@ -140,7 +144,16 @@ def new_container(request):
 def post_new_container(request):
     form = newContainerform(request.POST)
     if form.is_valid():
-        form.save(commit=True)
+        new_cont = Container_model(
+            select_compute = form.data['select_compute'],
+            image_name = form.data['image_name'],
+            tag_name = form.data['tag_name'],
+            container_name = form.data['container_name'],
+        )
+        create_cont = "docker-machine ssh "+ new_cont.select_compute + " docker container run -d -p "+ form.data["host_port"]+":"+form.data["cont_port"]+" --name "+ new_cont.container_name + " " + new_cont.image_name+":"+new_cont.tag_name
+        print(create_cont)
+        os.system(create_cont)
+        # form.save()
     return HttpResponseRedirect('/')
 
 
