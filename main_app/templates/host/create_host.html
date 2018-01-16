@@ -6,7 +6,6 @@
 </div>
 <br>
 <div class="col-md-2 col-lg-2"></div>
-
 <div class="col-md-8 col-lg-8 well well-lg well-primary" style="border:1px solid blue" >
     <ul class="nav nav-tabs text-size" role="tablist">
         <li class="nav-item active">
@@ -16,10 +15,13 @@
     <div class="tab-content">
         <br>
         <div role="tabpanel" class="tab-pane fade in active" id="profile">
-            <form action="post_create_host" method="post">
+            <form action="post_create_host" method="post" autocomplete="off">
               {% csrf_token %}
                 {{ form.vm_name.label_tag }}
                 {{ form.vm_name }}
+                <div  style="float:right">
+                    <strong>Password: </strong><input type="password" name="password">
+                </div>
                 <br><br>
                 {{ form.vm_os.label_tag }}
                 <select name="vm_os">
@@ -27,6 +29,9 @@
                     <option value="{{key}}">{{ value }}</option>
                 {% endfor %}
                 </select>
+                <div  style="float:right">
+                    <strong>Confirm Password: </strong><input type="password" name="password">
+                </div>
                 <br><br>
                 {{ form.select_vm_profile.label_tag }}
                 <select name="select_vm_profile">
