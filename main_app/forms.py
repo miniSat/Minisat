@@ -5,7 +5,6 @@ from django.forms import (
 )
 from .models import (
     Container_model,
-    Local_image_model
 )
 
 
@@ -43,10 +42,5 @@ class newContainerform(forms.Form):
     cont_port = forms.CharField(widget=forms.TextInput(attrs={'size':'5'}), max_length=4)
 
 
-class Local_image_form(forms.ModelForm):
-    class Meta:
-        model = Local_image_model
-        widgets = {
-            'dockerfile': Textarea(attrs={'cols': 99, 'rows': 18, 'resize': 'vertical'})
-        }
-        fields = '__all__'
+class Local_Images(forms.Form):
+    select_compute = forms.CharField(label="Compute", max_length=20)

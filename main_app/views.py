@@ -8,7 +8,7 @@ from .forms import (
     Profile_form,
     Operating_system_form,
     newContainerform,
-    Local_image_form
+    Local_Images
 )
 from django.http import (
     HttpResponseRedirect,
@@ -51,7 +51,7 @@ def post_data(request):
             root_password=form.cleaned_data["root_password"]
         )
         compute.save()
-        add_docker_machine = "docker-machine create --driver generic --generic-ip-address " + compute.ip_address + " --generic-ssh-user root --generic-ssh-key ~/.ssh/id_rsa " + compute.name
+        add_docker_machine = "docker-machine create --driver generic --generic-ip-address " + compute.ip_address + " --generic-ssh-user root --generic-ssh-key ~/.ssh/id_rsa " + compute.name + "&"
         result = os.system(add_docker_machine)
         print(result)
     return HttpResponseRedirect('/')
@@ -138,7 +138,8 @@ def new_container(request):
     form = newContainerform
     compute_name = Compute_resource_model.objects.values_list("name", flat=True)
     compute_name = list(zip(compute_name, compute_name))
-    return render(request, 'containers/new_container.html', {'title_name': "New Container", 'form': form, 'compute_name':compute_name})
+    return render(request, 'containers/new_container.html',\
+                  {'title_name': "New Container", 'form': form, 'compute_name':compute_name})
 
 
 def post_new_container(request):
@@ -150,7 +151,9 @@ def post_new_container(request):
             tag_name = form.data['tag_name'],
             container_name = form.data['container_name'],
         )
-        create_cont = "docker-machine ssh "+ new_cont.select_compute + " docker container run -d -p "+ form.data["host_port"]+":"+form.data["cont_port"]+" --name "+ new_cont.container_name + " " + new_cont.image_name+":"+new_cont.tag_name
+        create_cont = "docker-machine ssh "+ new_cont.select_compute + " docker container run -d -p "+\
+                      form.data["host_port"]+":"+form.data["cont_port"]+" --name "+ new_cont.container_name + " " +\
+                      new_cont.image_name+":"+new_cont.tag_name
         print(create_cont)
         os.system(create_cont)
         # form.save()
@@ -158,28 +161,29 @@ def post_new_container(request):
 
 
 def local_images(request):
-    form = Local_image_form
+    client = docker.from_env()
     images_list = {}
-    client = docker.from_env()
-    for i in range(0, len(client.images.list())):
-        image = client.images.list()[i]
-        images_list[image.attrs["Id"].split(":")[1][:10]] = [
-            image.attrs["RepoTags"][0].split(":")[0],
-            image.attrs["RepoTags"][0].split(":")[1],
-            str(image.attrs["Size"])[:-6],
-            image.attrs["Created"].split("T")[0]
-        ]
+    compute_name = Compute_resource_model.objects.values_list("name", flat=True)
+    active_compute = compute_name[0]
+    compute_name = list(zip(compute_name, compute_name))
+    get_images = os.popen("docker-machine ssh " + active_compute + " docker images").readlines()
+    for i in range(1, len(get_images)):
+        images = get_images[i].split()
+        images_list[images[2]] = [images[0], images[1], images[3]+" "+images[4]+" "+images[5], images[6]]
     return render(request, 'containers/local_images.html',
-                  {'title_name': "Local Docker Images", "images_list": images_list, 'form': form})
+                  {'title_name': "Local Docker Images", 'images_list': images_list, 'compute_name': compute_name})
 
 
-def post_docker_image(request):
-    client = docker.from_env()
-    form = Local_image_form(request.POST)
-    if form.is_valid():
-        docker_text = form.cleaned_data['dockerfile']
-        image_name = form.cleaned_data['image_name'] + ":" + form.cleaned_data['tag_name']
-        with open(os.path.join("main_app/templates/containers", "Dockerfile"), "w") as fobj:
-            fobj.write(docker_text)
-        client.images.build(path="main_app/templates/containers/", tag=image_name)
-    return HttpResponseRedirect('/')
+def post_local_images(request):
+    form = Local_Images(request.POST)
+    images_list = {}
+    compute_name = Compute_resource_model.objects.values_list("name", flat=True)
+    compute_name = list(zip(compute_name, compute_name))
+    cpt_name = form.data["select_compute"]
+    get_images = os.popen("docker-machine ssh "+ cpt_name + " docker images").readlines()
+    for i in range(1, len(get_images)):
+        images = get_images[i].split()
+        images_list[images[2]] = [images[0],images[1],images[3]+" "+images[4]+" "+images[5],images[6]]
+    return render(request, 'containers/local_images.html',
+                  {'title_name': "Local Docker Images", 'images_list':images_list,\
+                   'cpt_name':cpt_name, 'compute_name':compute_name})

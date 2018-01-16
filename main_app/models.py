@@ -58,9 +58,3 @@ class Container_model(models.Model):
     def __str__(self):
         return self.container_name
 
-
-# Model for Local Images
-class Local_image_model(models.Model):
-    dockerfile = models.TextField("Write Dockerfile here")
-    image_name = models.CharField("Image Name", max_length=20)
-    tag_name = models.CharField("Tag", max_length=20, default="latest")
