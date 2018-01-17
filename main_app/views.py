@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView
 import docker
 import os
+from django.db import IntegrityError
 from django.shortcuts import render
 from .forms import (
     Compute_resource_form,
@@ -50,8 +51,12 @@ def post_data(request):
         )
         ssh_flag = ssh.make_connection(compute.ip_address, compute.root_password)
         if ssh_flag == True:
-            # compute.save()
-            message = True
+            try:
+                compute.save()
+                message = True
+            except IntegrityError as e:
+                # message = "Name or Ip Address already exists"
+                message = e
             form = Compute_resource_form()
             return render(request, 'infrastructure/compute_resource.html',
                           {'title_name': 'Create New Compute Resource', 'form': form,
