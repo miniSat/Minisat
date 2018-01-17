@@ -16,9 +16,9 @@ class Compute_resource_form(forms.Form):
 
 class Profile_form(forms.Form):
     profile_name = forms.CharField(widget=forms.TextInput(attrs={'size':'50'}), label="Profile Name", max_length=10)
-    ram = forms.IntegerField(widget=forms.TextInput(attrs={'class':'dropdown_size'}), label="RAM(MB)")
-    cpus = forms.IntegerField(widget=forms.TextInput(attrs={'class':'dropdown_size'}), label="CPUs")
-    disk_size = forms.IntegerField(widget=forms.TextInput(attrs={'class':'dropdown_size'}), label="Disk Size(GB)")
+    ram = forms.IntegerField(label="RAM(MB)")
+    cpus = forms.IntegerField(label="CPUs")
+    disk_size = forms.IntegerField(label="Disk Size(GB)")
 
 
 class Create_host_form(forms.Form):
