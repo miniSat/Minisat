@@ -1,9 +1,3 @@
-//$(document).ready(function(){
-//    $("#toast_show").hide();
-//    $("#compute_submit").submit(function(){
-//        $("#toast_show").show();
-//    });
-//});
 
 $(document).ready(function(e){
      $("form").submit(function(e){
