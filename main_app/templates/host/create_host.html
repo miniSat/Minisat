@@ -17,7 +17,7 @@
         <br>
         <div role="tabpanel" class="tab-pane fade in active" id="profile">
             <form action="post_create_host" method="post" autocomplete="off">
-              {% csrf_token %}
+                {% csrf_token %}
                 {{ form.vm_name.label_tag }}
                 {{ form.vm_name }}
                 <div  style="float:right">
@@ -26,9 +26,9 @@
                 <br><br>
                 {{ form.vm_os.label_tag }}
                 <select name="vm_os">
-                {% for key,value in  os_name %}
+                    {% for key,value in  os_name %}
                     <option value="{{key}}">{{ value }}</option>
-                {% endfor %}
+                    {% endfor %}
                 </select>
                 <div  style="float:right">
                     <strong>Confirm Password: </strong><input type="password" name="password">
@@ -36,20 +36,19 @@
                 <br><br>
                 {{ form.select_vm_profile.label_tag }}
                 <select name="select_vm_profile">
-                {% for key,value in  profile_name %}
+                    {% for key,value in  profile_name %}
                     <option value="{{key}}">{{ value }}</option>
-                {% endfor %}
+                    {% endfor %}
                 </select>
                 <br><br>
                 {{ form.select_compute.label_tag }}
                 <select name="select_compute">
-                {% for key,value in  compute_name %}
+                    {% for key,value in  compute_name %}
                     <option value="{{key}}">{{ value }}</option>
-                {% endfor %}
+                    {% endfor %}
                 </select>
                 <br><br>
                 <button type="submit" class="btn btn-primary">Create Instance</button>
-                <a class="btn btn-info btn-lg" id="alert-target" >Click me!</a>
             </form>
         </div>
     </div>

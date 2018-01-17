@@ -1,4 +1,5 @@
 {% extends 'form_template.html' %}
+
 {% block form_content %}
     {% if message == True %}
       <div class="alert alert-success alert-dismissable fade in">
@@ -11,7 +12,7 @@
           <strong>{{ message }}</strong>
       </div>
     {% endif %}
-    <form action="post_data" method="post">
+    <form action="post_data" method="post" autocomplete="off">
       {% csrf_token %}
       {% for field in form %}
         <div class="form-group">
@@ -26,20 +27,21 @@
 {% block exist_content %}
 <table class="table">
   <thead>
-    <tr>
-      <th>#</th>
-      <th>Name</th>
-      <th>IP Address</th>
-    </tr>
+  <tr>
+    <th>#</th>
+    <th>Name</th>
+    <th>IP Address</th>
+  </tr>
   </thead>
   <tbody>
   {% for obj in compute_obj %}
-    <tr>
-      <th scope="row">{{ obj.id }}</th>
-      <td>{{ obj.name }}</td>
-      <td>{{ obj.ip_address }}</td>
-    </tr>
+  <tr>
+    <th scope="row">{{ obj.id }}</th>
+    <td>{{ obj.name }}</td>
+    <td>{{ obj.ip_address }}</td>
+  </tr>
   {% endfor %}
   </tbody>
 </table>
 {% endblock %}
+
