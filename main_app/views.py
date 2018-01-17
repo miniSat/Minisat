@@ -22,7 +22,7 @@ from .models import (
     Container_model
 )
 from main_app.modules import vm_manage as vm
-from main_app.modules import kickstart
+from main_app.modules import kickstart, ssh_connect as ssh
 
 
 # Create your views here.
@@ -36,25 +36,36 @@ def compute_resource(request):
     compute_resource_list = Compute_resource_model.objects.all()
     return render(request, 'infrastructure/compute_resource.html',
                   {'title_name': 'Create New Compute Resource', 'form': form,
-                   'compute_obj': compute_resource_list})
+                   'compute_obj': compute_resource_list, 'message': False})
 
 
 def post_data(request):
     form = Compute_resource_form(request.POST)
+    compute_resource_list = Compute_resource_model.objects.all()
     if form.is_valid():
-        getssh = "sshpass -p " + form.cleaned_data["root_password"] + " ssh-copy-id root@" + form.cleaned_data[
-            "ip_address"] + ' -o "StrictHostKeyChecking no" '
-        os.system(getssh)
         compute = Compute_resource_model(
             name=form.cleaned_data["name"],
             ip_address=form.cleaned_data["ip_address"],
             root_password=form.cleaned_data["root_password"]
         )
-        compute.save()
-        add_docker_machine = "docker-machine create --driver generic --generic-ip-address " + compute.ip_address + " --generic-ssh-user root --generic-ssh-key ~/.ssh/id_rsa " + compute.name + "&"
-        result = os.system(add_docker_machine)
-        print(result)
-    return HttpResponseRedirect('/')
+        ssh_flag = ssh.make_connection(compute.ip_address, compute.root_password)
+        if ssh_flag == True:
+            # compute.save()
+            message = True
+            form = Compute_resource_form()
+            return render(request, 'infrastructure/compute_resource.html',
+                          {'title_name': 'Create New Compute Resource', 'form': form,
+                           'compute_obj': compute_resource_list, 'message': message})
+        else:
+            message = ssh_flag
+            return render(request, 'infrastructure/compute_resource.html',
+                          {'title_name': 'Create New Compute Resource', 'form': form,
+                           'compute_obj': compute_resource_list, 'message': message})
+        # add_docker_machine = "docker-machine create --driver generic --generic-ip-address " + compute.ip_address + \
+        #                      " --generic-ssh-user root --generic-ssh-key ~/.ssh/id_rsa " + compute.name + "&"
+        # result = os.system(add_docker_machine)
+        # compute.save()
+
 
 
 def profile(request):
@@ -164,6 +175,7 @@ def local_images(request):
     client = docker.from_env()
     images_list = {}
     compute_name = Compute_resource_model.objects.values_list("name", flat=True)
+    print(compute_name)
     active_compute = compute_name[0]
     compute_name = list(zip(compute_name, compute_name))
     get_images = os.popen("docker-machine ssh " + active_compute + " docker images").readlines()
