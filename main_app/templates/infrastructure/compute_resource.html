@@ -12,7 +12,7 @@
           <strong>{{ message }}</strong>
       </div>
     {% endif %}
-    <form action="post_data" method="post">
+    <form action="post_data" method="post" autocomplete="off">
       {% csrf_token %}
       {% for field in form %}
         <div class="form-group">

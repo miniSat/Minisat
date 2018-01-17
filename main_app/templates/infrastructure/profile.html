@@ -1,7 +1,7 @@
 {% extends 'form_template.html' %}
 {% block form_content %}
 
-    <form action="post_profile" method="post">
+    <form action="post_profile" method="post" autocomplete="off">
       {% csrf_token %}
         {{compute_resource_name}}
       {% for field in form %}
