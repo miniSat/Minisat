@@ -11,7 +11,7 @@ from django.core.exceptions import ValidationError
 # Model for Compute_resources
 class Compute_resource_model(models.Model):
     name = models.CharField(max_length=10, unique=True)
-    ip_address = models.CharField(max_length=15,unique=True)
+    ip_address = models.CharField(max_length=15, unique=True)
     root_password = models.CharField(max_length=20)
 
     # Use special model types that correspond to databases types.
