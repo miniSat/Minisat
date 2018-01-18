@@ -1,12 +1,12 @@
 from django.db import models, IntegrityError
+# import the models class
 from django import forms
 from django.core.validators import ip_address_validators
 from django.core.exceptions import ValidationError
 
 
-
 # Create your models here.
-
+# Create a class that inherits from models.Model so that Django knows we're creating a model.
 
 # Model for Compute_resources
 class Compute_resource_model(models.Model):
@@ -14,7 +14,10 @@ class Compute_resource_model(models.Model):
     ip_address = models.CharField(max_length=15,unique=True)
     root_password = models.CharField(max_length=20)
 
+    # Use special model types that correspond to databases types.
+
     def __str__(self):
+        # Use self.name to display in databases.
         return self.name
 
 
@@ -56,8 +59,5 @@ class Container_model(models.Model):
     tag_name = models.CharField("Tag", max_length=20)
     container_name = models.CharField("Container Name", max_length=20)
 
-
-
     def __str__(self):
         return self.container_name
-

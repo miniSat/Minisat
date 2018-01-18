@@ -9,9 +9,9 @@ from .models import (
 
 
 class Compute_resource_form(forms.Form):
-    name = forms.CharField(widget=forms.TextInput(attrs={'size':'50'}), label="Name", max_length=10)
-    ip_address = forms.CharField(widget=forms.TextInput(attrs={'size':'50','id':'ip_add'}), label="IP Address")
-    root_password = forms.CharField(widget=forms.TextInput(attrs={'size':'50'}), label="Root Password", max_length=20)
+    name = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}), label="Name", max_length=10)
+    ip_address = forms.CharField(widget=forms.TextInput(attrs={'size': '50', 'id': 'ip_add'}), label="IP Address")
+    root_password = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}), label="Root Password", max_length=20)
 
 
 class Profile_form(forms.Form):
@@ -22,10 +22,10 @@ class Profile_form(forms.Form):
 
 
 class Create_host_form(forms.Form):
-    vm_name = forms.CharField(widget=forms.TextInput(attrs={'size':'50'}), label="VM Name")
-    vm_os = forms.CharField(widget=forms.TextInput(attrs={'size':'25'}), label="VM OS")
-    select_vm_profile = forms.CharField(widget=forms.TextInput(attrs={'size':'25'}), label="VM Profile")
-    select_compute = forms.CharField(widget=forms.TextInput(attrs={'size':'25'}), label="Compute")
+    vm_name = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}), label="VM Name")
+    vm_os = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="VM OS")
+    select_vm_profile = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="VM Profile")
+    select_compute = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="Compute")
 
 
 class Operating_system_form(forms.Form):

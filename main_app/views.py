@@ -3,7 +3,10 @@ import docker
 import os
 from django.db import IntegrityError
 from django.shortcuts import render
+# We'll use render to display our templates.
+
 from .forms import (
+    # We need to import our forms to use it.
     Compute_resource_form,
     Create_host_form,
     Profile_form,
@@ -16,6 +19,7 @@ from django.http import (
     HttpResponse
 )
 from .models import (
+    # We need to import our model to use it.
     Compute_resource_model,
     Profile_model,
     Operating_system_model,
@@ -29,12 +33,25 @@ from main_app.modules import kickstart, ssh_connect as ssh
 # Create your views here.
 
 def home(request):
+    """
+    We can pass the home.html as parameter to our render() function.
+
+    :param request: .html page
+    :return: home.html
+    """
     return render(request, 'home.html')
 
 
 def compute_resource(request):
+    """
+    We can pass the second parameter as infrastructure/compute_resource.html and third parameter as Dictionary to our.
+    render() fuction
+    :param request: .html page and Dictionary
+    :return: compute_resource.html
+    """
     form = Compute_resource_form()
     compute_resource_list = Compute_resource_model.objects.all()
+    # We create object of Compute_resource_model and fetch data and store in compute_resource_list variable
     return render(request, 'infrastructure/compute_resource.html',
                   {'title_name': 'Create New Compute Resource', 'form': form,
                    'compute_obj': compute_resource_list, 'message': False})
@@ -51,12 +68,14 @@ def post_data(request):
         )
         ssh_flag = ssh.make_connection(compute.ip_address, compute.root_password)
         if ssh_flag == True:
+
             try:
                 compute.save()
                 message = True
             except IntegrityError as e:
                 # message = "Name or Ip Address already exists"
                 message = e
+
             form = Compute_resource_form()
             return render(request, 'infrastructure/compute_resource.html',
                           {'title_name': 'Create New Compute Resource', 'form': form,
@@ -70,7 +89,6 @@ def post_data(request):
         #                      " --generic-ssh-user root --generic-ssh-key ~/.ssh/id_rsa " + compute.name + "&"
         # result = os.system(add_docker_machine)
         # compute.save()
-
 
 
 def profile(request):
@@ -134,7 +152,8 @@ def post_create_host(request):
             select_compute=form.data['select_compute']
         )
 
-        profile_details = list(Profile_model.objects.filter(profile_name=create_host.select_vm_profile).values_list()[0])
+        profile_details = list(
+            Profile_model.objects.filter(profile_name=create_host.select_vm_profile).values_list()[0])
         *not_imp1, ram, cpus, disk_size = profile_details
 
         compute_details = list(Compute_resource_model.objects.filter(name=create_host.select_compute).values_list()[0])
@@ -144,7 +163,7 @@ def post_create_host(request):
         *not_imp3, location_url = os_details
 
         root_passwd = form.data['password']
-        kickstart_location = kickstart.kick_gen(root_passwd,location_url)
+        kickstart_location = kickstart.kick_gen(root_passwd, location_url)
         vm.vm_create(compute_ip, create_host.vm_name, ram, cpus, disk_size, location_url, kickstart_location)
         create_host.save()
     return HttpResponseRedirect('/')
@@ -154,22 +173,23 @@ def new_container(request):
     form = newContainerform
     compute_name = Compute_resource_model.objects.values_list("name", flat=True)
     compute_name = list(zip(compute_name, compute_name))
-    return render(request, 'containers/new_container.html',\
-                  {'title_name': "New Container", 'form': form, 'compute_name':compute_name})
+    return render(request, 'containers/new_container.html', \
+                  {'title_name': "New Container", 'form': form, 'compute_name': compute_name})
 
 
 def post_new_container(request):
     form = newContainerform(request.POST)
     if form.is_valid():
         new_cont = Container_model(
-            select_compute = form.data['select_compute'],
-            image_name = form.data['image_name'],
-            tag_name = form.data['tag_name'],
-            container_name = form.data['container_name'],
+            select_compute=form.data['select_compute'],
+            image_name=form.data['image_name'],
+            tag_name=form.data['tag_name'],
+            container_name=form.data['container_name'],
         )
-        create_cont = "docker-machine ssh "+ new_cont.select_compute + " docker container run -d -p "+\
-                      form.data["host_port"]+":"+form.data["cont_port"]+" --name "+ new_cont.container_name + " " +\
-                      new_cont.image_name+":"+new_cont.tag_name
+        create_cont = "docker-machine ssh " + new_cont.select_compute + " docker container run -d -p " + \
+                      form.data["host_port"] + ":" + form.data[
+                          "cont_port"] + " --name " + new_cont.container_name + " " + \
+                      new_cont.image_name + ":" + new_cont.tag_name
         print(create_cont)
         os.system(create_cont)
         # form.save()
@@ -186,7 +206,7 @@ def local_images(request):
     get_images = os.popen("docker-machine ssh " + active_compute + " docker images").readlines()
     for i in range(1, len(get_images)):
         images = get_images[i].split()
-        images_list[images[2]] = [images[0], images[1], images[3]+" "+images[4]+" "+images[5], images[6]]
+        images_list[images[2]] = [images[0], images[1], images[3] + " " + images[4] + " " + images[5], images[6]]
     return render(request, 'containers/local_images.html',
                   {'title_name': "Local Docker Images", 'images_list': images_list, 'compute_name': compute_name})
 
@@ -197,10 +217,10 @@ def post_local_images(request):
     compute_name = Compute_resource_model.objects.values_list("name", flat=True)
     compute_name = list(zip(compute_name, compute_name))
     cpt_name = form.data["select_compute"]
-    get_images = os.popen("docker-machine ssh "+ cpt_name + " docker images").readlines()
+    get_images = os.popen("docker-machine ssh " + cpt_name + " docker images").readlines()
     for i in range(1, len(get_images)):
         images = get_images[i].split()
-        images_list[images[2]] = [images[0],images[1],images[3]+" "+images[4]+" "+images[5],images[6]]
+        images_list[images[2]] = [images[0], images[1], images[3] + " " + images[4] + " " + images[5], images[6]]
     return render(request, 'containers/local_images.html',
-                  {'title_name': "Local Docker Images", 'images_list':images_list,\
-                   'cpt_name':cpt_name, 'compute_name':compute_name})
+                  {'title_name': "Local Docker Images", 'images_list': images_list, \
+                   'cpt_name': cpt_name, 'compute_name': compute_name})

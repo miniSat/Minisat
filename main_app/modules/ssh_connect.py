@@ -13,6 +13,6 @@ def make_connection(ip_address, password):
 
 
 def copy_ssh_id(ip_address, password):
-    make_ssh = "sshpass -p "+ password +" ssh-copy-id -o StrictHostKeyChecking=no root@"+ ip_address
+    make_ssh = "sshpass -p " + password + " ssh-copy-id -o StrictHostKeyChecking=no root@" + ip_address
     os.system(make_ssh)
     return True
