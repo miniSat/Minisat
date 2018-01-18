@@ -116,15 +116,25 @@ def post_profile(request):
 
 def create_host(request):
     form = Create_host_form()
-    compute_name = Compute_resource_model.objects.values_list("name", flat=True)
-    compute_name = list(zip(compute_name, compute_name))
-    profile_name = Profile_model.objects.values_list("profile_name", flat=True)
-    profile_name = list(zip(profile_name, profile_name))
+    error = False
     os_name = Operating_system_model.objects.values_list("os_name", flat=True)
-    os_name = list(zip(os_name, os_name))
+    if not os_name:
+        error = "No Operating System Found"
+    else:
+        os_name = list(zip(os_name, os_name))
+    profile_name = Profile_model.objects.values_list("profile_name", flat=True)
+    if not profile_name:
+        error = "No Profiles Found"
+    else:
+        profile_name = list(zip(profile_name, profile_name))
+    compute_name = Compute_resource_model.objects.values_list("name", flat=True)
+    if not compute_name:
+        error = "No Compute Resource Found"
+    else:
+        compute_name = list(zip(compute_name, compute_name))
     return render(request, 'host/create_host.html',
                   {'title_name': 'Create A New Host', 'form': form, 'os_name': os_name, 'compute_name': compute_name,
-                   'profile_name': profile_name})
+                   'profile_name': profile_name, 'error': error})
 
 
 def operating_system(request):
