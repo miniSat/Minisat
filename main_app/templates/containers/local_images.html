@@ -15,6 +15,9 @@
     <div class="tab-content">
         <br>
         <div role="tabpanel" class="tab-pane fade in active" id="profile">
+          {% if compute_name == False %}
+            <h1>No Compute Resources Found</h1>
+          {% else %}
           <form action="post_local_images" method="post">
             {% csrf_token %}
             <strong>Images on :</strong>
@@ -49,6 +52,7 @@
               </tbody>
             </table>
             </form>
+           {% endif %}
         </div>
     </div>
 </div>

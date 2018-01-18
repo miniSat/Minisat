@@ -52,6 +52,8 @@ def compute_resource(request):
     """
     form = Compute_resource_form()
     compute_resource_list = Compute_resource_model.objects.all()
+    if not compute_resource_list:
+        compute_resource_list = False
     # We create object of Compute_resource_model and fetch data and store in compute_resource_list variable
     return render(request, 'infrastructure/compute_resource.html',
                   {'title_name': 'Create New Compute Resource', 'form': form,
@@ -93,6 +95,8 @@ def post_data(request):
 def profile(request):
     form = Profile_form()
     profile_list = Profile_model.objects.all()
+    if not profile_list:
+        profile_list = False
     return render(request, 'infrastructure/profile.html',
                   {'title_name': 'Profile', 'form': form, 'profile_obj': profile_list})
 
@@ -199,13 +203,16 @@ def local_images(request):
     client = docker.from_env()
     images_list = {}
     compute_name = Compute_resource_model.objects.values_list("name", flat=True)
-    print(compute_name)
-    active_compute = compute_name[0]
-    compute_name = list(zip(compute_name, compute_name))
-    get_images = os.popen("docker-machine ssh " + active_compute + " docker images").readlines()
-    for i in range(1, len(get_images)):
-        images = get_images[i].split()
-        images_list[images[2]] = [images[0], images[1], images[3] + " " + images[4] + " " + images[5], images[6]]
+    if not compute_name:
+        compute_name = False
+    else:
+        print(compute_name)
+        active_compute = compute_name[0]
+        compute_name = list(zip(compute_name, compute_name))
+        get_images = os.popen("docker-machine ssh " + active_compute + " docker images").readlines()
+        for i in range(1, len(get_images)):
+            images = get_images[i].split()
+            images_list[images[2]] = [images[0], images[1], images[3] + " " + images[4] + " " + images[5], images[6]]
     return render(request, 'containers/local_images.html',
                   {'title_name': "Local Docker Images", 'images_list': images_list, 'compute_name': compute_name})
 

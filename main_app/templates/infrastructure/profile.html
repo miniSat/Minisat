@@ -17,6 +17,9 @@
 {% endblock %}
 
 {% block exist_content %}
+{% if profile_obj == False %}
+<h1>No Profiles Found</h1>
+{% else %}
 <table class="table">
   <thead>
     <tr>
@@ -40,4 +43,5 @@
   {% endfor %}
   </tbody>
 </table>
+{% endif %}
 {% endblock %}
