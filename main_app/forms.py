@@ -11,7 +11,7 @@ from .models import (
 class Compute_resource_form(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}), label="Name", max_length=10)
     ip_address = forms.CharField(widget=forms.TextInput(attrs={'size': '50', 'id': 'ip_add'}), label="IP Address")
-    root_password = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}), label="Root Password", max_length=20)
+    root_password = forms.CharField(widget=forms.PasswordInput(attrs={'size': '50'}), label="Root Password", max_length=20)
 
 
 class Profile_form(forms.Form):
