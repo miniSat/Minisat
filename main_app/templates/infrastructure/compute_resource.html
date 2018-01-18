@@ -38,6 +38,9 @@
 {% endblock %}
 
 {% block exist_content %}
+{% if compute_obj == False %}
+<h1>No Compute Resources Found</h1>
+{% else %}
 <table class="table">
   <thead>
   <tr>
@@ -56,6 +59,10 @@
   {% endfor %}
   </tbody>
 </table>
+<<<<<<< HEAD
 
+=======
+{% endif %}
+>>>>>>> 4e1a541e121e28c76aeb66739e3b5aff688dd20c
 {% endblock %}
 
