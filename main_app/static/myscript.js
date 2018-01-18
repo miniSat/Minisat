@@ -3,7 +3,7 @@ $(document).ready(function(e){
      $("#compute_form").submit(function(e){
      var ip_addr=$('#ip_add').val();
      if (validateEmail(ip_addr)) {
-                      }
+         }
      else{
         alert('Invalid  IP Address');
         e.preventDefault();
