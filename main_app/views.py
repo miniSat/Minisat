@@ -52,6 +52,8 @@ def compute_resource(request):
     """
     form = Compute_resource_form()
     compute_resource_list = Compute_resource_model.objects.all()
+    if not compute_resource_list:
+        compute_resource_list = False
     # We create object of Compute_resource_model and fetch data and store in compute_resource_list variable
     return render(request, 'infrastructure/compute_resource.html',
                   {'title_name': 'Create New Compute Resource', 'form': form,
@@ -93,6 +95,8 @@ def post_data(request):
 def profile(request):
     form = Profile_form()
     profile_list = Profile_model.objects.all()
+    if not profile_list:
+        profile_list = False
     return render(request, 'infrastructure/profile.html',
                   {'title_name': 'Profile', 'form': form, 'profile_obj': profile_list})
 

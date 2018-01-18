@@ -12,6 +12,7 @@
           <strong>{{ message }}</strong>
       </div>
     {% endif %}
+
     <form action="post_data" method="post" autocomplete="off">
       {% csrf_token %}
       {% for field in form %}
@@ -25,6 +26,9 @@
 {% endblock %}
 
 {% block exist_content %}
+{% if compute_obj == False %}
+<h1>No Compute Resources Found</h1>
+{% else %}
 <table class="table">
   <thead>
   <tr>
@@ -43,5 +47,6 @@
   {% endfor %}
   </tbody>
 </table>
+{% endif %}
 {% endblock %}
 
