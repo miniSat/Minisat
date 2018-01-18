@@ -3,6 +3,7 @@ import docker
 import os
 from django.db import IntegrityError
 from django.shortcuts import render
+from main_app.modules.docker_manage import make_connection
 # We'll use render to display our templates.
 
 from .forms import (
@@ -71,7 +72,10 @@ def post_data(request):
 
             try:
                 compute.save()
-                message = True
+                if make_connection(compute.ip_address, compute.name):
+                    message = True
+                else:
+                    message = "Failed to add compute resource for docker"
             except IntegrityError as e:
                 # message = "Name or Ip Address already exists"
                 message = e
@@ -85,11 +89,6 @@ def post_data(request):
             return render(request, 'infrastructure/compute_resource.html',
                           {'title_name': 'Create New Compute Resource', 'form': form,
                            'compute_obj': compute_resource_list, 'message': message})
-        # add_docker_machine = "docker-machine create --driver generic --generic-ip-address " + compute.ip_address + \
-        #                      " --generic-ssh-user root --generic-ssh-key ~/.ssh/id_rsa " + compute.name + "&"
-        # result = os.system(add_docker_machine)
-        # compute.save()
-
 
 def profile(request):
     form = Profile_form()
