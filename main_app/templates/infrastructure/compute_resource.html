@@ -12,8 +12,7 @@
           <strong>{{ message }}</strong>
       </div>
     {% endif %}
-
-    <form action="post_data" method="post" autocomplete="off">
+    <form action="post_data" method="post" autocomplete="off" id="compute_form">
       {% csrf_token %}
       {% for field in form %}
         <div class="form-group">
@@ -21,8 +20,21 @@
           {{ field }}
         </div>
       {% endfor %}
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-primary" onclick="myFunction()">Submit</button>
     </form>
+
+
+<!--<div id="snackbar">-->
+<!--{% if messages %}-->
+  <!--<ul class="messages">-->
+    <!--{% for message in messages %}-->
+      <!--<li class="{{ message.tags }}">{{ message }}</li>-->
+    <!--{% endfor %}-->
+  <!--</ul>-->
+<!--{% endif %}-->
+
+<!--</div>-->
+
 {% endblock %}
 
 {% block exist_content %}
