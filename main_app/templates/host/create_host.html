@@ -16,6 +16,7 @@
     <div class="tab-content">
         <br>
         <div role="tabpanel" class="tab-pane fade in active" id="profile">
+            {% if error == False %}
             <form action="post_create_host" method="post" autocomplete="off">
                 {% csrf_token %}
                 {{ form.vm_name.label_tag }}
@@ -50,6 +51,9 @@
                 <br><br>
                 <button type="submit" class="btn btn-primary">Create Instance</button>
             </form>
+            {% else %}
+            <h1>{{ error }}</h1>
+            {% endif %}
         </div>
     </div>
 </div>
