@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView  # NOQA
 import docker
 import os
 from django.db import IntegrityError
@@ -16,8 +16,7 @@ from .forms import (
     Local_Images
 )
 from django.http import (
-    HttpResponseRedirect,
-    HttpResponse
+    HttpResponseRedirect
 )
 from .models import (
     # We need to import our model to use it.
@@ -70,7 +69,7 @@ def post_data(request):
             root_password=form.cleaned_data["root_password"]
         )
         ssh_flag = ssh.make_connection(compute.ip_address, compute.root_password)
-        if ssh_flag == True:
+        if ssh_flag:
 
             try:
                 compute.save()
@@ -91,6 +90,7 @@ def post_data(request):
             return render(request, 'infrastructure/compute_resource.html',
                           {'title_name': 'Create New Compute Resource', 'form': form,
                            'compute_obj': compute_resource_list, 'message': message})
+
 
 def profile(request):
     form = Profile_form()
@@ -186,7 +186,7 @@ def new_container(request):
     form = newContainerform
     compute_name = Compute_resource_model.objects.values_list("name", flat=True)
     compute_name = list(zip(compute_name, compute_name))
-    return render(request, 'containers/new_container.html', \
+    return render(request, 'containers/new_container.html',
                   {'title_name': "New Container", 'form': form, 'compute_name': compute_name})
 
 
@@ -210,7 +210,7 @@ def post_new_container(request):
 
 
 def local_images(request):
-    client = docker.from_env()
+    client = docker.from_env()          # NOQA
     images_list = {}
     compute_name = Compute_resource_model.objects.values_list("name", flat=True)
     if not compute_name:
@@ -238,5 +238,5 @@ def post_local_images(request):
         images = get_images[i].split()
         images_list[images[2]] = [images[0], images[1], images[3] + " " + images[4] + " " + images[5], images[6]]
     return render(request, 'containers/local_images.html',
-                  {'title_name': "Local Docker Images", 'images_list': images_list, \
+                  {'title_name': "Local Docker Images", 'images_list': images_list,
                    'cpt_name': cpt_name, 'compute_name': compute_name})

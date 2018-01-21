@@ -1,12 +1,9 @@
-from django.db import models, IntegrityError
+from django.db import models
 # import the models class
-from django import forms
-from django.core.validators import ip_address_validators
-from django.core.exceptions import ValidationError
-
 
 # Create your models here.
 # Create a class that inherits from models.Model so that Django knows we're creating a model.
+
 
 # Model for Compute_resources
 class Compute_resource_model(models.Model):
