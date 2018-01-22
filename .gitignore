@@ -5,3 +5,4 @@ mini/__pycache__
 main_app/modules/__pycache__
 main_app/migrations/0*
 db.sqlite3
+__pycache__
