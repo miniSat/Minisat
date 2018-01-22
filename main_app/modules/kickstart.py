@@ -1,4 +1,7 @@
-import os
+"""
+kickgen function create a kickstart and save it in /var/www/html folder
+httpd.service should be running
+"""
 
 
 def kick_gen(passwd, location):
@@ -23,4 +26,3 @@ def kick_gen(passwd, location):
                  )
     # os.system("scp /var/www/html/ks.cfg root@172.22.26.202:/var/www/html/")
     return "http://172.22.26.202/ks.cfg"
-
