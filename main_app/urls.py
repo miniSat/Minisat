@@ -1,8 +1,12 @@
-from django.urls import path
+from django.urls import (
+    path)
 from . import views
+
+# We need to import our app's views to call our home views,compute views etc.
 
 urlpatterns = [
     path('', views.home, name='home'),
+    # First paramter:localhost:8000 , Second paramter:Look inside the views.py file Call the home view fuction
     path('compute_resource', views.compute_resource, name='compute_resource'),
     path('post_data', views.post_data, name='post_data'),
     path('profile', views.profile, name='profile'),
@@ -14,5 +18,5 @@ urlpatterns = [
     path('new_container', views.new_container, name="new_container"),
     path('post_new_container', views.post_new_container, name='post_new_container'),
     path('local_images', views.local_images, name='local_images'),
-    path('post_docker_image', views.post_docker_image, name="post_docker_image"),
+    path('post_local_images', views.post_local_images, name="post_local_images")
 ]

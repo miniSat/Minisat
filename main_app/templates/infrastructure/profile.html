@@ -1,7 +1,7 @@
 {% extends 'form_template.html' %}
 {% block form_content %}
 
-    <form action="post_profile" method="post">
+    <form action="post_profile" method="post" autocomplete="off">
       {% csrf_token %}
         {{compute_resource_name}}
       {% for field in form %}
@@ -17,6 +17,9 @@
 {% endblock %}
 
 {% block exist_content %}
+{% if profile_obj == False %}
+<h1>No Profiles Found</h1>
+{% else %}
 <table class="table">
   <thead>
     <tr>
@@ -40,4 +43,5 @@
   {% endfor %}
   </tbody>
 </table>
+{% endif %}
 {% endblock %}

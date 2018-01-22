@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="bg-primary" style="height:50px;">
+<div class="bg-primary" style="height:50px;margin-top:-25px">
     <h3 class="title-bg"><center>{{ title_name }}</center></h3>
 </div>
 <br>
@@ -8,13 +8,7 @@
 <div class="col-md-8 col-lg-8 well well-lg well-primary" style="border:1px solid blue" >
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item active">
-            <a class="nav-link active" href="#compute_resource" role="tab" data-toggle="tab"><strong>1.</strong>Compute Resource</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#image" role="tab" data-toggle="tab"><strong>2.</strong>Image</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#config" role="tab" data-toggle="tab"><strong>3.</strong>Configuration</a>
+            <a class="nav-link active" href="#compute_resource" role="tab" data-toggle="tab"><strong>Run Container</strong></a>
         </li>
     </ul>
     <form action="post_new_container" method="post">
@@ -22,25 +16,24 @@
         <div class="tab-content">
             <br>
             <div role="tabpanel" class="tab-pane fade in active" id="compute_resource">
-                {{ form.select_compute_resource.label_tag }}<br>
-                {{ form.select_compute_resource }}
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="image">
                 {{ form.image_name.label_tag }}<br>
                 {{ form.image_name }}
                 <br><br>
                 {{ form.tag_name.label_tag }}<br>
                 {{ form.tag_name }}
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="config">
+                <br><br>
                 {{ form.container_name.label_tag }}<br>
                 {{ form.container_name }}
                 <br><br>
-                {{ form.command.label_tag }}<br>
-                {{ form.command }}
-                <br><br>
-                {{ form.entry_point.label_tag }}<br>
-                {{ form.entry_point }}
+                {{ form.host_port.label_tag }}<br>
+                {{ form.host_port }}<strong> : </strong>{{ form.cont_port }}<br>
+                <br>
+                {{ form.select_compute.label_tag }}<br>
+                <select name="select_compute">
+                {% for key,value in  compute_name %}
+                    <option value="{{key}}">{{ value }}</option>
+                {% endfor %}
+                </select>
                 <br><br>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
