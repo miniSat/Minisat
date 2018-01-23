@@ -198,6 +198,8 @@ def post_new_container(request):
             image_name=form.data['image_name'],
             tag_name=form.data['tag_name'],
             container_name=form.data['container_name'],
+            host_port=form.data["host_port"],
+            cont_port=form.data["cont_port"]
         )
         create_cont = "docker-machine ssh " + new_cont.select_compute + " docker container run -d -p " + \
                       form.data["host_port"] + ":" + form.data[
