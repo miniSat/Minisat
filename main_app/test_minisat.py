@@ -1,6 +1,7 @@
 from django.test import TestCase  # NOQA
 import os
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 # Create your tests here.
 
 
@@ -10,7 +11,9 @@ def test_pep8():
 
 
 def test_compute_resource():
-    driver = webdriver.Firefox()
+    options = Options()
+    options.add_argument('-headless')
+    driver = webdriver.Firefox(firefox_options=options)
     driver.get("http://localhost:8000")
     assert "MiniSat" in driver.title
     driver.get("http://localhost:8000/compute_resource")
