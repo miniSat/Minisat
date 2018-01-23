@@ -1,3 +1,5 @@
+---
+sudo: true
 language: python
 python:
   - "3.6"
@@ -6,6 +8,15 @@ python:
 install:
   - pip install -r requirements.txt
 
+# command to run before test
+before_script:
+  - sudo mkdir /webDriver
+  - sudo wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip
+  - sudo mv chrome* /webDriver
+  - sudo export PATH=$PATH/:/webDriver
+  - python manage.py runserver > /dev/null 2>&1 &
+
 # command to run tests
 script:
-  - py.test
+  - pytest
