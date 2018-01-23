@@ -10,7 +10,7 @@ def test_pep8():
 
 
 def test_compute_resource():
-    driver = webdriver.Chrome()
+    driver = webdriver.Firefox()
     driver.get("http://localhost:8000")
     assert "MiniSat" in driver.title
     driver.get("http://localhost:8000/compute_resource")
