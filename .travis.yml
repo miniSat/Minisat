@@ -1,3 +1,5 @@
+---
+sudo: true
 language: python
 python:
   - "3.6"
@@ -6,6 +8,15 @@ python:
 install:
   - pip install -r requirements.txt
 
+# command to run before test
+before_script:
+  - sudo mkdir /webDriver
+  - sudo wget https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckodriver-v0.19.1-linux64.tar.gz
+  - tar -xf geckodriver-v0.19.1-linux64.tar.gz
+  - sudo mv gecko* /webDriver
+  - export PATH=$PATH/:/webDriver
+  - python manage.py runserver > /dev/null 2>&1 &
+
 # command to run tests
 script:
-  - flake8 --ignore=E501,E122 mini main_app
+  - pytest
