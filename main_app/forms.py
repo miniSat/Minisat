@@ -32,8 +32,8 @@ class newContainerform(forms.Form):
     image_name = forms.CharField(label="Image Name", max_length=20)
     tag_name = forms.CharField(label="Tag", max_length=20)
     container_name = forms.CharField(label="Container Name", max_length=20)
-    command = forms.CharField(label="Command", max_length=15)
-    entry_point = forms.CharField(label="Entry Point", max_length=15)
+    host_port = forms.IntegerField(label= "Ports")
+    cont_port = forms.IntegerField()
 
 
 class Local_Images(forms.Form):
