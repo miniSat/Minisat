@@ -41,9 +41,9 @@ python3 manage.py runserver
 ```
 
 ### Create test environment
-All minisat pull request are tested in [Travis-ci](https://travis-ci.org/). Sometimes tests fail, and when they do you can visit the test job that failed and view its console output. 
+All minisat pull request are tested in [Travis-ci](https://travis-ci.org/miniSat/minisat). Sometimes tests fail, and when they do you can visit the test job that failed and view its console output. 
 
-It is possible for you to run these same tests locally. As most of our testing is done using selenium. For that you need to download [selenium](http://www.seleniumhq.org/) webdriver for mozila seliumfirefox. [mozilla geckodriver](https://github.com/mozilla/geckodriver/releases) 
+It is possible for you to run these same tests locally. As most of our testing is done using selenium. For that you need to download [selenium](http://www.seleniumhq.org/) webdriver for mozilla firefox. [mozilla geckodriver](https://github.com/mozilla/geckodriver/releases) 
 
 Extract the driver. 
 Export path 
