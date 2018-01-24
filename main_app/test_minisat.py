@@ -28,3 +28,4 @@ def test_compute_resource():
     assert "MiniSat" in driver.title
     driver.get("http://localhost:8000/local_images")
     assert "MiniSat" in driver.title
+    driver.close()
