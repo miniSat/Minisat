@@ -1,6 +1,71 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1 style="margin-top:100px;">DASHBOARD</h1>
+<div class="bg-primary" style="height:50px;margin-top:-20px;">
+    <h3 class="title-bg"><center>{{ title_name }}</center></h3>
+</div>
+<br>
+<div class="col-md-2 col-lg-2"></div>
+
+<div class="col-md-8 col-lg-8 well well-lg well-primary" style="border:1px solid blue" >
+    <ul class="nav nav-tabs text-size" role="tablist">
+        <li class="nav-item active">
+            <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"><b>VM </b></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="#buzz" role="tab" data-toggle="tab"><b>Docker</b></a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <br>
+        <div role="tabpanel" class="tab-pane fade in active" id="profile">
+
+            <div class="row toolbar-pf table-view-pf-toolbar" id="toolbar1">
+                <div class="col-sm-12">
+
+
+            <table class="table table-striped table-bordered table-hover" id="table1">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Compute Name</th>
+                    <th>Status</th>
+                    <th>OS</th>
+
+                </tr>
+                </thead>
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Compute Name</th>
+                    <th>Status</th>
+                    <th>OS</th>
+
+                </tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Compute Name</th>
+                    <th>Status</th>
+                    <th>OS</th>
+
+                </tr>
+            </tbody>
+            </table>
+
+
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="buzz">
+
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2 col-lg-2"></div>
+
+
 
 {% endblock %}
