@@ -242,3 +242,7 @@ def post_local_images(request):
     return render(request, 'containers/local_images.html',
                   {'title_name': "Local Docker Images", 'images_list': images_list,
                    'cpt_name': cpt_name, 'compute_name': compute_name})
+
+
+def vm_info(request):
+    return render(request, 'VM_info.html')
