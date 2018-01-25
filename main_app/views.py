@@ -244,5 +244,5 @@ def post_local_images(request):
                    'cpt_name': cpt_name, 'compute_name': compute_name})
 
 
-def  vm_info(request):
-    return render(request,'VM_info.html')
+def vm_info(request):
+    return render(request, 'VM_info.html')
