@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <script src="components/c3/c3.min.js"></script>
+    <script src="components/d3/d3.min.js"></script>
+
+    <body class="cards-pf">
+      ...
+      <div class="container-fluid container-cards-pf">
+        <div class="row row-cards-pf">
+          <div class="col-xs-12">
+            <div class="card-pf card-pf-utilization">
+  <div class="card-pf-heading">
+
+    <h2 class="card-pf-title">
+      VM_name
+    </h2>
+      <div class="btn-group card-pf-title" style="float:right;top:-60px;">
+      <button class="btn btn-success">Start</button>
+        <button class="btn btn-warning">Pause</button>
+        <button class="btn btn-danger">Stop</button>
+          </div>
+
+  </div>
+  <div class="card-pf-body" id="vm_info_font">
+      <label >UUID :</label><br>
+      <label>Operating System :</label><br>
+      <label>Total Memory :</label><br>
+      <label>Used Memory :</label><br>
+      <label>Status :</label><br>
+
+  </div>
+        </div><!-- /row -->
+      </div><!-- /container -->
+          </div>
+        </div>
+      </div>
+
+    </body>
+
+
+
+{% endblock %}

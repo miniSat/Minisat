@@ -18,5 +18,6 @@ urlpatterns = [
     path('new_container', views.new_container, name="new_container"),
     path('post_new_container', views.post_new_container, name='post_new_container'),
     path('local_images', views.local_images, name='local_images'),
-    path('post_local_images', views.post_local_images, name="post_local_images")
+    path('post_local_images', views.post_local_images, name="post_local_images"),
+    path('vm_info', views.vm_info, name='vm_info')
 ]
