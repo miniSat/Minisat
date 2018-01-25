@@ -29,29 +29,20 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Compute Name</th>
                     <th>Status</th>
+                    <th>Compute Name</th>
                     <th>OS</th>
-
                 </tr>
                 </thead>
             <tbody>
+                {% for key, values in vms.items %}
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Compute Name</th>
-                    <th>Status</th>
-                    <th>OS</th>
-
+                  <td>{{ key }}</td>
+                  {% for v in values %}
+                    <td>{{ v }}</td>
+                  {% endfor %}
                 </tr>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Compute Name</th>
-                    <th>Status</th>
-                    <th>OS</th>
-
-                </tr>
+                {% endfor %}
             </tbody>
             </table>
 
