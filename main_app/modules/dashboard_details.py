@@ -10,7 +10,6 @@ def get_vms(ip_list=[]):
             vm_names = vm_list[vm].split()
             vm_details = os.popen("virsh -c qemu+ssh://"+ip+"/system dominfo "+vm_names[1]).readlines()
             key = vm_details[2].split()
-            print(vm_details)
             vm_det = []
             vm_name = vm_details[1].split()
             vm_det.append(vm_name[1])
