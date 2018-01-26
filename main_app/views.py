@@ -27,7 +27,7 @@ from .models import (
     Container_model
 )
 from main_app.modules import vm_manage as vm
-from main_app.modules import kickstart, ssh_connect as ssh
+from main_app.modules import kickstart, ssh_connect as ssh, dashboard_details as dash
 
 
 # Create your views here.
@@ -39,7 +39,9 @@ def home(request):
     :param request: .html page
     :return: home.html
     """
-    return render(request, 'home.html')
+    compute_name = Compute_resource_model.objects.values_list()
+    get_vms = dash.get_vms(compute_name)
+    return render(request, 'home.html', {'vms': get_vms})
 
 
 def compute_resource(request):

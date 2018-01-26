@@ -10,10 +10,10 @@
 <div class="col-md-8 col-lg-8 well well-lg well-primary" style="border:1px solid blue" >
     <ul class="nav nav-tabs text-size" role="tablist">
         <li class="nav-item active">
-            <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"><b>VM </b></a>
+            <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"><b>Virtual Machines</b></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="#buzz" role="tab" data-toggle="tab"><b>Docker</b></a>
+            <a class="nav-link " href="#buzz" role="tab" data-toggle="tab"><b>Docker Containers</b></a>
         </li>
     </ul>
     <div class="tab-content">
@@ -29,29 +29,20 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Compute Name</th>
                     <th>Status</th>
+                    <th>Compute Name</th>
                     <th>OS</th>
-
                 </tr>
                 </thead>
             <tbody>
+                {% for key, values in vms.items %}
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Compute Name</th>
-                    <th>Status</th>
-                    <th>OS</th>
-
+                  <td>{{ key }}</td>
+                  {% for v in values %}
+                    <td>{{ v }}</td>
+                  {% endfor %}
                 </tr>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Compute Name</th>
-                    <th>Status</th>
-                    <th>OS</th>
-
-                </tr>
+                {% endfor %}
             </tbody>
             </table>
 
