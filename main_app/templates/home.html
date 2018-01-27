@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block extrascript %}
+<script type="text/javascript" src="/static/vmlist.js"></script>
+{% endblock %}
 {% block content %}
 
 <div class="bg-primary" style="height:50px;margin-top:-20px;">
@@ -34,16 +37,8 @@
                     <th>OS</th>
                 </tr>
                 </thead>
-            <tbody>
-                {% for key, values in vms.items %}
-                <tr>
-                  <td>{{ key }}</td>
-                  {% for v in values %}
-                    <td>{{ v }}</td>
-                  {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
+                <tbody id="vm_table">
+                </tbody>
             </table>
 
 
