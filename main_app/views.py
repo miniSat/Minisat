@@ -4,6 +4,7 @@ import os
 from django.db import IntegrityError
 from django.shortcuts import render
 from main_app.modules.docker_manage import make_connection
+from django.http import JsonResponse
 # We'll use render to display our templates.
 
 from .forms import (
@@ -39,9 +40,13 @@ def home(request):
     :param request: .html page
     :return: home.html
     """
+    return render(request, 'home.html')
+
+
+def get_virtual_mc(request):
     compute_name = Compute_resource_model.objects.values_list()
     get_vms = dash.get_vms(compute_name)
-    return render(request, 'home.html', {'vms': get_vms})
+    return JsonResponse(get_vms)
 
 
 def compute_resource(request):
