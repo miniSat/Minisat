@@ -3,7 +3,7 @@ import docker
 import os
 from django.db import IntegrityError
 from django.shortcuts import render
-from main_app.modules.docker_manage import make_connection
+from main_app.modules.docker_manage import make_connection, get_docker_images
 from django.http import JsonResponse
 # We'll use render to display our templates.
 
@@ -14,7 +14,6 @@ from .forms import (
     Profile_form,
     Operating_system_form,
     newContainerform,
-    Local_Images
 )
 from django.http import (
     HttpResponseRedirect
@@ -220,35 +219,22 @@ def post_new_container(request):
 
 def local_images(request):
     client = docker.from_env()          # NOQA
-    images_list = {}
     compute_name = Compute_resource_model.objects.values_list("name", flat=True)
     if not compute_name:
         compute_name = False
     else:
-        print(compute_name)
-        active_compute = compute_name[0]
         compute_name = list(zip(compute_name, compute_name))
-        get_images = os.popen("docker-machine ssh " + active_compute + " docker images").readlines()
-        for i in range(1, len(get_images)):
-            images = get_images[i].split()
-            images_list[images[2]] = [images[0], images[1], images[3] + " " + images[4] + " " + images[5], images[6]]
     return render(request, 'containers/local_images.html',
-                  {'title_name': "Local Docker Images", 'images_list': images_list, 'compute_name': compute_name})
+                  {'title_name': "Local Docker Images", 'compute_name': compute_name})
 
 
 def post_local_images(request):
-    form = Local_Images(request.POST)
-    images_list = {}
-    compute_name = Compute_resource_model.objects.values_list("name", flat=True)
-    compute_name = list(zip(compute_name, compute_name))
-    cpt_name = form.data["select_compute"]
-    get_images = os.popen("docker-machine ssh " + cpt_name + " docker images").readlines()
-    for i in range(1, len(get_images)):
-        images = get_images[i].split()
-        images_list[images[2]] = [images[0], images[1], images[3] + " " + images[4] + " " + images[5], images[6]]
-    return render(request, 'containers/local_images.html',
-                  {'title_name': "Local Docker Images", 'images_list': images_list,
-                   'cpt_name': cpt_name, 'compute_name': compute_name})
+    docker_images = {}
+    com_name = request.GET.get('com_name', None)
+    com_det = Compute_resource_model.objects.filter(name=com_name).values_list()
+    docker_images = get_docker_images(com_det)
+    print(docker_images)
+    return JsonResponse(docker_images)
 
 
 def vm_info(request):
