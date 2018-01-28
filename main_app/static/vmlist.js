@@ -41,10 +41,17 @@ $.when(
                 {
                     str= str+"<td>"+each_vm[item]+"</td>";
                 }
+                str=str+'<td><div class="dropdown">'+
+                    '<button class="btn btn-default dropdown-toggle" type="button" id="action_docker" data-toggle="dropdown">Action'+
+                    '<span class="caret"></span></button>'+
+                    '<ul class="dropdown-menu" role="menu" aria-labelledby="action_docker">'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" id="docker_start" onclick="return start_docker()">Start</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" id = "docker_pause" onclick="return pause_docker()">Pause</a></li>'+
+                    '</ul></div></td>'
                 ele.innerHTML=str;
                 myTable.appendChild(ele);
             }
-        }           
+        }
     })
 ).then(function() {
     $("#spinner").html("");
@@ -60,4 +67,15 @@ alert('Start Vm');
 function pause_vm()
 {
 alert('Pause Vm');
+}
+
+function start_docker()
+{
+alert('Start Docker Container');
+}
+
+
+function pause_docker()
+{
+alert('Pause Docker Container');
 }
