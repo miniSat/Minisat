@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block extrascript %}
+<script type="text/javascript" src="/static/dockerlist.js"></script>
+{% endblock %}
 {% block content %}
 
 <div class="bg-primary" style="height:50px;margin-top:-25px">
@@ -21,7 +24,7 @@
           <form action="post_local_images" method="post">
             {% csrf_token %}
             <strong>Images on :</strong>
-            <select name="select_compute" onchange="form.submit();">
+            <select name="select_compute" id="compute_name" onchange="return getDockerImages()">
                   {% for key,value in  compute_name %}
                       {% if value == cpt_name %}
                       <option value="{{key}}" selected>{{ value }}</option>
@@ -30,7 +33,7 @@
                       {% endif %}
                   {% endfor %}
                   </select>
-            <table class="table">
+            <table class="table" id="table_docker">
               <thead>
                 <tr>
                   <th>Image ID</th>
@@ -40,15 +43,8 @@
                   <th>Size(MiB)</th>
                 </tr>
               </thead>
-              <tbody>
-                {% for key, values in images_list.items %}
-                <tr>
-                  <td>{{ key }}</td>
-                  {% for v in values %}
-                    <td>{{ v }}</td>
-                  {% endfor %}
-                </tr>
-                {% endfor %}
+              <tbody id="docker_images">
+    
               </tbody>
             </table>
             </form>
