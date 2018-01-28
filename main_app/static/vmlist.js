@@ -18,8 +18,8 @@ $.when(
                     '<button class="btn btn-default dropdown-toggle" type="button" id="action" data-toggle="dropdown">Action'+
                     '<span class="caret"></span></button>'+
                     '<ul class="dropdown-menu" role="menu" aria-labelledby="action">'+
-                    '<li role="presentation"><a role="menuitem" tabindex="-1" id="start" onclick="return start_vm()">Start</a></li>'+
-                    '<li role="presentation"><a role="menuitem" tabindex="-1" id = "pause" onclick="return pause_vm()">Pause</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" id="start" onclick="start_vm(\''+each_vm[1]+'\',\''+each_vm[3]+'\')">Start</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" id = "pause" onclick="pause_vm(\''+each_vm[1]+'\',\''+each_vm[3]+'\')">Pause</a></li>'+
                     '</ul></div></td>'
                 ele.innerHTML=str;
                 myTable.appendChild(ele);
@@ -51,13 +51,35 @@ $.when(
 });
 });
 
-function start_vm()
+function start_vm(name,compute_name)
 {
-alert('Start Vm');
+alert('Start '+name);
+$.ajax({
+    url: 'vm_start',
+    data: {
+        'vm_name':name,
+        'compute_name':compute_name
+    },
+    dataType: 'json',
+    success: function(vals){
+        alert(vals.status);
+    }
+});
 }
 
 
-function pause_vm()
+function pause_vm(name,compute_name)
 {
-alert('Pause Vm');
+alert('Pause '+name);
+$.ajax({
+    url: 'vm_pause',
+    data: {
+        'vm_name':name,
+        'compute_name':compute_name
+    },
+    dataType: 'json',
+    success: function(vals){
+        alert(vals.status);
+    }
+});
 }

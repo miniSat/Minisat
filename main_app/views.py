@@ -282,3 +282,23 @@ def post_local_images(request):
 
 def vm_info(request):
     return render(request, 'VM_info.html')
+
+
+def vm_start(request):
+    data = {}
+    vm_name = request.GET.get('vm_name', None)
+    vm_compute_name = request.GET.get('compute_name', None)
+    com_ip = list(Compute_resource_model.objects.filter(name=vm_compute_name).values_list(flat=True))[2]
+    status = vm.virsh_start_vm(vm_name, com_ip)
+    data['status'] = status
+    return JsonResponse(data)
+
+
+def vm_pause(request):
+    data = {}
+    vm_name = request.GET.get('vm_name', None)
+    vm_compute_name = request.GET.get('compute_name', None)
+    com_ip = list(Compute_resource_model.objects.filter(name=vm_compute_name).values_list(flat=True))[2]
+    status = vm.virsh_pause_vm(vm_name, com_ip)
+    data['status'] = status
+    return JsonResponse(data)
