@@ -21,4 +21,5 @@ urlpatterns = [
     path('post_local_images', views.post_local_images, name="post_local_images"),
     path('vm_info', views.vm_info, name='vm_info'),
     path('get_virtual_mc', views.get_virtual_mc, name='get_virtual_mc'),
+    path('get_running_containers', views.get_running_containers, name='get_running_containers'),
 ]

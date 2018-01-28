@@ -1,5 +1,6 @@
 $(document).ready(function(){
-    $.ajax({
+$.when(
+    $.ajax({ // First Request
         url: 'get_virtual_mc',
         dataType: 'json',
         success: function (vals) {
@@ -24,10 +25,31 @@ $(document).ready(function(){
                 myTable.appendChild(ele);
             }
         }
-    });
+    }),
+    
+    $.ajax({ //Seconds Request
+        url: 'get_running_containers',
+        dataType: 'json',
+        success: function (vals) {
+            var myTable = document.getElementById("docker_table");
+            for (var newitem in vals)
+            {
+                var ele = document.createElement("tr");
+                each_vm = vals[newitem].toString().split(",");
+                var str = "";
+                for (var item in each_vm)
+                {
+                    str= str+"<td>"+each_vm[item]+"</td>";
+                }
+                ele.innerHTML=str;
+                myTable.appendChild(ele);
+            }
+        }           
+    })
+).then(function() {
+    $("#spinner").html("");
 });
-
-
+});
 
 function start_vm()
 {

@@ -55,6 +55,8 @@ class Container_model(models.Model):
     image_name = models.CharField("Image Name", max_length=20)
     tag_name = models.CharField("Tag", max_length=20)
     container_name = models.CharField("Container Name", max_length=20)
+    host_port = models.CharField(max_length=4)
+    cont_port = models.CharField(max_length=4)
 
     def __str__(self):
         return self.container_name
