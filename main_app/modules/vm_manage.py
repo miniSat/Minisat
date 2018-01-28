@@ -21,3 +21,15 @@ def isOnline(host):
         print("online")
     else:
         print("offline")
+
+
+def virsh_start_vm(vm_name, com_ip):
+    cmd = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system start " + str(vm_name)
+    start_vm_flag = os.popen(cmd).readlines()
+    return start_vm_flag
+
+
+def virsh_pause_vm(vm_name, com_ip):
+    cmd = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system shutdown " + str(vm_name)
+    shut_vm_flag = os.popen(cmd).readlines()
+    return shut_vm_flag

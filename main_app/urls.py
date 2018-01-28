@@ -22,4 +22,6 @@ urlpatterns = [
     path('vm_info', views.vm_info, name='vm_info'),
     path('get_virtual_mc', views.get_virtual_mc, name='get_virtual_mc'),
     path('get_running_containers', views.get_running_containers, name='get_running_containers'),
+    path('vm_start', views.vm_start, name='vm_start'),
+    path('vm_pause', views.vm_pause, name='vm_pause'),
 ]
