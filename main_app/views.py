@@ -291,6 +291,7 @@ def vm_start(request):
     com_ip = list(Compute_resource_model.objects.filter(name=vm_compute_name).values_list(flat=True))[2]
     status = vm.virsh_start_vm(vm_name, com_ip)
     data['status'] = status
+    data['vm_name'] = vm_name
     return JsonResponse(data)
 
 
@@ -301,4 +302,5 @@ def vm_pause(request):
     com_ip = list(Compute_resource_model.objects.filter(name=vm_compute_name).values_list(flat=True))[2]
     status = vm.virsh_pause_vm(vm_name, com_ip)
     data['status'] = status
+    data['vm_name'] = vm_name
     return JsonResponse(data)

@@ -1,4 +1,5 @@
 import os
+import time
 
 
 def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_loc):
@@ -16,20 +17,22 @@ def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_lo
 
 
 def isOnline(host):
-    response = os.system("ping -c 2 " + host + " > /dev/null 2>&1 &")
+    response = os.system("ping -c 1 " + host + ">/dev/null 2>&1")
     if response == 0:
-        print("online")
+        return True
     else:
-        print("offline")
+        return False
 
 
 def virsh_start_vm(vm_name, com_ip):
     cmd = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system start " + str(vm_name)
-    start_vm_flag = os.popen(cmd).readlines()
+    start_vm_flag = os.system(cmd)
+    time.sleep(6)
     return start_vm_flag
 
 
 def virsh_pause_vm(vm_name, com_ip):
     cmd = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system shutdown " + str(vm_name)
-    shut_vm_flag = os.popen(cmd).readlines()
+    shut_vm_flag = os.system(cmd)
+    time.sleep(6)
     return shut_vm_flag
