@@ -36,3 +36,11 @@ def virsh_pause_vm(vm_name, com_ip):
     shut_vm_flag = os.system(cmd)
     time.sleep(6)
     return shut_vm_flag
+
+
+def vm_ip(vm_name, compute_ip):
+    response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_name).readlines()
+    vm_mac = response[2].split(" ")[-1]
+    response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system net-dhcp-leases default | grep " + vm_mac).readlines()
+    vm_ip = response[0].split()[4]
+    print(vm_ip)
