@@ -44,3 +44,20 @@ def vm_ip(vm_name, compute_ip):
     response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system net-dhcp-leases default | grep " + vm_mac).readlines()
     vm_ip = response[0].split()[4]
     print(vm_ip)
+
+
+def vm_details(compute_ip, vm_id):
+    details = {}
+    details["Id"] = vm_id
+    vm_name = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domname " + vm_id).readline()
+    details["Name"] = vm_name[:-1]
+    vm_state = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domstate " + vm_id).readline()
+    details["State"] = vm_state[:-1]
+    vm_allocated_mem = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system dommemstat " + vm_id).readline()
+    details["Allocated memory "] = str(int(int(vm_allocated_mem.split()[1]) / 1024)) + "MB"
+    list = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_id).readlines()[2].split()
+    vm_mac = list[4]
+    details["MAC Address"] = vm_mac
+
+    print(details)
+    return details

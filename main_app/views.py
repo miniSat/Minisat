@@ -280,8 +280,9 @@ def post_local_images(request):
     return JsonResponse(docker_images)
 
 
-def vm_info(request):
-    return render(request, 'VM_info.html')
+def vm_info(request, vm_id):
+    details = vm.vm_details("172.22.26.101", vm_id)
+    return render(request, 'VM_info.html', {"details": details})
 
 
 def vm_start(request):
