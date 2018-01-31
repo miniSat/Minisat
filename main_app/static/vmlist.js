@@ -78,7 +78,7 @@ function ajax_vm(){
                 each_vm = vals[newitem].toString().split(",");
                 ele.setAttribute("id",each_vm[1]);
                 var str = "";
-                str= str+"<td class='vm_id'><a href='vm_info/"+each_vm[0]+"' >"+each_vm[0]+"</a></td>";
+                str= str+"<td class='vm_id'><a href='"+each_vm[3]+"/"+each_vm[0]+"' >"+each_vm[0]+"</a></td>";
                 str= str+"<td class='vm_name'>"+each_vm[1]+"</td>";
                 str= str+"<td class='vm_status'>"+each_vm[2]+"</td>";
                 str= str+"<td class='vm_compute'>"+each_vm[3]+"</td>";
@@ -89,7 +89,7 @@ function ajax_vm(){
                     '<li role="presentation"><a role="menuitem" tabindex="-1" class="start_'+each_vm[1]+'" onclick="start_vm(\''+each_vm[1]+'\',\''+each_vm[3]+'\')">Start</a></li>'+
                     '<li role="presentation"><a role="menuitem" tabindex="-1" class = "pause_'+each_vm[1]+'" onclick="pause_vm(\''+each_vm[1]+'\',\''+each_vm[3]+'\')">Shutdown</a></li>'+
                     '</ul></div></td>'
-                $("#this-"+each_vm[0]).attr("href","vm_info/"+each_vm[0]);
+//                $("#this-"+each_vm[0]).attr("href","vm_info/"+each_vm[0]);
                 ele.innerHTML=str;
                 myTable.appendChild(ele);
             }

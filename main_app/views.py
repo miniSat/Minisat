@@ -280,8 +280,13 @@ def post_local_images(request):
     return JsonResponse(docker_images)
 
 
-def vm_info(request, vm_id):
-    details = vm.vm_details("172.22.26.101", vm_id)
+def vm_info(request, cname, vm_id):
+    compute = Compute_resource_model.objects.filter(name=cname).values_list()[0]
+    compute_ip = compute[2]
+    details = vm.vm_details(compute_ip, vm_id)
+    # details["Operating System"] = \
+    OS = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][2]
+    details["Operating System"] = OS
     return render(request, 'VM_info.html', {"details": details})
 
 
