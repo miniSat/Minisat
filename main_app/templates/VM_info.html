@@ -23,11 +23,9 @@
 
   </div>
   <div class="card-pf-body" id="vm_info_font">
-      <label >UUID :</label><br>
-      <label>Operating System :</label><br>
-      <label>Total Memory :</label><br>
-      <label>Used Memory :</label><br>
-      <label>Status :</label><br>
+      {% for key,value in details.items %}
+      <label > {{ key }} : {{ value }} </label><br>
+      {% endfor %}
 
   </div>
         </div><!-- /row -->
