@@ -5,38 +5,41 @@ $(document).ready(function(){
 
 function start_vm(name,compute_name)
 {
-$("#vm-spinner").show();
-$.ajax({
-    url: 'vm_start',
-    data: {
-        'vm_name':name,
-        'compute_name':compute_name
-    },
-    dataType: 'json',
-    success: function(vals){
-        console.log("#dash_vms "+"#"+vals.vm_name+" .vm_status");
-        $("#dash_vms "+"#"+vals.vm_name+" .vm_status").html("<p style='color:green'>Running</p>");
-        $("#vm-spinner").hide();
-    }
-});
+    $("#action_"+name).prop("disabled", true);
+    $("#vm-spinner").show();
+    $.ajax({
+        url: 'vm_start',
+        data: {
+            'vm_name':name,
+            'compute_name':compute_name
+        },
+        dataType: 'json',
+        success: function(vals){
+            $("#dash_vms "+"#"+vals.vm_name+" .vm_status").html("<p style='color:green'>Running</p>");
+            $("#vm-spinner").hide();
+            $("#action_"+name).prop("disabled", false);
+        }
+    });
 }
 
 
 function pause_vm(name,compute_name)
 {
-$("#vm-spinner").show();
-$.ajax({
-    url: 'vm_pause',
-    data: {
-        'vm_name':name,
-        'compute_name':compute_name
-    },
-    dataType: 'json',
-    success: function(vals){
-        $("#dash_vms "+"#"+vals.vm_name+" .vm_status").html("<p style='color:red'>Shutdown</p>");
-        $("#vm-spinner").hide();
-    }
-});
+    $("#action_"+name).prop("disabled", true);
+    $("#vm-spinner").show();
+    $.ajax({
+        url: 'vm_pause',
+        data: {
+            'vm_name':name,
+            'compute_name':compute_name
+        },
+        dataType: 'json',
+        success: function(vals){
+            $("#dash_vms "+"#"+vals.vm_name+" .vm_status").html("<p style='color:red'>Shutdown</p>");
+            $("#vm-spinner").hide();
+            $("#action_"+name).prop("disabled", false);
+        }
+    });
 }
 
 function start_docker()
@@ -80,11 +83,11 @@ function ajax_vm(){
                 str= str+"<td class='vm_status'>"+each_vm[2]+"</td>";
                 str= str+"<td class='vm_compute'>"+each_vm[3]+"</td>";
                 str=str+'<td><div class="dropdown">'+
-                    '<button class="btn btn-default dropdown-toggle" type="button" id="action" data-toggle="dropdown">Action'+
+                    '<button class="btn btn-default dropdown-toggle" type="button" id="action_'+each_vm[1]+'" data-toggle="dropdown">Action'+
                     '<span class="caret"></span></button>'+
                     '<ul class="dropdown-menu" role="menu" aria-labelledby="action">'+
                     '<li role="presentation"><a role="menuitem" tabindex="-1" id="start" onclick="start_vm(\''+each_vm[1]+'\',\''+each_vm[3]+'\')">Start</a></li>'+
-                    '<li role="presentation"><a role="menuitem" tabindex="-1" id = "pause" onclick="pause_vm(\''+each_vm[1]+'\',\''+each_vm[3]+'\')">Pause</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" id = "pause" onclick="pause_vm(\''+each_vm[1]+'\',\''+each_vm[3]+'\')">Shutdown</a></li>'+
                     '</ul></div></td>'
                 ele.innerHTML=str;
                 myTable.appendChild(ele);
@@ -100,7 +103,7 @@ function ajax_vm(){
                 }
             });
             $("#vm-spinner").hide();
-        },
+        }
     });
 }
 function ajax_containers() {
