@@ -53,8 +53,11 @@ def vm_details(compute_ip, vm_id):
     details["Name"] = vm_name[:-1]
     vm_state = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domstate " + vm_id).readline()
     details["State"] = vm_state[:-1]
-    vm_allocated_mem = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system dommemstat " + vm_id).readline()
-    details["Allocated memory "] = str(int(int(vm_allocated_mem.split()[1]) / 1024)) + "MB"
+    try:
+        vm_allocated_mem = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system dommemstat " + vm_id).readline()
+        details["Allocated memory "] = str(int(int(vm_allocated_mem.split()[1]) / 1024)) + "MB"
+    except IndexError:
+        details["Allocated memory "] = "-"
     list = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_id).readlines()[2].split()
     vm_mac = list[4]
     details["MAC Address"] = vm_mac
