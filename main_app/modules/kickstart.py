@@ -25,5 +25,5 @@ def kick_gen(passwd, location):
                  "part swap --fstype=\"swap\" --size=2048 \n"
                  "part / --fstype=\"ext4\" --grow --size=1"
                  )
-    os.system("scp /var/www/html/ks.cfg root@172.22.26.202:/var/www/html/")
+    os.system("scp /var/www/html/ks.cfg root@172.22.26.102:/var/www/html/")
     return "http://172.22.26.102/ks.cfg"
