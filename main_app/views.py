@@ -1,7 +1,6 @@
 from django.views.generic import TemplateView  # NOQA
 import docker
 import os
-from django.db import IntegrityError
 from django.shortcuts import render
 from main_app.modules.docker_manage import make_connection, get_docker_images
 from django.http import JsonResponse
@@ -69,47 +68,41 @@ def compute_resource(request):
     # compute_resource_list variable
     return render(request, 'infrastructure/compute_resource.html',
                   {'title_name': 'Create New Compute Resource', 'form': form,
-                   'compute_obj': compute_resource_list, 'message': False})
+                   'compute_obj': compute_resource_list})
 
 
 def post_data(request):
-    form = Compute_resource_form(request.POST)
-    compute_resource_list = Compute_resource_model.objects.all()
-    if form.is_valid():
-        compute = Compute_resource_model(
-            name=form.cleaned_data["name"],
-            ip_address=form.cleaned_data["ip_address"],
-            root_password=form.cleaned_data["root_password"]
-        )
-        ssh_flag = ssh.make_connection(
-            compute.ip_address, compute.root_password)
-        if ssh_flag:
-
-            try:
-                compute.save()
-                if make_connection(compute.ip_address, compute.name):
-                    message = True
+    message = {}
+    if (request.is_ajax() and request.method == 'POST'):
+        name = request.POST["name"]
+        ip_address = request.POST["ip_address"]
+        root_password = request.POST["root_password"]
+        check_name = Compute_resource_model.objects.all().filter(name=name).exists()
+        check_ip = Compute_resource_model.objects.filter(ip_address=ip_address).exists()
+        if not check_name:
+            if not check_ip:
+                if vm.isOnline(ip_address):
+                    vm_result = ssh.make_connection(ip_address, root_password)
+                    if vm_result == "True":
+                        if make_connection(ip_address, name) == "True":
+                            compute_obj = Compute_resource_model(
+                                name=name,
+                                ip_address=ip_address,
+                                root_password=root_password
+                            )
+                            compute_obj.save()
+                        else:
+                            message['docker-status'] = "Could not add compute for Docker"
+                    else:
+                        message['vm-status'] = vm_result
                 else:
-                    message = "Failed to add compute resource for docker"
-            except IntegrityError as e:
-                # message = "Name or Ip Address already exists"
-                message = e
-
-            form = Compute_resource_form()
-            return render(request,
-                          'infrastructure/compute_resource.html',
-                          {'title_name': 'Create New Compute Resource',
-                           'form': form,
-                           'compute_obj': compute_resource_list,
-                           'message': message})
+                    message["status"] = "System is unreachable"
+            else:
+                message["status"] = "IP address already exists"
         else:
-            message = ssh_flag
-            return render(request,
-                          'infrastructure/compute_resource.html',
-                          {'title_name': 'Create New Compute Resource',
-                           'form': form,
-                           'compute_obj': compute_resource_list,
-                           'message': message})
+            message["status"] = "Compute name already exists"
+    print(message)
+    return JsonResponse(message)
 
 
 def profile(request):

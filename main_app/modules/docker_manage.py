@@ -7,9 +7,9 @@ def make_connection(ip_address, name):
     result = os.system(add_docker_machine)
 
     if result == 0:
-        return True
+        return "True"
     else:
-        return False
+        return "False"
 
 
 def get_docker_images(compute=[]):
