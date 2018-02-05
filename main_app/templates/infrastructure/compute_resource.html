@@ -1,18 +1,18 @@
 {% extends 'form_template.html' %}
 
 {% block form_content %}
-    
-    <div id="results"></div>
-    
-    <form  id="compute_form">{% csrf_token %}
-      {% for field in form %}
-        <div class="form-group">
-          {{ field.label_tag }}<br>
-          {{ field }}
-        </div>
-      {% endfor %}
-      <button type="submit" class="btn btn-primary" onclick="myFunction()">Submit</button>
-    </form>
+
+<div id="results"></div>
+
+<form id="compute_form">{% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+        {{ field.label_tag }}<br>
+        {{ field }}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary" onclick="myFunction()">Submit</button>
+</form>
 
 
 {% endblock %}
@@ -24,24 +24,25 @@
 {% else %}
 <script>
     console.log("{{compute_obj}}");
-  </script>
+
+</script>
 <table class="table">
-  <thead>
-  <tr>
-    <th>#</th>
-    <th>Name</th>
-    <th>IP Address</th>
-  </tr>
-  </thead>
-  <tbody>
-  {% for obj in compute_obj %}
-  <tr>
-    <th scope="row">{{ obj.id }}</th>
-    <td>{{ obj.name }}</td>
-    <td>{{ obj.ip_address }}</td>
-  </tr>
-  {% endfor %}
-  </tbody>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>IP Address</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for obj in compute_obj %}
+    <tr>
+        <th scope="row">{{ obj.id }}</th>
+        <td>{{ obj.name }}</td>
+        <td>{{ obj.ip_address }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
 </table>
 {% endif %}
 {% endblock %}
