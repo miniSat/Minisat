@@ -41,9 +41,12 @@ def virsh_pause_vm(vm_name, com_ip):
 def vm_ip(vm_name, compute_ip):
     response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_name).readlines()
     vm_mac = response[2].split(" ")[-1]
-    response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system net-dhcp-leases default | grep " + vm_mac).readlines()
-    vm_ip = response[0].split()[4]
-    print(vm_ip)
+    try:
+        response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system net-dhcp-leases default | grep " + vm_mac).readlines()
+        vm_ipaddress = response[0].split()[4]
+    except:
+        vm_ipaddress = '-'
+    return vm_ipaddress
 
 
 def vm_details(compute_ip, vm_id):
@@ -58,9 +61,17 @@ def vm_details(compute_ip, vm_id):
         details["Allocated memory "] = str(int(int(vm_allocated_mem.split()[1]) / 1024)) + "MB"
     except IndexError:
         details["Allocated memory "] = "-"
+    details["IP Address"] = vm_ip(details["Name"], compute_ip)
     list = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_id).readlines()[2].split()
     vm_mac = list[4]
     details["MAC Address"] = vm_mac
 
-    print(details)
+    # print(details)
     return details
+
+
+def get_packages(compute_ip, vm_ip):
+    vm_ip = vm_ip.split("/")[0]
+    package_info = os.popen("ssh root@" + compute_ip + " 'ssh root@" + vm_ip + " rpm -qa'").readlines()
+    package_info = package_info[2:]
+    return package_info

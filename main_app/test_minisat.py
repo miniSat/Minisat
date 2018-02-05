@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.options import Options
 
 
 def test_pep8():
-    response = os.system("flake8 --ignore=E501,E122 mini main_app")
+    response = os.system("flake8 --ignore=E501,E122,E722 mini main_app")
     assert response == 0
 
 

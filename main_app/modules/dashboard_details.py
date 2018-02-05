@@ -33,7 +33,7 @@ def get_vms(ip_list=[]):
                 final_dict[count] = vm_det
                 count = count + 1
         else:
-                error.append(tuple[1])
+            error.append(tuple[1])
     if len(error):
         final_dict['error'] = error
     return final_dict
