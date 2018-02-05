@@ -2,7 +2,7 @@ from django.views.generic import TemplateView  # NOQA
 import docker
 import os
 from django.shortcuts import render
-from main_app.modules.docker_manage import make_connection, get_docker_images
+from main_app.modules.docker_manage import make_connection, get_docker_images, start_cont, stop_cont
 from django.http import JsonResponse
 # We'll use render to display our templates.
 
@@ -303,3 +303,19 @@ def vm_pause(request):
     data['status'] = status
     data['vm_name'] = vm_name
     return JsonResponse(data)
+
+
+def start_container(request):
+    cont_name = request.GET.get('cont_name', None)
+    compute_name = request.GET.get('compute_name', None)
+    container_status = start_cont(cont_name, compute_name)
+    res = {'status': container_status, 'cont_name': cont_name}
+    return JsonResponse(res)
+
+
+def stop_container(request):
+    cont_name = request.GET.get('cont_name', None)
+    compute_name = request.GET.get('compute_name', None)
+    container_status = stop_cont(cont_name, compute_name)
+    res = {'status': container_status, 'cont_name': cont_name}
+    return JsonResponse(res)

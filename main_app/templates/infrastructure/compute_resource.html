@@ -15,23 +15,16 @@
     </form>
 
 
-<!--<div id="snackbar">-->
-<!--{% if messages %}-->
-  <!--<ul class="messages">-->
-    <!--{% for message in messages %}-->
-      <!--<li class="{{ message.tags }}">{{ message }}</li>-->
-    <!--{% endfor %}-->
-  <!--</ul>-->
-<!--{% endif %}-->
-
-<!--</div>-->
-
 {% endblock %}
 
 {% block exist_content %}
 {% if compute_obj == False %}
+
 <h1>No Compute Resources Found</h1>
 {% else %}
+<script>
+    console.log("{{compute_obj}}");
+  </script>
 <table class="table">
   <thead>
   <tr>
