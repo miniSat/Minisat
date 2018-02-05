@@ -44,3 +44,9 @@ font-size : 16px;
 #vm_info_font{
 font-size:15px;
 }
+
+
+.myBox {
+height: 330px;
+overflow: auto;
+}
