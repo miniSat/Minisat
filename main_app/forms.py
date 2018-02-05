@@ -39,6 +39,7 @@ class newContainerform(forms.Form):
 class Local_Images(forms.Form):
     select_compute = forms.CharField(label="Compute", max_length=20)
 
+
 class Product_form(forms.Form):
     product_name = forms.CharField(label="Name", max_length=20)
     product_location = forms.CharField(label="Location", max_length=100)

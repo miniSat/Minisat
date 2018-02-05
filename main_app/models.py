@@ -1,4 +1,6 @@
 from django.db import models
+
+
 # import the models class
 
 # Create your models here.
@@ -64,7 +66,7 @@ class Container_model(models.Model):
 
 class Product_model(models.Model):
     product_name = models.CharField("Name", max_length=20)
-    product_location = models.CharField("Location",max_length=100)
+    product_location = models.CharField("Location", max_length=100)
 
     def __str__(self):
         return self.product_name
