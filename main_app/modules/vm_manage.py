@@ -45,7 +45,7 @@ def vm_ip(vm_name, compute_ip):
         response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system net-dhcp-leases default | grep " + vm_mac).readlines()
         vm_ipaddress = response[0].split()[4]
     except:
-        vm_ipaddress = "-"
+        vm_ipaddress = '-'
     return vm_ipaddress
 
 
@@ -71,7 +71,7 @@ def vm_details(compute_ip, vm_id):
 
 
 def get_packages(compute_ip, vm_ip):
-    vm_ip=vm_ip.split("/")[0]
+    vm_ip = vm_ip.split("/")[0]
     package_info = os.popen("ssh root@" + compute_ip + " 'ssh root@" + vm_ip + " rpm -qa'").readlines()
     package_info = package_info[2:]
     return package_info

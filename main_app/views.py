@@ -32,8 +32,8 @@ from main_app.modules import (
     ssh_connect as ssh,
     dashboard_details as dash
 )
-
 # Create your views here.
+
 
 def home(request):
     """
