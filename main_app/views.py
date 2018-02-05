@@ -13,6 +13,7 @@ from .forms import (
     Profile_form,
     Operating_system_form,
     newContainerform,
+    Product_form,
 )
 from django.http import (
     HttpResponseRedirect
@@ -23,8 +24,8 @@ from .models import (
     Profile_model,
     Operating_system_model,
     Create_host_model,
-    Container_model
-)
+    Container_model,
+    Product_model)
 from main_app.modules import vm_manage as vm
 from main_app.modules import kickstart, ssh_connect as ssh, dashboard_details as dash
 
@@ -123,7 +124,7 @@ def post_profile(request):
         profile = Profile_model(
             profile_name=form.cleaned_data["profile_name"],
             ram=form.cleaned_data["ram"],
-            cpus=form.cleaned_data["cpus"],
+            cpus=form.cleaned_data["c>>>>>>> Stashed changespus"],
             disk_size=form.cleaned_data["disk_size"]
         )
         profile.save()
@@ -212,6 +213,10 @@ def post_create_host(request):
             ram,
             cpus,
             disk_size,
+            create_host.vm_name,
+            ram,
+            cpus,
+            disk_size,
             location_url,
             kickstart_location)
         create_host.save()
@@ -243,7 +248,8 @@ def post_new_container(request):
             cont_port=form.data["cont_port"]
         )
         create_cont = "docker-machine ssh " + new_cont.select_compute + " docker container run -d -p " + \
-                      form.data["host_port"] + ":" + form.data["cont_port"] + " --name " + new_cont.container_name + " " + \
+                      form.data["host_port"] + ":" + form.data[
+                          "cont_port"] + " --name " + new_cont.container_name + " " + \
                       new_cont.image_name + ":" + new_cont.tag_name
         print(create_cont)
         os.system(create_cont)
@@ -252,7 +258,7 @@ def post_new_container(request):
 
 
 def local_images(request):
-    client = docker.from_env()          # NOQA
+    client = docker.from_env()  # NOQA
     compute_name = Compute_resource_model.objects.values_list("name", flat=True)
     if not compute_name:
         compute_name = False
@@ -319,3 +325,24 @@ def stop_container(request):
     container_status = stop_cont(cont_name, compute_name)
     res = {'status': container_status, 'cont_name': cont_name}
     return JsonResponse(res)
+
+
+def product(request):
+    form = Product_form()
+    product_list = Product_model.objects.all()
+    return render(request,
+                  'Content/product.html',
+                  {'title_name': 'Product',
+                   'form': form,
+                   'product_obj': product_list})
+
+
+def post_product(request):
+    form = Product_form(request.POST)
+    if form.is_valid():
+        product = Product_model(
+            product_name=form.cleaned_data["product_name"],
+            product_location=form.cleaned_data["product_location"]
+        )
+        product.save()
+    return HttpResponseRedirect('/')
