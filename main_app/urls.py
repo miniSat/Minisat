@@ -26,4 +26,6 @@ urlpatterns = [
     path('vm_pause', views.vm_pause, name='vm_pause'),
     path('containers/start_container/', views.start_container, name="start_container"),
     path('containers/pause_container/', views.stop_container, name="stop_container"),
+    path('product', views.product, name="product"),
+    path('post_product', views.post_product, name='post_product'),
 ]

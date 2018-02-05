@@ -1,0 +1,36 @@
+{% extends 'form_template.html' %}
+{% block form_content %}
+
+    <form action="post_product" method="post" autocomplete="off">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          {{ field.label_tag }}<br>
+          {{ field }}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+
+{% endblock %}
+
+{% block exist_content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for obj in product_obj %}
+    <tr>
+      <th scope="row">{{ obj.id }}</th>
+      <td>{{ obj.product_name }}</td>
+      <td>{{ obj.product_location }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
