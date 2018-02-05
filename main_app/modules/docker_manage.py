@@ -25,3 +25,21 @@ def get_docker_images(compute=[]):
         images_list = []
         count = count + 1
     return docker_dict
+
+
+def start_cont(cont_name, compute_name):
+    start_cmd = "docker-machine ssh " + compute_name + " docker unpause " + cont_name
+    cont_response = os.system(start_cmd)
+    if cont_response == 0:
+        return "Paused"
+    elif cont_response == 256:
+        return 0
+
+
+def stop_cont(cont_name, compute_name):
+    start_cmd = "docker-machine ssh " + compute_name + " docker pause " + cont_name
+    cont_response = os.popen(start_cmd)
+    if cont_response == 0:
+        return "Running"
+    elif cont_response == 256:
+        return 0

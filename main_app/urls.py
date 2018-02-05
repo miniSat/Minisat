@@ -24,4 +24,6 @@ urlpatterns = [
     path('get_running_containers', views.get_running_containers, name='get_running_containers'),
     path('vm_start', views.vm_start, name='vm_start'),
     path('vm_pause', views.vm_pause, name='vm_pause'),
+    path('containers/start_container/', views.start_container, name="start_container"),
+    path('containers/pause_container/', views.stop_container, name="stop_container"),
 ]

@@ -29,6 +29,7 @@ def get_vms(ip_list=[]):
                 vm_status = vm_details[4].split()
                 vm_det.append(vm_status[1])
                 vm_det.append(tuple[1])
+                vm_det.append(ip)
                 final_dict[count] = vm_det
                 count = count + 1
         else:
@@ -52,8 +53,11 @@ def running_containers(compute=[]):
             for j in range(1, len(cont_list)):
                 li = cont_list[j].split()
                 newli = []
-                newli.extend([li[13], li[1], li[12], tuple[1], li[9] + " " + li[10] + " " + li[11]])
-                data[li[0]] = newli
+                if '(Paused)' in li:
+                    newli.extend([li[-1], li[1], li[-2], tuple[1], "Paused", li[0], tuple[2]])
+                else:
+                    newli.extend([li[-1], li[1], li[-2], tuple[1], "Running", li[0], tuple[2]])
+                data[i] = newli
                 i = i + 1
         else:
             error.append(tuple[1])
