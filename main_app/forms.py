@@ -43,3 +43,8 @@ class Local_Images(forms.Form):
 class Product_form(forms.Form):
     product_name = forms.CharField(label="Name", max_length=20)
     product_location = forms.CharField(label="Location", max_length=100)
+
+
+class View_form(forms.Form):
+    view_name = forms.CharField(label="Name", max_length=20)
+    select_product = forms.CharField(label="Select Products", max_length=20)
