@@ -32,6 +32,8 @@ from main_app.modules import (
     ssh_connect as ssh,
     dashboard_details as dash
 )
+
+
 # Create your views here.
 
 
@@ -127,7 +129,7 @@ def post_profile(request):
         profile = Profile_model(
             profile_name=form.cleaned_data["profile_name"],
             ram=form.cleaned_data["ram"],
-            cpus=form.cleaned_data["c>>>>>>> Stashed changespus"],
+            cpus=form.cleaned_data["cpus"],
             disk_size=form.cleaned_data["disk_size"]
         )
         profile.save()
@@ -212,10 +214,6 @@ def post_create_host(request):
         kickstart_location = kickstart.kick_gen(root_passwd, location_url)
         vm.vm_create(
             compute_ip,
-            create_host.vm_name,
-            ram,
-            cpus,
-            disk_size,
             create_host.vm_name,
             ram,
             cpus,
@@ -349,3 +347,15 @@ def post_product(request):
         )
         product.save()
     return HttpResponseRedirect('/')
+
+
+def delete(request):
+    if(request.GET.get('ComputeDelete')):
+        Compute_resource_model.objects.filter(id=request.GET.get('ComputeDelete')).delete()
+    if(request.GET.get('ProfileDelete')):
+        Profile_model.objects.filter(id=request.GET.get('ProfileDelete')).delete()
+    if(request.GET.get('ProductDelete')):
+        Product_model.objects.filter(id=request.GET.get('ProductDelete')).delete()
+    if(request.GET.get('OSDelete')):
+        Operating_system_model.objects.filter(id=request.GET.get('OSDelete')).delete()
+    return HttpResponseRedirect("/")

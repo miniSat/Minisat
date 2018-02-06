@@ -29,6 +29,7 @@
       <th scope="row">{{ obj.id }}</th>
       <td>{{ obj.os_name }}</td>
       <td>{{ obj.os_location }}</td>
+      <td><form action="delete" method="GET"><button class = "btn btn-default" name="OSDelete" value="{{ obj.id }}">Delete</button> </form></td>
     </tr>
   {% endfor %}
   </tbody>
