@@ -5,7 +5,9 @@ from .models import (
     Create_host_model,
     Operating_system_model,
     Profile_model,
-    Container_model
+    Container_model,
+    Product_model,
+    View_model
 )
 
 # Register your models here.
@@ -15,3 +17,5 @@ admin.site.register(Profile_model)
 admin.site.register(Create_host_model)
 admin.site.register(Operating_system_model)
 admin.site.register(Container_model)
+admin.site.register(Product_model)
+admin.site.register(View_model)

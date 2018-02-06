@@ -70,3 +70,11 @@ class Product_model(models.Model):
 
     def __str__(self):
         return self.product_name
+
+
+class View_model(models.Model):
+    view_name = models.CharField(max_length=20)
+    select_product = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.view_name
