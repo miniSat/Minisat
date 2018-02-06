@@ -42,6 +42,7 @@
       <td>{{ obj.cpus }}</td>
       <td>{{ obj.disk_size }}</td>
       <td>{{ obj.select_compute }}</td>
+      <td><form action="delete" method="GET"><button class = "btn btn-default" name="ProfileDelete" value="{{ obj.id }}">Delete</button> </form></td>
     </tr>
   {% endfor %}
 
