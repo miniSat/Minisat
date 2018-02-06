@@ -365,8 +365,19 @@ def delete(request):
 
 def content_view(request):
     form = View_form()
+    view_dict = {}
     product_list = Product_model.objects.all()
-    return render(request, 'Content/content_view.html', {'title_name': "Content View", 'form': form, 'products': product_list, 'message': False})
+    viewList = View_model.objects.all().values_list('view_name', flat=True).distinct()
+    for each in viewList:
+        var = View_model.objects.all().filter(view_name=each).values()
+        tmp = []
+        for one in var:
+            product = one['select_product']
+            product_url = Product_model.objects.all().filter(product_name=product).values()[0]['product_location']
+            myTup = (product, product_url)
+            tmp.append(myTup)
+        view_dict[each] = tmp
+    return render(request, 'Content/content_view.html', {'title_name': "Content View", 'form': form, 'products': product_list, 'message': False, 'view_dict': view_dict})
 
 
 def post_content_view(request):

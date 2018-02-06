@@ -50,5 +50,33 @@
 {% endblock %}
 
 {% block exist_content %}
+    <div class="myBox">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width=10%>View</th>
+                    <th width=15%>Product</th>
+                    <th>Product Url</th>
+                </tr>
+            </thead>
+            <tbody>
 
+                {% for key,value in view_dict.items %}
+                    <tr>
+                        {% for each in value %}
+                        <tr>
+                            {% if forloop.first %}
+                            <td>{{ key }}</td>
+                            {% else %}
+                            <td></td> 
+                            {% endif %}
+                            <td>{{ each.0 }}</td>
+                            <td>{{ each.1 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
