@@ -14,6 +14,7 @@ from .forms import (
     Operating_system_form,
     newContainerform,
     Product_form,
+    View_form
 )
 from django.http import (
     HttpResponseRedirect
@@ -25,7 +26,8 @@ from .models import (
     Operating_system_model,
     Create_host_model,
     Container_model,
-    Product_model)
+    Product_model,
+    View_model)
 from main_app.modules import vm_manage as vm
 from main_app.modules import (
     kickstart,
@@ -281,13 +283,13 @@ def post_local_images(request):
 
 
 def vm_info(request, cname, vm_id):
-    compute = Compute_resource_model.objects.filter(name=cname).values_list()[0]
-    compute_ip = compute[2]
-    details = vm.vm_details(compute_ip, vm_id)
-    OS = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][2]
-    details["Operating System"] = OS
-    packages = vm.get_packages(compute_ip, details["IP Address"])
-    return render(request, 'VM_info.html', {"details": details, "packages": packages})
+        compute = Compute_resource_model.objects.filter(name=cname).values_list()[0]
+        compute_ip = compute[2]
+        details = vm.vm_details(compute_ip, vm_id)
+        OS = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][2]
+        details["Operating System"] = OS
+        packages = vm.get_packages(compute_ip, details["IP Address"])
+        return render(request, 'VM_info.html', {"details": details, "packages": packages})
 
 
 def vm_start(request):
@@ -359,3 +361,42 @@ def delete(request):
     if(request.GET.get('OSDelete')):
         Operating_system_model.objects.filter(id=request.GET.get('OSDelete')).delete()
     return HttpResponseRedirect("/")
+
+
+def content_view(request):
+    form = View_form()
+    view_dict = {}
+    product_list = Product_model.objects.all()
+    viewList = View_model.objects.all().values_list('view_name', flat=True).distinct()
+    for each in viewList:
+        var = View_model.objects.all().filter(view_name=each).values()
+        tmp = []
+        for one in var:
+            product = one['select_product']
+            product_url = Product_model.objects.all().filter(product_name=product).values()[0]['product_location']
+            myTup = (product, product_url)
+            tmp.append(myTup)
+        view_dict[each] = tmp
+    return render(request, 'Content/content_view.html', {'title_name': "Content View", 'form': form, 'products': product_list, 'message': False, 'view_dict': view_dict})
+
+
+def post_content_view(request):
+    form = View_form(request.POST)
+    view_name = request.POST.get('view_name')
+    product_list = Product_model.objects.all()
+    message = ""
+    product_names = request.POST.getlist('products[]')
+    if not product_names:
+        message = "Select atleast one product"
+    else:
+        if not View_model.objects.all().filter(view_name=view_name).exists():
+            for product in product_names:
+                data = View_model(
+                    view_name=view_name,
+                    select_product=product
+                )
+                data.save()
+                message = True
+        else:
+            message = "Name already exists"
+    return render(request, 'Content/content_view.html', {'title_name': "Content View", 'form': form, 'products': product_list, 'message': message})
