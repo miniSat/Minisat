@@ -18,15 +18,14 @@
 <table class="table">
   <thead>
     <tr>
-      <th>#</th>
       <th>Name</th>
       <th>Location</th>
+      <th>Action</th>
     </tr>
   </thead>
   <tbody>
   {% for obj in os_obj %}
     <tr>
-      <th scope="row">{{ obj.id }}</th>
       <td>{{ obj.os_name }}</td>
       <td>{{ obj.os_location }}</td>
       <td><form action="delete" method="GET"><button class = "btn btn-default" name="OSDelete" value="{{ obj.id }}">Delete</button> </form></td>

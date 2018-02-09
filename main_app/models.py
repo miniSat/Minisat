@@ -78,3 +78,11 @@ class View_model(models.Model):
 
     def __str__(self):
         return self.view_name
+
+
+class Activation_model(models.Model):
+    activation_name = models.CharField(max_length=20)
+    select_view = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.activation_name
