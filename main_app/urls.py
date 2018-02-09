@@ -31,4 +31,6 @@ urlpatterns = [
     path('delete', views.delete, name="delete"),
     path('view', views.content_view, name='content_view'),
     path('post_content_view', views.post_content_view, name="post_content_view"),
+    path('activation', views.activation_view, name='activation_view'),
+    path('post_activation_view', views.post_activation_view, name='post_activation_view'),
 ]

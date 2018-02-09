@@ -14,7 +14,8 @@ from .forms import (
     Operating_system_form,
     newContainerform,
     Product_form,
-    View_form
+    View_form,
+    Activation_form
 )
 from django.http import (
     HttpResponseRedirect
@@ -27,7 +28,9 @@ from .models import (
     Create_host_model,
     Container_model,
     Product_model,
-    View_model)
+    View_model,
+    Activation_model,
+)
 from main_app.modules import vm_manage as vm
 from main_app.modules import (
     kickstart,
@@ -363,10 +366,8 @@ def delete(request):
     return HttpResponseRedirect("/")
 
 
-def content_view(request):
-    form = View_form()
+def get_updated_views():
     view_dict = {}
-    product_list = Product_model.objects.all()
     viewList = View_model.objects.all().values_list('view_name', flat=True).distinct()
     for each in viewList:
         var = View_model.objects.all().filter(view_name=each).values()
@@ -377,7 +378,32 @@ def content_view(request):
             myTup = (product, product_url)
             tmp.append(myTup)
         view_dict[each] = tmp
-    return render(request, 'Content/content_view.html', {'title_name': "Content View", 'form': form, 'products': product_list, 'message': False, 'view_dict': view_dict})
+    return view_dict
+
+
+def get_updated_activations():
+    act_dict = {}
+    acts = Activation_model.objects.all().values_list('activation_name', flat=True).distinct()
+    for act in acts:
+        viewList = Activation_model.objects.all().filter(activation_name=act).values_list()
+        tmp = {}
+        for each in viewList:
+            productList = View_model.objects.all().filter(view_name=each[2]).values_list()
+            li = {}
+            for product in productList:
+                products = Product_model.objects.all().filter(product_name=product[2]).values_list()
+                for one in products:
+                    li[one[1]] = one[2]
+            tmp[each[2]] = li
+        act_dict[act] = tmp
+    print(act_dict)
+    return act_dict
+
+
+def content_view(request):
+    form = View_form()
+    product_list = Product_model.objects.all()
+    return render(request, 'Content/content_view.html', {'title_name': "Content View", 'form': form, 'products': product_list, 'message': False, 'view_dict': get_updated_views()})
 
 
 def post_content_view(request):
@@ -399,4 +425,30 @@ def post_content_view(request):
                 message = True
         else:
             message = "Name already exists"
-    return render(request, 'Content/content_view.html', {'title_name': "Content View", 'form': form, 'products': product_list, 'message': message})
+    return render(request, 'Content/content_view.html', {'title_name': "Content View", 'form': form, 'products': product_list, 'message': message, 'view_dict': get_updated_views()})
+
+
+def activation_view(request):
+    form = Activation_form()
+    return render(request, 'Content/activation_key.html', {'title_name': 'Activation Key', 'form': form, 'view_dict': get_updated_views(), 'message': False, 'act_dict': get_updated_activations(), 'tmp_var': ''})
+
+
+def post_activation_view(request):
+    form = Activation_form(request.POST)
+    activation_name = request.POST.get('activation_name')
+    view_list = request.POST.getlist('views[]')
+    message = ''
+    if not view_list:
+        message = 'Select atleast one view'
+    else:
+        if not Activation_model.objects.all().filter(activation_name=activation_name).exists():
+            for view in view_list:
+                data = Activation_model(
+                    activation_name=activation_name,
+                    select_view=view
+                )
+                data.save()
+                message = True
+        else:
+            message = 'Activation name already exists'
+    return render(request, 'Content/activation_key.html', {'title_name': 'Activation Key', 'form': form, 'message': message, 'view_dict': get_updated_views(), 'act_dict': get_updated_activations()})

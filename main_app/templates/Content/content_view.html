@@ -11,7 +11,7 @@
         <strong>{{ message }}</strong>
 </div>
 {% endif %}
-<form action="post_content_view" method="post">
+<form action="post_content_view" method="post" autocomplete="off">
     {% csrf_token %}
     {{ form.view_name.label_tag }} 
     {{ form.view_name }}

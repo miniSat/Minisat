@@ -48,3 +48,8 @@ class Product_form(forms.Form):
 class View_form(forms.Form):
     view_name = forms.CharField(label="Name", max_length=20)
     select_product = forms.CharField(label="Select Products", max_length=20)
+
+
+class Activation_form(forms.Form):
+    activation_name = forms.CharField(label='Name', max_length=20)
+    select_view = forms.CharField(label='Select Views', max_length=20)
