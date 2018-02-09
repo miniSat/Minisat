@@ -29,9 +29,9 @@
 <table class="table">
     <thead>
     <tr>
-        <th>#</th>
         <th>Name</th>
         <th>IP Address</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -39,7 +39,6 @@
     {% for obj in compute_obj %}
 
     <tr>
-        <th scope="row">{{ obj.id }}</th>
         <td>{{ obj.name }}</td>
         <td>{{ obj.ip_address }}</td>
         <td><form action="delete" method="GET"><button class = "btn btn-default" name="ComputeDelete" value="{{ obj.id }}">Delete</button> </form></td>
