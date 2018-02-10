@@ -6,7 +6,7 @@
 
 Web interface for MiniSat.
 
-MiniSat is a centralize web interface to provision virtual machine and run docker container on remote hosts.
+MiniSat is a infrastructure management tool to provision virtual machine and run docker container on remote hosts.
 
 ### Dependencies
 ```sh
