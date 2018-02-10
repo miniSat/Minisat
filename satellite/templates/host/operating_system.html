@@ -1,0 +1,36 @@
+{% extends 'form_template.html' %}
+{% block form_content %}
+
+    <form action="post_operating_system" method="post" autocomplete="off">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          {{ field.label_tag }}<br>
+          {{ field }}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+
+{% endblock %}
+
+{% block exist_content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Location</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for obj in os_obj %}
+    <tr>
+      <td>{{ obj.os_name }}</td>
+      <td>{{ obj.os_location }}</td>
+      <td><form action="delete" method="GET"><button class = "btn btn-default" name="OSDelete" value="{{ obj.id }}">Delete</button> </form></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

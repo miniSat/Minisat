@@ -1,0 +1,52 @@
+@import url(https://fonts.googleapis.com/css?family=Dosis:300,400);
+
+.title-bg{
+padding:10px;
+}
+.well {
+border:1px solid blue;
+background : #e9edfb;
+}
+
+.text-size{
+font-size : 16px;
+}
+
+/*effect-underline*/
+.effect-underline:after {
+	content: '';
+  position: absolute;
+  left: 0;
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  border-bottom: 5px solid;
+    top:0px;
+
+  opacity: 0;
+  z-index=-1;
+
+	-webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
+	transition: opacity 0.35s, transform 0.35s;
+	-webkit-transform: scale(0,1);
+	transform: scale(0,1);
+	color:#337ab7;
+}
+
+.effect-underline:hover:after {
+  opacity: 1;
+	-webkit-transform: scale(1);
+	transform: scale(1);
+}
+
+
+
+#vm_info_font{
+font-size:15px;
+}
+
+
+.myBox {
+height: 330px;
+overflow: auto;
+}
