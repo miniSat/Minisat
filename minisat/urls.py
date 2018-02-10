@@ -21,5 +21,5 @@ from django.urls import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('main_app.urls')),
+    path('', include('satellite.urls')),
 ]

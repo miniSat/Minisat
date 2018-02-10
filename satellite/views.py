@@ -2,7 +2,7 @@ from django.views.generic import TemplateView  # NOQA
 import docker
 import os
 from django.shortcuts import render
-from main_app.modules.docker_manage import make_connection, get_docker_images, start_cont, stop_cont
+from satellite.modules.docker_manage import make_connection, get_docker_images, start_cont, stop_cont
 from django.http import JsonResponse
 # We'll use render to display our templates.
 
@@ -31,8 +31,8 @@ from .models import (
     View_model,
     Activation_model,
 )
-from main_app.modules import vm_manage as vm
-from main_app.modules import (
+from satellite.modules import vm_manage as vm
+from satellite.modules import (
     kickstart,
     ssh_connect as ssh,
     dashboard_details as dash
