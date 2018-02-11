@@ -1,7 +1,17 @@
 $(document).ready(function(){
+    load_vms_cont();
+    $("#btn-refresh").click(function(){
+        $("#vm_table").html("");
+        $("#docker_table").html("");
+        load_vms_cont();
+    });
+});
+
+function load_vms_cont()
+{
     ajax_containers()
     ajax_vm()
-});
+}
 
 function start_vm(name,compute_name)
 {

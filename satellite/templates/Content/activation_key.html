@@ -51,7 +51,7 @@
                 </tbody>
             </table>
         </div>
-        <input type="submit" value="Add">
+        <input type="submit" id="btn-refresh" class="btn btn-primary" value="Add">
 </form>
 {% endblock %}
 {% block exist_content %}
@@ -67,22 +67,29 @@
             </thead>
             <tbody>
                     {% for act_key,act_value in act_dict.items %}
-                    <tr>
+                    <tr>    
                         {% for view_key,view_value in act_value.items %}
                         <tr>
                             {% if forloop.first %}
-                            {% update_value tmp_var act_key as tmp_var %}
+                                {% update_value tmp_var act_key as tmp_var %}
+                            {% else %}
+                                {% update_value tmp_var empty_var as tmp_var %}
                             {% endif %}
                             {% for product_key,product_value in view_value.items %}
                             <tr>
-                                <td>{{tmp_var}}</td>
                                 {% if forloop.first %}
-                                <td>{{ view_key }}</td>
+                                    <td>{{tmp_var}}</td>
                                 {% else %}
-                                <td></td>
+                                    <td></td>
+                                {% endif %}
+                                {% if forloop.first %}
+                                    <td>{{ view_key }}</td>
+                                {% else %}
+                                    <td></td>
                                 {% endif %}
                                 <td>{{ product_key }}</td>
                                 <td>{{ product_value }}</td>
+                                
                             </tr>
                             {% endfor %}
                         </tr>
