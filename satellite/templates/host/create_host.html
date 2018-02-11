@@ -21,9 +21,6 @@
                 {% csrf_token %}
                 {{ form.vm_name.label_tag }}
                 {{ form.vm_name }}
-                <div  style="float:right">
-                    <strong>Password: </strong><input type="password" name="password">
-                </div>
                 <br><br>
                 {{ form.vm_os.label_tag }}
                 <select name="vm_os">
@@ -31,9 +28,6 @@
                     <option value="{{key}}">{{ value }}</option>
                     {% endfor %}
                 </select>
-                <div  style="float:right">
-                    <strong>Confirm Password: </strong><input type="password" name="password">
-                </div>
                 <br><br>
                 {{ form.select_vm_profile.label_tag }}
                 <select name="select_vm_profile">
@@ -48,6 +42,10 @@
                     <option value="{{key}}">{{ value }}</option>
                     {% endfor %}
                 </select>
+                <br><br>
+                Password: <input type="password" name="password">
+                <br><br>
+                Confirm Password: <input type="password" name="password">
                 <br><br>
                 <button type="submit" class="btn btn-primary">Create Instance</button>
             </form>
