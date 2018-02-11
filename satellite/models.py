@@ -46,6 +46,7 @@ class Create_host_model(models.Model):
     vm_os = models.CharField(max_length=15)
     select_vm_profile = models.CharField(max_length=10)
     select_compute = models.CharField(max_length=10)
+    password = models.CharField(max_length=50)
 
     def __str__(self):
         return self.vm_name
