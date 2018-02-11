@@ -198,7 +198,8 @@ def post_create_host(request):
             vm_name=form.data['vm_name'],
             vm_os=form.data['vm_os'],
             select_vm_profile=form.data['select_vm_profile'],
-            select_compute=form.data['select_compute']
+            select_compute=form.data['select_compute'],
+            password=form.data['password']
         )
 
         profile_details = list(Profile_model.objects.filter(
@@ -215,8 +216,7 @@ def post_create_host(request):
                 os_name=create_host.vm_os).values_list()[0])
         *not_imp3, location_url = os_details
 
-        root_passwd = form.data['password']
-        kickstart_location = kickstart.kick_gen(root_passwd, location_url)
+        kickstart_location = kickstart.kick_gen(create_host.password, location_url)
         vm.vm_create(
             compute_ip,
             create_host.vm_name,
@@ -291,7 +291,9 @@ def vm_info(request, cname, vm_id):
         details = vm.vm_details(compute_ip, vm_id)
         OS = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][2]
         details["Operating System"] = OS
-        packages = vm.get_packages(compute_ip, details["IP Address"])
+        root_passwd = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][5]
+        # print(root_passwd)
+        packages = vm.get_packages(compute_ip, details["IP Address"], root_passwd)
         return render(request, 'VM_info.html', {"details": details, "packages": packages})
 
 

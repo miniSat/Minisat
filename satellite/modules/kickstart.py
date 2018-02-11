@@ -6,7 +6,7 @@ import os
 
 
 def kick_gen(passwd, location):
-    with open("/var/www/html/ks.cfg", "w+") as ks:
+    with open("/tmp/ks.cfg", "w+") as ks:
         ks.write("install \n"
                  "keyboard 'us' \n"
                  "rootpw --plaintext " + passwd +
@@ -23,7 +23,11 @@ def kick_gen(passwd, location):
                  "clearpart --all --initlabel\n"
                  "part /boot --fstype=\"ext4\" --size=1024 \n"
                  "part swap --fstype=\"swap\" --size=2048 \n"
-                 "part / --fstype=\"ext4\" --grow --size=1"
+                 "part / --fstype=\"ext4\" --grow --size=1 \n"
+                 "%post \n"
+                 "systemctl restart sshd \n"
+                 "systemctl enable sshd \n"
+                 "%end "
                  )
-    os.system("scp /var/www/html/ks.cfg root@172.22.26.102:/var/www/html/")
+    os.system("scp /tmp/ks.cfg root@172.22.26.102:/var/www/html/")
     return "http://172.22.26.102/ks.cfg"

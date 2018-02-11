@@ -43,7 +43,14 @@ def vm_ip(vm_name, compute_ip):
     vm_mac = response[2].split(" ")[-1]
     try:
         response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system net-dhcp-leases default | grep " + vm_mac).readlines()
-        vm_ipaddress = response[0].split()[4]
+        if len(response) > 1:
+            for each in range(len(response)):
+                vm_ipaddress = response[each].split()[4]
+                if isOnline(vm_ipaddress):
+                    print(vm_ipaddress)
+                    break
+        else:
+            vm_ipaddress = response[0].split()[4]
     except:
         vm_ipaddress = '-'
     return vm_ipaddress
@@ -70,8 +77,11 @@ def vm_details(compute_ip, vm_id):
     return details
 
 
-def get_packages(compute_ip, vm_ip):
+def get_packages(compute_ip, vm_ip, root_passwd):
+    print(compute_ip, vm_ip, root_passwd)
     vm_ip = vm_ip.split("/")[0]
-    package_info = os.popen("ssh root@" + compute_ip + " 'ssh root@" + vm_ip + " rpm -qa'").readlines()
+    str1 = "ssh root@" + compute_ip + " 'sshpass -p " + root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " rpm -qa'"
+    print(str1)
+    package_info = os.popen("ssh root@" + compute_ip + " 'sshpass -p " + root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " rpm -qa'").readlines()
     package_info = package_info[2:]
     return package_info
