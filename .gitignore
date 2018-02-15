@@ -1,7 +1,11 @@
-main_app/__pycache__
-main_app/migrations/__pycache__
-mini/__pycache__
+satellite/__pycache__
+satellite/migrations/__pycache__
+minisat/__pycache__
 .idea
-main_app/modules/__pycache__
-main_app/migrations/0*
+satellite/modules/__pycache__
+satellite/migrations/0*
 db.sqlite3
+__pycache__
+.cache
+geckodriver.log
+satellite/__init__.pyc

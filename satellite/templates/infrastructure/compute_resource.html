@@ -1,0 +1,52 @@
+{% extends 'form_template.html' %}
+
+{% block form_content %}
+
+<div id="results" name="results"></div>
+
+<form id="compute_form">{% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+        {{ field.label_tag }}<br>
+        {{ field }}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary" name="sub_compute" onclick="myFunction()">Submit</button>
+</form>
+
+
+{% endblock %}
+
+{% block exist_content %}
+{% if compute_obj == False %}
+
+<h1>No Compute Resources Found</h1>
+{% else %}
+<script>
+    console.log("{{compute_obj}}");
+
+</script>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>IP Address</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {% for obj in compute_obj %}
+
+    <tr>
+        <td>{{ obj.name }}</td>
+        <td>{{ obj.ip_address }}</td>
+        <td><form action="delete" method="GET"><button class = "btn btn-default" name="ComputeDelete" value="{{ obj.id }}">Delete</button> </form></td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}
+
