@@ -19,6 +19,7 @@
     <br><br>
     {{ form.select_view.label_tag }}
     <br>
+    {% if view_dict %}
     <div class="myBox">
             <table class="table table-bordered table">
                 <thead>
@@ -52,9 +53,13 @@
             </table>
         </div>
         <input type="submit" id="btn-refresh" class="btn btn-primary" value="Add">
+        {% else %}
+        <h1>No Views Found</h1>
+        {% endif %}
 </form>
 {% endblock %}
 {% block exist_content %}
+    {% if act_dict %}
     <div class="myBox">
         <table class="table table-bordered">
             <thead>
@@ -99,4 +104,7 @@
             </tbody>
         </table>
     </div>
+    {% else %}
+    <h1>No Activation Key Added</h1>
+    {% endif %}
 {% endblock %}

@@ -15,6 +15,7 @@
 {% endblock %}
 
 {% block exist_content %}
+{% if product_obj %}
 <table class="table">
   <thead>
     <tr>
@@ -33,4 +34,7 @@
   {% endfor %}
   </tbody>
 </table>
+{% else %}
+<h1>No Products Added</h1>
+{% endif %}
 {% endblock %}
