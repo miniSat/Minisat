@@ -16,10 +16,11 @@ class Profile_form(forms.Form):
 
 
 class Create_host_form(forms.Form):
-    vm_name = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}), label="VM Name")
-    vm_os = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="VM OS")
-    select_vm_profile = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="VM Profile")
-    select_compute = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="Compute")
+    vm_name = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}), label="Name")
+    vm_os = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="Operating System")
+    select_vm_profile = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="Profile")
+    select_compute = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="Compute Resource")
+    password = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="Root Password")
 
 
 class Operating_system_form(forms.Form):
