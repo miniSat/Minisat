@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+
+{% block vmpackages %}
+<script src="/static/vm_packages.js"></script>
+{% endblock %}
+
 {% block content %}
-
-<script src="components/c3/c3.min.js"></script>
-<script src="components/d3/d3.min.js"></script>
-
 <body class="cards-pf">
 <div class="container-fluid container-cards-pf">
     <div class="row row-cards-pf">
@@ -15,9 +16,6 @@
                         {{ details.Name }}
                     </h2>
                     <div class="btn-group card-pf-title" style="float:right;top:-60px;">
-                        <!--<button class="btn btn-success">Start</button>-->
-                        <!--<button class="btn btn-warning">Pause</button>-->
-                        <!--<button class="btn btn-danger">Stop</button>-->
                     </div>
 
                 </div>
@@ -39,10 +37,12 @@
                     </h2>
                 </div>
                 <div class="card-pf-body" id="vm_packages">
-                    <table class="table table-striped table-bordered table-hover">
+                    <table class="table table-striped table-bordered table-hover" id="myPackages">
                         <thead>
                         <tr>
-                            <th>Package Name</th>
+                            <th>Package Name
+                            <input style="float:right" type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for packages...">
+                            </th>
                         </tr>
                         </thead>
                         <tbody id="vm_packages_table">
