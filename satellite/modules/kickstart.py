@@ -6,7 +6,7 @@ import os
 
 
 def kick_gen(passwd, location):
-    with open("/tmp/ks.cfg", "w+") as ks:
+    with open("/var/www/html/ks.cfg", "w+") as ks:
         ks.write("install \n"
                  "keyboard 'us' \n"
                  "rootpw --plaintext " + passwd +
@@ -29,5 +29,5 @@ def kick_gen(passwd, location):
                  "systemctl enable sshd \n"
                  "%end "
                  )
-    os.system("scp /tmp/ks.cfg root@172.22.26.102:/var/www/html/")
-    return "http://172.22.26.102/ks.cfg"
+    ip = os.popen("hostname -I").readline().split()[0]
+    return "http://" + ip + "/ks.cfg"
