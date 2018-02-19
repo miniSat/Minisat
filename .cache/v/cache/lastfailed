@@ -1,0 +1,4 @@
+{
+  "main_app/test_minisat.py::test_compute_resource": true,
+  "main_app/test_minisat.py::test_pep8": true
+}
