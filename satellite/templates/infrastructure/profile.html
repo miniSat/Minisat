@@ -1,18 +1,27 @@
 {% extends 'form_template.html' %}
 {% block form_content %}
-
-    <form action="post_profile" method="post" autocomplete="off">
-      {% csrf_token %}
-        {{compute_resource_name}}
-      {% for field in form %}
-        <div class="form-group">
-          {{ field.label_tag }}<br>
-          {{ field }}
-        </div>
-      {% endfor %}
-      <button type="submit" class="btn btn-primary">Submit</button>
-
-    </form>
+{% if message == True %}
+<div class="alert alert-success alert-dismissable fade in">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Profile Added Successfully</strong>
+</div>
+{% elif message != False %}
+<div class="alert alert-danger alert-dismissable fade in">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>{{ message }}</strong>
+</div>
+{% endif %}
+<form action="post_profile" method="post" autocomplete="off">
+    {% csrf_token %}
+    {{compute_resource_name}}
+    {% for field in form %}
+    <div class="form-group">
+        {{ field.label_tag }}<br>
+        {{ field }}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 
 {% endblock %}
 
@@ -20,32 +29,38 @@
 {% if profile_obj == False %}
 <h1>No Profiles Found</h1>
 {% else %}
-<div class="myBox">
-<table class="table " >
-  <thead>
-    <tr>
-      <th>Profile Name</th>
-      <th>RAM</th>
-      <th>CPUs</th>
-      <th>Disk Size</th>
-      <th>Action</th>
-    </tr>
-  </thead>
+<div class="col-md-1"></div>
+<div class="col-md-10 myBox">
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Profile Name</th>
+            <th>RAM</th>
+            <th>CPUs</th>
+            <th>Disk Size</th>
+            <th>Action</th>
+        </tr>
+        </thead>
 
-  <tbody>
+        <tbody>
 
-  {% for obj in profile_obj %}
-    <tr>
-      <td>{{ obj.profile_name }}</td>
-      <td>{{ obj.ram }}</td>
-      <td>{{ obj.cpus }}</td>
-      <td>{{ obj.disk_size }}</td>
-      <td><form action="delete" method="GET"><button class = "btn btn-default" name="ProfileDelete" value="{{ obj.id }}">Delete</button> </form></td>
-    </tr>
-  {% endfor %}
+        {% for obj in profile_obj %}
+        <tr>
+            <td>{{ obj.profile_name }}</td>
+            <td>{{ obj.ram }}</td>
+            <td>{{ obj.cpus }}</td>
+            <td>{{ obj.disk_size }}</td>
+            <td>
+                <form action="delete" method="GET">
+                    <button class="btn btn-default" name="ProfileDelete" value="{{ obj.id }}">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
 
-  </tbody>
-  </table>
+        </tbody>
+    </table>
 </div>
+<div class="col-md-1"></div>
 {% endif %}
 {% endblock %}

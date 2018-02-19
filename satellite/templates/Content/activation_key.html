@@ -3,13 +3,13 @@
 {% load extra_tags %}
 {% if message == True %}
 <div class="alert alert-success alert-dismissable fade in">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>Activation key added successfuly</strong>
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Activation key added successfuly</strong>
 </div>
 {% elif message != False %}
 <div class="alert alert-danger alert-dismissable fade in">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>{{ message }}</strong>
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>{{ message }}</strong>
 </div>
 {% endif %}
 <form method="post" action="post_activation_view" autocomplete="off">
@@ -21,90 +21,90 @@
     <br>
     {% if view_dict %}
     <div class="myBox">
-            <table class="table table-bordered table">
-                <thead>
-                    <tr>
-                        <th width=3%></th>
-                        <th width=10%>View</th>
-                        <th width=15%>Product</th>
-                        <th>Product Url</th>
-                    </tr>
-                </thead>
-                <tbody>
-    
-                    {% for key,value in view_dict.items %}
-                        <tr>
-                            {% for each in value %}
-                            <tr>
-                                {% if forloop.first %}
-                                <td><input type="checkbox" name="views[]" value="{{ key }}"></input></td>
-                                <td>{{ key }}</td>
-                                {% else %}
-                                <td></td> 
-                                <td></td> 
-                                {% endif %}
-                                <td>{{ each.0 }}</td>
-                                <td>{{ each.1 }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <input type="submit" id="btn-refresh" class="btn btn-primary" value="Add">
-        {% else %}
-        <h1>No Views Found</h1>
-        {% endif %}
-</form>
-{% endblock %}
-{% block exist_content %}
-    {% if act_dict %}
-    <div class="myBox">
-        <table class="table table-bordered">
+        <table class="table table-bordered table">
             <thead>
-                <tr>
-                    <th>Activation Key</th>
-                    <th>Content View</th>
-                    <th>Product Name</th>
-                    <th>Product URL</th>
-                </tr>
+            <tr>
+                <th width=3%></th>
+                <th width=10%>View</th>
+                <th width=15%>Product</th>
+                <th>Product Url</th>
+            </tr>
             </thead>
             <tbody>
-                    {% for act_key,act_value in act_dict.items %}
-                    <tr>    
-                        {% for view_key,view_value in act_value.items %}
-                        <tr>
-                            {% if forloop.first %}
-                                {% update_value tmp_var act_key as tmp_var %}
-                            {% else %}
-                                {% update_value tmp_var empty_var as tmp_var %}
-                            {% endif %}
-                            {% for product_key,product_value in view_value.items %}
-                            <tr>
-                                {% if forloop.first %}
-                                    <td>{{tmp_var}}</td>
-                                {% else %}
-                                    <td></td>
-                                {% endif %}
-                                {% if forloop.first %}
-                                    <td>{{ view_key }}</td>
-                                {% else %}
-                                    <td></td>
-                                {% endif %}
-                                <td>{{ product_key }}</td>
-                                <td>{{ product_value }}</td>
-                                
-                            </tr>
-                            {% endfor %}
-                        </tr>
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
+
+            {% for key,value in view_dict.items %}
+            <tr>
+                {% for each in value %}
+            <tr>
+                {% if forloop.first %}
+                <td><input type="checkbox" name="views[]" value="{{ key }}"></input></td>
+                <td>{{ key }}</td>
+                {% else %}
+                <td></td>
+                <td></td>
+                {% endif %}
+                <td>{{ each.0 }}</td>
+                <td>{{ each.1 }}</td>
+            </tr>
+            {% endfor %}
+            </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
+    <input type="submit" id="btn-refresh" class="btn btn-primary" value="Add">
     {% else %}
-    <h1>No Activation Key Added</h1>
+    <h1>No Views Found</h1>
     {% endif %}
+</form>
+{% endblock %}
+{% block exist_content %}
+{% if act_dict %}
+<div class="myBox">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Activation Key</th>
+            <th>Content View</th>
+            <th>Product Name</th>
+            <th>Product URL</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for act_key,act_value in act_dict.items %}
+        <tr>
+            {% for view_key,view_value in act_value.items %}
+        <tr>
+            {% if forloop.first %}
+            {% update_value tmp_var act_key as tmp_var %}
+            {% else %}
+            {% update_value tmp_var empty_var as tmp_var %}
+            {% endif %}
+            {% for product_key,product_value in view_value.items %}
+        <tr>
+            {% if forloop.first %}
+            <td>{{tmp_var}}</td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            {% if forloop.first %}
+            <td>{{ view_key }}</td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            <td>{{ product_key }}</td>
+            <td>{{ product_value }}</td>
+
+        </tr>
+        {% endfor %}
+        </tr>
+        {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<h1>No Activation Key Added</h1>
+{% endif %}
 {% endblock %}
