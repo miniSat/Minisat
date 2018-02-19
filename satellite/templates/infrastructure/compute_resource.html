@@ -1,20 +1,19 @@
 {% extends 'form_template.html' %}
 
 {% block form_content %}
+<div class="myBox">
+    <div id="results" name="results"></div>
 
-<div id="results" name="results"></div>
-
-<form id="compute_form">{% csrf_token %}
-    {% for field in form %}
-    <div class="form-group">
-        {{ field.label_tag }}<br>
-        {{ field }}
-    </div>
-    {% endfor %}
-    <button type="submit" class="btn btn-primary" name="sub_compute" onclick="myFunction()">Submit</button>
-</form>
-
-
+    <form id="compute_form">{% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}<br>
+            {{ field }}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary" name="sub_compute" onclick="myFunction()">Submit</button>
+    </form>
+</div>
 {% endblock %}
 
 {% block exist_content %}
@@ -25,28 +24,35 @@
 <script>
     console.log("{{compute_obj}}");
 
+
 </script>
-<table class="table">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>IP Address</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
+<div class="myBox">
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>IP Address</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
 
-    {% for obj in compute_obj %}
+        {% for obj in compute_obj %}
 
-    <tr>
-        <td>{{ obj.name }}</td>
-        <td>{{ obj.ip_address }}</td>
-        <td><form action="delete" method="GET"><button class = "btn btn-default" name="ComputeDelete" value="{{ obj.id }}">Delete</button> </form></td>
-    </tr>
-    {% endfor %}
+        <tr>
+            <td>{{ obj.name }}</td>
+            <td>{{ obj.ip_address }}</td>
+            <td>
+                <form action="delete" method="GET">
+                    <button class="btn btn-default" name="ComputeDelete" value="{{ obj.id }}">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 {% endif %}
 {% endblock %}
 

@@ -50,3 +50,7 @@ font-size:15px;
 height: 330px;
 overflow: auto;
 }
+
+table.padded-table td{
+  padding:10px;
+}
