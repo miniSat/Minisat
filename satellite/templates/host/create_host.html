@@ -43,6 +43,13 @@
                     {% endfor %}
                 </select>
                 <br><br>
+                {{ form.activation_name.label_tag }}
+                <select name="activation_name">
+                    {% for key,value in  activation_name %}
+                    <option value="{{key}}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
                 {{ form.password.label_tag }}
                 {{ form.password }}
                 <br><br>

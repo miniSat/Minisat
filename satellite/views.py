@@ -145,21 +145,29 @@ def create_host(request):
     form = Create_host_form()
     error = False
     os_name = Operating_system_model.objects.values_list("os_name", flat=True)
+
     if not os_name:
         error = "No Operating System Found"
     else:
         os_name = list(zip(os_name, os_name))
     profile_name = Profile_model.objects.values_list("profile_name", flat=True)
+
     if not profile_name:
         error = "No Profiles Found"
     else:
         profile_name = list(zip(profile_name, profile_name))
     compute_name = Compute_resource_model.objects.values_list(
         "name", flat=True)
+
     if not compute_name:
         error = "No Compute Resource Found"
     else:
         compute_name = list(zip(compute_name, compute_name))
+    activation_list = Activation_model.objects.values_list("activation_name", flat=True)
+    activation_list = set(activation_list)
+    activation_name = list(zip(activation_list, activation_list))
+    activation_name.insert(0, ("Choose Activation Key", "Choose Activation Key"))
+
     return render(request,
                   'host/create_host.html',
                   {'title_name': 'Create A New Host',
@@ -167,6 +175,7 @@ def create_host(request):
                    'os_name': os_name,
                    'compute_name': compute_name,
                    'profile_name': profile_name,
+                   'activation_name': activation_name,
                    'error': error})
 
 
@@ -199,6 +208,7 @@ def post_create_host(request):
             vm_os=form.data['vm_os'],
             select_vm_profile=form.data['select_vm_profile'],
             select_compute=form.data['select_compute'],
+            activation_name=form.data['activation_name'],
             password=form.data['password']
         )
 
@@ -216,7 +226,13 @@ def post_create_host(request):
                 os_name=create_host.vm_os).values_list()[0])
         *not_imp3, location_url = os_details
 
-        kickstart_location = kickstart.kick_gen(create_host.password, location_url)
+        if create_host.activation_name == 'Choose Activation Key':
+            repo = {}
+        else:
+            repo = vm.get_repo(create_host.activation_name)
+
+        kickstart_location = kickstart.kick_gen(create_host.password, location_url, repo)
+
         vm.vm_create(
             compute_ip,
             create_host.vm_name,
