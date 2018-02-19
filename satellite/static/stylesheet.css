@@ -50,3 +50,13 @@ font-size:15px;
 height: 330px;
 overflow: auto;
 }
+
+
+.vl {
+    border-left: 1px solid grey;
+    height: 500px;
+    position: absolute;
+    left: 50%;
+    margin-left: -3px;
+    top: 0;
+}
