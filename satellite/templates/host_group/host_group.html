@@ -1,0 +1,82 @@
+{% extends 'form_template.html' %}
+
+{% block form_content %}
+{% if message == True %}
+<div class="alert alert-success alert-dismissable fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Host Group created successfuly</strong>
+</div>
+{% elif message != False %}
+<div class="alert alert-danger alert-dismissable fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>{{ message }}</strong>
+</div>
+{% endif %}
+<form method="post" action="post_host_group">
+    {% csrf_token %}
+    {{form.host_group_name.label_tag}}
+    {{form.host_group_name}}
+    <br><br>
+    {{form.select_compute.label_tag}}
+    <select name="select_compute">
+        {% for each in select_compute %}
+        <option value="{{each}}">{{each}}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+    {{form.select_profile.label_tag}}
+    <select name="select_profile">
+        {% for each in select_profile %}
+        <option value="{{each}}">{{each}}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+    {{form.select_os.label_tag}}
+    <select name="select_os">
+        {% for each in select_os %}
+        <option value="{{each}}">{{each}}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+    {{form.select_activation.label_tag}}
+    <select name="select_activation">
+        {% for each in select_activation %}
+        <option value="{{each}}">{{each}}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+    <input type="submit" value="Add" class="btn btn-primary">
+</form>
+{% endblock %}
+
+{% block exist_content %}
+    {% if host_group_dict %}
+        <div class="myBox">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Compute Resource</td>
+                        <td>Profile</td>
+                        <td>Operating System</td>
+                        <td>Activation Name</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for each in host_group_dict %}
+                        <tr>
+                            <td>{{each.host_group_name}}</td>
+                            <td>{{each.select_compute}}</td>
+                            <td>{{each.select_profile}}</td>
+                            <td>{{each.select_os}}</td>
+                            <td>{{each.select_activation}}</td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+    <h1>No Host Groups Added</h1>
+    {% endif %}
+{% endblock %}

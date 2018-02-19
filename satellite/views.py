@@ -15,7 +15,8 @@ from .forms import (
     newContainerform,
     Product_form,
     View_form,
-    Activation_form
+    Activation_form,
+    Host_group_form,
 )
 from django.http import (
     HttpResponseRedirect
@@ -30,6 +31,7 @@ from .models import (
     Product_model,
     View_model,
     Activation_model,
+    Host_group_model
 )
 from satellite.modules import vm_manage as vm
 from satellite.modules import (
@@ -112,7 +114,6 @@ def post_data(request):
                 message["status"] = "IP address already exists"
         else:
             message["status"] = "Compute name already exists"
-    print(message)
     return JsonResponse(message)
 
 
@@ -273,7 +274,6 @@ def post_new_container(request):
                       form.data["host_port"] + ":" + form.data[
                           "cont_port"] + " --name " + new_cont.container_name + " " + \
                       new_cont.image_name + ":" + new_cont.tag_name
-        print(create_cont)
         os.system(create_cont)
         # form.save()
     return HttpResponseRedirect('/')
@@ -297,7 +297,6 @@ def post_local_images(request):
     com_name = request.GET.get('com_name', None)
     com_det = Compute_resource_model.objects.filter(name=com_name).values_list()
     docker_images = get_docker_images(com_det)
-    print(docker_images)
     return JsonResponse(docker_images)
 
 
@@ -308,7 +307,6 @@ def vm_info(request, cname, vm_id):
         OS = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][2]
         details["Operating System"] = OS
         root_passwd = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][5]
-        # print(root_passwd)
         packages = vm.get_packages(compute_ip, details["IP Address"], root_passwd)
         return render(request, 'VM_info.html', {"details": details, "packages": packages})
 
@@ -414,7 +412,6 @@ def get_updated_activations():
                     li[one[1]] = one[2]
             tmp[each[2]] = li
         act_dict[act] = tmp
-    print(act_dict)
     return act_dict
 
 
@@ -470,3 +467,54 @@ def post_activation_view(request):
         else:
             message = 'Activation name already exists'
     return render(request, 'Content/activation_key.html', {'title_name': 'Activation Key', 'form': form, 'message': message, 'view_dict': get_updated_views(), 'act_dict': get_updated_activations()})
+
+
+def host_group_view(request):
+    select_compute = Compute_resource_model.objects.values_list("name", flat=True)
+    select_profile = Profile_model.objects.values_list("profile_name", flat=True)
+    select_os = Operating_system_model.objects.values_list("os_name", flat=True)
+    select_activation = Activation_model.objects.values_list("activation_name", flat=True).distinct()
+    form = Host_group_form()
+    return render(request, 'host_group/host_group.html', {
+        'form': form,
+        'title_name': "Host Group",
+        'select_compute': select_compute,
+        'select_profile': select_profile,
+        'select_os': select_os,
+        'select_activation': select_activation,
+        'message': False,
+        'host_group_dict': Host_group_model.objects.all()
+    })
+
+
+def post_host_group(request):
+    form = Host_group_form(request.POST)
+    select_compute = Compute_resource_model.objects.values_list("name", flat=True)
+    select_profile = Profile_model.objects.values_list("profile_name", flat=True)
+    select_os = Operating_system_model.objects.values_list("os_name", flat=True)
+    select_activation = Activation_model.objects.values_list("activation_name", flat=True).distinct()
+    message = ""
+    if form.is_valid() and not Host_group_model.objects.all().filter(host_group_name=form.cleaned_data['host_group_name']).exists():
+        form = Host_group_model(
+            host_group_name=form.cleaned_data['host_group_name'],
+            select_compute=form.cleaned_data['select_compute'],
+            select_profile=form.cleaned_data['select_profile'],
+            select_os=form.cleaned_data['select_os'],
+            select_activation=form.cleaned_data['select_activation'],
+        )
+        form.save()
+        form = Host_group_form()
+        message = True
+    else:
+        message = "Host Group Already Exists"
+
+    return render(request, 'host_group/host_group.html', {
+        'title_name': "Host Group",
+        'select_compute': select_compute,
+        'select_profile': select_profile,
+        'select_os': select_os,
+        'select_activation': select_activation,
+        'form': form,
+        'message': message,
+        'host_group_dict': Host_group_model.objects.all(),
+    })

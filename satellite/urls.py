@@ -33,4 +33,6 @@ urlpatterns = [
     path('post_content_view', views.post_content_view, name="post_content_view"),
     path('activation', views.activation_view, name='activation_view'),
     path('post_activation_view', views.post_activation_view, name='post_activation_view'),
+    path('host_group', views.host_group_view, name='host_group_view'),
+    path('post_host_group', views.post_host_group, name="post_host_group"),
 ]
