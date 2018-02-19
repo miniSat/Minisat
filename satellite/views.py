@@ -177,6 +177,7 @@ def create_host(request):
                    'compute_name': compute_name,
                    'profile_name': profile_name,
                    'activation_name': activation_name,
+                   'host_group': Host_group_model.objects.all(),
                    'error': error})
 
 
@@ -518,3 +519,18 @@ def post_host_group(request):
         'message': message,
         'host_group_dict': Host_group_model.objects.all(),
     })
+
+
+def host_group_data(request):
+    host_group = request.GET.get("host_group")
+    host_data = list(Host_group_model.objects.all().filter(host_group_name=host_group).values_list(flat=True))
+    print(host_data[5])
+    data = {
+        'host_group_name': host_data[1],
+        'compute': host_data[2],
+        'profile': host_data[3],
+        'operating_system': host_data[4],
+        'activation_key': host_data[5]
+    }
+    print(data)
+    return JsonResponse(data)

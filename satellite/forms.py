@@ -22,6 +22,7 @@ class Create_host_form(forms.Form):
     select_compute = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="Compute Resource")
     activation_name = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="Activation Name")
     password = forms.CharField(widget=forms.PasswordInput(attrs={'size': '50'}), label="Root Password")
+    select_host_group = forms.CharField(label="Host Group", widget=forms.TextInput(attrs={'size': '25'}))
 
 
 class Operating_system_form(forms.Form):
