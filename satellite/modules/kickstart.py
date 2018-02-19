@@ -5,7 +5,7 @@ httpd.service should be running
 import os
 
 
-def kick_gen(passwd, location):
+def kick_gen(passwd, location, repo):
     with open("/var/www/html/ks.cfg", "w+") as ks:
         ks.write("install \n"
                  "keyboard 'us' \n"
@@ -27,7 +27,11 @@ def kick_gen(passwd, location):
                  "%post \n"
                  "systemctl restart sshd \n"
                  "systemctl enable sshd \n"
-                 "%end "
                  )
+
+        for name, baseurl in repo.items():
+            ks.write("echo -e '[" + name + "] \\nname=" + name + " \\nbaseurl=" + baseurl + " \\ngpgcheck=0 \\nenabled=1' >/etc/yum.repos.d/" + name + ".repo \n")
+        ks.write("%end \n")
+
     ip = os.popen("hostname -I").readline().split()[0]
     return "http://" + ip + "/ks.cfg"

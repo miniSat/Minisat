@@ -1,5 +1,10 @@
 import os
 import time
+from satellite.models import (
+    Product_model,
+    Activation_model,
+    View_model
+)
 
 
 def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_loc):
@@ -72,8 +77,6 @@ def vm_details(compute_ip, vm_id):
     list = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_id).readlines()[2].split()
     vm_mac = list[4]
     details["MAC Address"] = vm_mac
-
-    # print(details)
     return details
 
 
@@ -85,3 +88,19 @@ def get_packages(compute_ip, vm_ip, root_passwd):
     package_info = os.popen("ssh root@" + compute_ip + " 'sshpass -p " + root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " rpm -qa'").readlines()
     package_info = package_info[2:]
     return package_info
+
+
+def get_repo(activation_name):
+    repo = {}
+    product = []
+    view_list = list(Activation_model.objects.filter(activation_name=activation_name).values_list())
+    for each in view_list:
+        product_list = list(View_model.objects.filter(view_name=each[2]).values_list())
+        for every in product_list:
+            product.append(list(Product_model.objects.filter(product_name=every[2]).values_list()))
+    for each in product:
+        if each[0][1] in repo:
+            pass
+        else:
+            repo[each[0][1]] = each[0][2]
+    return repo
