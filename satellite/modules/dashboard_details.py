@@ -6,7 +6,6 @@ def get_vms(ip_list=[]):
     final_dict = {}
     error = []
     count = 0
-    # final_vms = []
     for tuple in ip_list:
         ip = tuple[2]
         if vm_funcs.isOnline(ip):

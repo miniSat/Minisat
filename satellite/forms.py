@@ -55,3 +55,11 @@ class View_form(forms.Form):
 class Activation_form(forms.Form):
     activation_name = forms.CharField(label='Name', max_length=20)
     select_view = forms.CharField(label='Select Views', max_length=20)
+
+
+class Host_group_form(forms.Form):
+    host_group_name = forms.CharField(label="Name", max_length=20)
+    select_compute = forms.CharField(label="Select Compute", max_length=20)
+    select_profile = forms.CharField(label="Select Profile", max_length=20)
+    select_os = forms.CharField(label="Select Operating System", max_length=20)
+    select_activation = forms.CharField(label="Select Activation Key", max_length=20)

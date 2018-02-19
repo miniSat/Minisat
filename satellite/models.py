@@ -66,6 +66,7 @@ class Container_model(models.Model):
         return self.container_name
 
 
+# Model for product
 class Product_model(models.Model):
     product_name = models.CharField("Name", max_length=20)
     product_location = models.CharField("Location", max_length=100)
@@ -74,6 +75,7 @@ class Product_model(models.Model):
         return self.product_name
 
 
+# Model for views
 class View_model(models.Model):
     view_name = models.CharField(max_length=20)
     select_product = models.CharField(max_length=20)
@@ -82,9 +84,22 @@ class View_model(models.Model):
         return self.view_name
 
 
+# Model for activation key
 class Activation_model(models.Model):
     activation_name = models.CharField(max_length=20)
     select_view = models.CharField(max_length=20)
 
     def __str__(self):
         return self.activation_name
+
+
+# Model for host group
+class Host_group_model(models.Model):
+    host_group_name = models.CharField(max_length=20)
+    select_compute = models.CharField(max_length=20)
+    select_profile = models.CharField(max_length=20)
+    select_os = models.CharField(max_length=20)
+    select_activation = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.host_group_name
