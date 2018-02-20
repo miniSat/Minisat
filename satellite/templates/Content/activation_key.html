@@ -15,7 +15,6 @@
     {% endif %}
     <form method="post" action="post_activation_view" autocomplete="off">
         {% csrf_token %}
-
         {{ form.activation_name.label_tag }}
         {{ form.activation_name }}
         <br><br>
@@ -32,9 +31,7 @@
                     <th>Product Url</th>
                 </tr>
                 </thead>
-
                 <tbody>
-
                 {% for key,value in view_dict.items %}
                 <tr>
                     {% for each in value %}
@@ -56,8 +53,6 @@
             </table>
         </div>
         <input type="submit" id="btn-refresh" class="btn btn-primary" value="Add">
-
-
         {% else %}
         <h1>No Views Found</h1>
         {% endif %}
@@ -100,7 +95,6 @@
             {% endif %}
             <td>{{ product_key }}</td>
             <td>{{ product_value }}</td>
-
         </tr>
         {% endfor %}
         </tr>

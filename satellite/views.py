@@ -126,6 +126,7 @@ def profile(request):
                   'infrastructure/profile.html',
                   {'title_name': 'Profile',
                    'form': form,
+                   'message':False,
                    'profile_obj': profile_list})
 
 
@@ -437,7 +438,10 @@ def content_view(request):
     form = View_form()
     product_list = Product_model.objects.all()
     return render(request, 'Content/content_view.html',
-                  {'title_name': "Content View", 'form': form, 'products': product_list, 'message': False,
+                  {'title_name': "Content View",
+                   'form': form,
+                   'products': product_list,
+                   'message': False,
                    'view_dict': get_updated_views()})
 
 

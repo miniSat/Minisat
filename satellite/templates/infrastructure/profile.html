@@ -1,6 +1,18 @@
 {% extends 'form_template.html' %}
 {% block form_content %}
-<div class="myBox">
+
+{% if message == True %}
+<div class="alert alert-success alert-dismissable fade in">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Profile Added Successfully</strong>
+</div>
+{% elif message != False %}
+<div class="alert alert-danger alert-dismissable fade in">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>{{ message }}</strong>
+</div>
+{% endif %}
+
     <form action="post_profile" method="post" autocomplete="off">
         {% csrf_token %}
         {{compute_resource_name}}
@@ -13,7 +25,7 @@
         <button type="submit" class="btn btn-primary">Submit</button>
 
     </form>
-</div>
+
 {% endblock %}
 
 {% block exist_content %}
