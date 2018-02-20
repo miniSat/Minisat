@@ -1,10 +1,3 @@
-$(document).ready(function(){
-    $.get('get_vm_packages',function(data){
-        console.log(data);
-    });
-});
-
-
 function myFunction() {
     var input, filter, table, tr, td, i;
     input = document.getElementById("myInput");
@@ -19,6 +12,6 @@ function myFunction() {
         } else {
           tr[i].style.display = "none";
         }
-      }       
+      }
     }
   }

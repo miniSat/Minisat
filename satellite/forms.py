@@ -44,8 +44,8 @@ class Local_Images(forms.Form):
 
 
 class Product_form(forms.Form):
-    product_name = forms.CharField(label="Name", max_length=20)
-    product_location = forms.CharField(label="Location", max_length=100)
+    product_name = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Name", max_length=20)
+    product_location = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Location", max_length=100)
 
 
 class View_form(forms.Form):
@@ -54,7 +54,7 @@ class View_form(forms.Form):
 
 
 class Activation_form(forms.Form):
-    activation_name = forms.CharField(label='Name', max_length=20)
+    activation_name = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label='Name', max_length=20)
     select_view = forms.CharField(label='Select Views', max_length=20)
 
 
