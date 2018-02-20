@@ -26,21 +26,21 @@ class Create_host_form(forms.Form):
 
 
 class Operating_system_form(forms.Form):
-    os_name = forms.CharField(label="Name", max_length=15)
-    os_location = forms.CharField(label="Location", max_length=100)
+    os_name = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Name", max_length=15)
+    os_location = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Location", max_length=100)
 
 
 class newContainerform(forms.Form):
-    select_compute = forms.CharField(label="Compute", max_length=20)
-    image_name = forms.CharField(label="Image Name", max_length=20)
-    tag_name = forms.CharField(label="Tag", max_length=20)
-    container_name = forms.CharField(label="Container Name", max_length=20)
-    host_port = forms.IntegerField(label="Ports")
-    cont_port = forms.IntegerField()
+    select_compute = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Compute", max_length=20)
+    image_name = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Image Name", max_length=20)
+    tag_name = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Tag", max_length=20)
+    container_name = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Container Name", max_length=20)
+    host_port = forms.IntegerField(widget=forms.TextInput(attrs={'size': '12'}), label="Ports")
+    cont_port = forms.IntegerField(widget=forms.TextInput(attrs={'size': '12'}))
 
 
 class Local_Images(forms.Form):
-    select_compute = forms.CharField(label="Compute", max_length=20)
+    select_compute = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="Compute", max_length=20)
 
 
 class Product_form(forms.Form):
@@ -59,7 +59,7 @@ class Activation_form(forms.Form):
 
 
 class Host_group_form(forms.Form):
-    host_group_name = forms.CharField(label="Name", max_length=20)
+    host_group_name = forms.CharField(widget=forms.TextInput(attrs={'size': '25'}), label="Name", max_length=20)
     select_compute = forms.CharField(label="Select Compute", max_length=20)
     select_profile = forms.CharField(label="Select Profile", max_length=20)
     select_os = forms.CharField(label="Select Operating System", max_length=20)
