@@ -377,25 +377,25 @@ def product(request):
                   {'title_name': 'Product',
                    'form': form,
                    'product_obj': product_list,
-                   'message':False})
+                   'message': False})
 
 
 def post_product(request):
     form = Product_form(request.POST)
-    product_list=Product_model.objects.all()
+    product_list = Product_model.objects.all()
     message = ""
     if form.is_valid():
         product = Product_model(
             product_name=form.cleaned_data["product_name"],
             product_location=form.cleaned_data["product_location"]
         )
-        check_product_name=Product_model.objects.filter(product_name=product.product_name).exists()
+        check_product_name = Product_model.objects.filter(product_name=product.product_name).exists()
         if not check_product_name:
             product.save()
             form = Product_form
-            message=True
+            message = True
         else:
-            message="Product name Already Exist"
+            message = "Product name Already Exist"
     else:
         message = "Invalid Values"
 
@@ -404,7 +404,7 @@ def post_product(request):
                   {'title_name': 'Product',
                    'form': form,
                    'product_obj': product_list,
-                   'message':message})
+                   'message': message})
 
 
 def delete(request):

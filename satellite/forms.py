@@ -34,7 +34,8 @@ class newContainerform(forms.Form):
     select_compute = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Compute", max_length=20)
     image_name = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Image Name", max_length=20)
     tag_name = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Tag", max_length=20)
-    container_name = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Container Name", max_length=20)
+    container_name = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Container Name",
+                                     max_length=20)
     host_port = forms.IntegerField(widget=forms.TextInput(attrs={'size': '12'}), label="Ports")
     cont_port = forms.IntegerField(widget=forms.TextInput(attrs={'size': '12'}))
 
