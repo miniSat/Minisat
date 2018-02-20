@@ -1,6 +1,6 @@
 {% extends 'form_template.html' %}
 {% block form_content %}
-
+<div class="myBox">
     <form action="post_product" method="post" autocomplete="off">
       {% csrf_token %}
       {% for field in form %}
@@ -11,12 +11,13 @@
       {% endfor %}
       <button type="submit" class="btn btn-primary">Add</button>
     </form>
-
+</div>
 {% endblock %}
 
 {% block exist_content %}
+<div class="myBox">
 {% if product_obj %}
-<table class="table">
+<table class="table table-bordered table-striped">
   <thead>
     <tr>
       <th>Name</th>
@@ -29,11 +30,12 @@
     <tr>
       <td>{{ obj.product_name }}</td>
       <td>{{ obj.product_location }}</td>
-      <td><form action="delete" method="GET"><button class = "btn btn-default" name="ProductButton" value="{{ obj.id }}">Delete</button> </form></td>
+      <td><form action="delete" method="GET"><button class = "btn btn-danger" name="ProductDelete" value="{{ obj.id }}">Delete</button> </form></td>
     </tr>
   {% endfor %}
   </tbody>
 </table>
+    </div>
 {% else %}
 <h1>No Products Added</h1>
 {% endif %}

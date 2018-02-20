@@ -126,11 +126,14 @@ def profile(request):
                   'infrastructure/profile.html',
                   {'title_name': 'Profile',
                    'form': form,
+                   'message': False,
                    'profile_obj': profile_list})
 
 
 def post_profile(request):
     form = Profile_form(request.POST)
+    profile_list = Profile_model.objects.all()
+    message = ""
     if form.is_valid():
         profile = Profile_model(
             profile_name=form.cleaned_data["profile_name"],
@@ -138,8 +141,23 @@ def post_profile(request):
             cpus=form.cleaned_data["cpus"],
             disk_size=form.cleaned_data["disk_size"]
         )
-        profile.save()
-    return HttpResponseRedirect('/')
+        check_profile_name = Profile_model.objects.filter(profile_name=profile.profile_name).exists()
+        if not check_profile_name:
+            profile.save()
+            form = Profile_form()
+            message = True
+
+        else:
+            message = "Name Already exist"
+
+    else:
+        message = "Invalid Values"
+
+    return render(request, 'infrastructure/profile.html',
+                  {'title_name': 'Profile',
+                   'form': form,
+                   'profile_obj': profile_list,
+                   'message': message})
 
 
 def create_host(request):
@@ -302,14 +320,16 @@ def post_local_images(request):
 
 
 def vm_info(request, cname, vm_id):
-        compute = Compute_resource_model.objects.filter(name=cname).values_list()[0]
-        compute_ip = compute[2]
-        details = vm.vm_details(compute_ip, vm_id)
-        OS = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][2]
-        details["Operating System"] = OS
-        root_passwd = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][5]
-        packages = vm.get_packages(compute_ip, details["IP Address"], root_passwd)
-        return render(request, 'VM_info.html', {"details": details, "packages": packages})
+    print("Welcome to Vm Page=========================================================")
+    print(vm_id)
+    compute = Compute_resource_model.objects.filter(name=cname).values_list()[0]
+    compute_ip = compute[2]
+    details = vm.vm_details(compute_ip, vm_id)
+    OS = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][2]
+    details["Operating System"] = OS
+    root_passwd = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][6]
+    packages = vm.get_packages(compute_ip, details["IP Address"], root_passwd)
+    return render(request, 'VM_info.html', {"details": details, "packages": packages})
 
 
 def vm_start(request):
@@ -372,13 +392,13 @@ def post_product(request):
 
 
 def delete(request):
-    if(request.GET.get('ComputeDelete')):
+    if (request.GET.get('ComputeDelete')):
         Compute_resource_model.objects.filter(id=request.GET.get('ComputeDelete')).delete()
-    if(request.GET.get('ProfileDelete')):
+    if (request.GET.get('ProfileDelete')):
         Profile_model.objects.filter(id=request.GET.get('ProfileDelete')).delete()
-    if(request.GET.get('ProductDelete')):
+    if (request.GET.get('ProductDelete')):
         Product_model.objects.filter(id=request.GET.get('ProductDelete')).delete()
-    if(request.GET.get('OSDelete')):
+    if (request.GET.get('OSDelete')):
         Operating_system_model.objects.filter(id=request.GET.get('OSDelete')).delete()
     return HttpResponseRedirect("/")
 
@@ -419,7 +439,12 @@ def get_updated_activations():
 def content_view(request):
     form = View_form()
     product_list = Product_model.objects.all()
-    return render(request, 'Content/content_view.html', {'title_name': "Content View", 'form': form, 'products': product_list, 'message': False, 'view_dict': get_updated_views()})
+    return render(request, 'Content/content_view.html',
+                  {'title_name': "Content View",
+                   'form': form,
+                   'products': product_list,
+                   'message': False,
+                   'view_dict': get_updated_views()})
 
 
 def post_content_view(request):
@@ -441,12 +466,16 @@ def post_content_view(request):
                 message = True
         else:
             message = "Name already exists"
-    return render(request, 'Content/content_view.html', {'title_name': "Content View", 'form': form, 'products': product_list, 'message': message, 'view_dict': get_updated_views()})
+    return render(request, 'Content/content_view.html',
+                  {'title_name': "Content View", 'form': form, 'products': product_list, 'message': message,
+                   'view_dict': get_updated_views()})
 
 
 def activation_view(request):
     form = Activation_form()
-    return render(request, 'Content/activation_key.html', {'title_name': 'Activation Key', 'form': form, 'view_dict': get_updated_views(), 'message': False, 'act_dict': get_updated_activations(), 'tmp_var': ''})
+    return render(request, 'Content/activation_key.html',
+                  {'title_name': 'Activation Key', 'form': form, 'view_dict': get_updated_views(), 'message': False,
+                   'act_dict': get_updated_activations(), 'tmp_var': ''})
 
 
 def post_activation_view(request):
@@ -467,7 +496,9 @@ def post_activation_view(request):
                 message = True
         else:
             message = 'Activation name already exists'
-    return render(request, 'Content/activation_key.html', {'title_name': 'Activation Key', 'form': form, 'message': message, 'view_dict': get_updated_views(), 'act_dict': get_updated_activations()})
+    return render(request, 'Content/activation_key.html',
+                  {'title_name': 'Activation Key', 'form': form, 'message': message, 'view_dict': get_updated_views(),
+                   'act_dict': get_updated_activations()})
 
 
 def host_group_view(request):
@@ -495,7 +526,8 @@ def post_host_group(request):
     select_os = Operating_system_model.objects.values_list("os_name", flat=True)
     select_activation = Activation_model.objects.values_list("activation_name", flat=True).distinct()
     message = ""
-    if form.is_valid() and not Host_group_model.objects.all().filter(host_group_name=form.cleaned_data['host_group_name']).exists():
+    if form.is_valid() and not Host_group_model.objects.all().filter(
+            host_group_name=form.cleaned_data['host_group_name']).exists():
         form = Host_group_model(
             host_group_name=form.cleaned_data['host_group_name'],
             select_compute=form.cleaned_data['select_compute'],

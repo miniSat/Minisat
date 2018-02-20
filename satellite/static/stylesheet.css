@@ -51,6 +51,10 @@ height: 330px;
 overflow: auto;
 }
 
+.vm_pack {
+height: 400px;
+overflow: auto;
+}
 
 .vl {
     border-left: 1px solid grey;
@@ -60,3 +64,9 @@ overflow: auto;
     margin-left: -3px;
     top: 0;
 }
+
+
+table.padded-table td{
+  padding:10px;
+}
+

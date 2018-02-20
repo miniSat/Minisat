@@ -1,15 +1,18 @@
 {% extends 'base.html' %}
 {% block extrascript %}
+
 <script type="text/javascript" src="/static/dockerlist.js"></script>
 {% endblock %}
 {% block content %}
 
 <div class="bg-primary" style="height:50px;margin-top:-25px">
-    <h3 class="title-bg"><center>{{ title_name }}</center></h3>
+    <h3 class="title-bg">
+        <center>{{ title_name }}</center>
+    </h3>
 </div>
 <br>
 <div class="col-md-2 col-lg-2"></div>
-<div class="col-md-8 col-lg-8 well well-lg well-primary" style="border:1px solid blue" >
+<div class="col-md-8 col-lg-8 well well-lg well-primary myBox " style="border:1px solid blue">
     <ul class="nav nav-tabs text-size" role="tablist">
         <li class="nav-item active">
             <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"><b>Local Images</b></a>
@@ -18,39 +21,42 @@
     <div class="tab-content">
         <br>
         <div role="tabpanel" class="tab-pane fade in active" id="profile">
-          {% if compute_name == False %}
+            {% if compute_name == False %}
             <h1>No Compute Resources Found</h1>
-          {% else %}
-          <form action="post_local_images" method="post">
-            {% csrf_token %}
-            <strong>Images on :</strong>
-            <select name="select_compute" id="compute_name" onchange="return getDockerImages()">
-                  {% for key,value in  compute_name %}
-                      {% if value == cpt_name %}
-                      <option value="{{key}}" selected>{{ value }}</option>
-                      {% else %}
-                      <option value="{{key}}">{{ value }}</option>
-                      {% endif %}
-                  {% endfor %}
-                  </select>
-            <table class="table" id="table_docker">
-              <thead>
-                <tr>
-                  <th>Image ID</th>
-                  <th>Repository</th>
-                  <th>Tag</th>
-                  <th>Created On</th>
-                  <th>Size(MiB)</th>
-                </tr>
-              </thead>
-              <tbody id="docker_images">
-    
-              </tbody>
-            </table>
+            {% else %}
+            <form action="post_local_images" method="post">
+                {% csrf_token %}
+                <strong>Images on :</strong>
+                <select name="select_compute" id="compute_name" onchange="return getDockerImages()">
+                    {% for key,value in compute_name %}
+                    {% if value == cpt_name %}
+                    <option value="{{key}}" selected>{{ value }}</option>
+                    {% else %}
+                    <option value="{{key}}">{{ value }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select><br><br>
+
+                <table class="table table-bordered table-striped " id="table_docker">
+                    <thead>
+                    <tr>
+                        <th>Image ID</th>
+                        <th>Repository</th>
+                        <th>Tag</th>
+                        <th>Created On</th>
+                        <th>Size(MiB)</th>
+                    </tr>
+                    </thead>
+                    <tbody id="docker_images">
+
+                    </tbody>
+                </table>
+
             </form>
-           {% endif %}
+            {% endif %}
         </div>
     </div>
 </div>
 <div class="col-md-2 col-lg-2"></div>
+
 {% endblock %}

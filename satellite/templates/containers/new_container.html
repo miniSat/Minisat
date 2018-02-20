@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <div class="bg-primary" style="height:50px;margin-top:-25px">
     <h3 class="title-bg"><center>{{ title_name }}</center></h3>
 </div>
@@ -28,7 +29,7 @@
                 {{ form.host_port.label_tag }}<br>
                 {{ form.host_port }}<strong> : </strong>{{ form.cont_port }}<br>
                 <br>
-                {{ form.select_compute.label_tag }}<br>
+                {{ form.select_compute.label_tag }}
                 <select name="select_compute">
                 {% for key,value in  compute_name %}
                     <option value="{{key}}">{{ value }}</option>

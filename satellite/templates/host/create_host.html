@@ -6,11 +6,13 @@
 
 
 <div class="bg-primary" style="height:50px;margin-top:-25px">
-    <h3 class="title-bg"><center>{{ title_name }}</center></h3>
+    <h3 class="title-bg">
+        <center>{{ title_name }}</center>
+    </h3>
 </div>
 <br>
 <div class="col-md-2 col-lg-2"></div>
-<div class="col-md-8 col-lg-8 well well-lg well-primary" style="border:1px solid blue" >
+<div class="col-md-8 col-lg-8 well well-lg well-primary" style="border:1px solid blue">
     <ul class="nav nav-tabs text-size" role="tablist">
         <li class="nav-item active">
             <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"><b>Create New</b></a>
@@ -22,60 +24,75 @@
             {% if error == False %}
             <form action="post_create_host" method="post" autocomplete="off">
                 {% csrf_token %}
-                {{ form.vm_name.label_tag }}
-                {{ form.vm_name }}
-                <br><br>
-                {{ form.select_compute.label_tag }}
-                <select name="select_compute" id="select_compute">
-                    {% for key,value in  compute_name %}
-                    <option value="{{key}}">{{ value }}</option>
-                    {% endfor %}
-                </select>
-                <br><br>
-                {{ form.select_vm_profile.label_tag }}
-                <select name="select_vm_profile" id="select_profile">
-                    {% for key,value in  profile_name %}
-                    <option value="{{key}}">{{ value }}</option>
-                    {% endfor %}
-                </select>
+                <div>
+                    <table class="padded-table">
+                        <tr>
+                            <td>{{ form.vm_name.label_tag }}</td>
+                            <td>{{ form.vm_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ form.select_compute.label_tag }}</td>
+                            <td><select name="select_compute" id="select_compute">
+                                {% for key,value in compute_name %}
+                                <option value="{{key}}">{{ value }}</option>
+                                {% endfor %}
+                            </select></td>
+                        </tr>
+                        <tr>
+                            <td>{{ form.select_vm_profile.label_tag }}</td>
+                            <td><select name="select_vm_profile" id="select_profile">
+                                {% for key,value in profile_name %}
+                                <option value="{{key}}">{{ value }}</option>
+                                {% endfor %}
+                            </select></td>
+                        </tr>
+                        <tr>
+                            <td>{{ form.vm_os.label_tag }}</td>
+                            <td><select name="vm_os" id="select_os">
+                                {% for key,value in os_name %}
+                                <option value="{{key}}">{{ value }}</option>
+                                {% endfor %}
+                            </select></td>
+
+                            <td>
+                                {{form.select_host_group.label_tag}}
+                            </td>
+                            <td><select name="select_host_group" id="select_host_group" onchange="host_group_change()">
+                                <option value="none">Choose Host Group</option>
+                                {% for each in host_group %}
+                                <option value="{{each}}">{{each}}</option>
+                                {% endfor %}
+                            </select>
+
+                </td>
 
 
-                <div style="float:right">
-                {{form.select_host_group.label_tag}}
-                <select name="select_host_group" id="select_host_group" onchange="host_group_change()">
-                    <option value="none">Choose Host Group</option>
-                    {% for each in host_group %}
-                    <option value="{{each}}">{{each}}</option>
-                    {% endfor %}
-                </select>
-                </div>
+                </tr>
+                <tr>
+                    <td>{{ form.activation_name.label_tag }}</td>
+                    <td><select name="activation_name" id="select_activation">
+                        {% for key,value in activation_name %}
+                        <option value="{{key}}">{{ value }}</option>
+                        {% endfor %}
+                    </select></td>
+                </tr>
+                <tr>
+                    <td>{{ form.password.label_tag }}</td>
+                    <td>{{ form.password }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit" class="btn btn-primary">Create Instance</button>
+                    </td>
+                </tr>
+                </table>
 
-
-                <br><br>
-                {{ form.vm_os.label_tag }}
-                <select name="vm_os" id="select_os">
-                    {% for key,value in  os_name %}
-                    <option value="{{key}}">{{ value }}</option>
-                    {% endfor %}
-                </select>
-                <br><br>
-                {{ form.activation_name.label_tag }}
-                <select name="activation_name" id="select_activation">
-                    {% for key,value in  activation_name %}
-                    <option value="{{key}}">{{ value }}</option>
-                    {% endfor %}
-                </select>
-                <br><br>
-                {{ form.password.label_tag }}
-                {{ form.password }}
-                <br><br>
-                <button type="submit" class="btn btn-primary">Create Instance</button>
-            </form>
-            {% else %}
-            <h1>{{ error }}</h1>
-            {% endif %}
-        </div>
+        </form>
+        {% else %}
+        <h1>{{ error }}</h1>
+        {% endif %}
     </div>
+</div>
 </div>
 <div class="col-md-2 col-lg-2"></div>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'form_template.html' %}
 
 {% block form_content %}
-
+<div class="myBox">
 <div id="results" name="results"></div>
 
 <form id="compute_form">{% csrf_token %}
@@ -13,11 +13,12 @@
     {% endfor %}
     <button type="submit" class="btn btn-primary" name="sub_compute" onclick="myFunction()">Submit</button>
 </form>
-
+</div>
 
 {% endblock %}
 
 {% block exist_content %}
+<div class="myBox">
 {% if compute_obj == False %}
 
 <h1>No Compute Resources Found</h1>
@@ -26,7 +27,7 @@
     console.log("{{compute_obj}}");
 
 </script>
-<table class="table">
+<table class="table table-bordered table-striped">
     <thead>
     <tr>
         <th>Name</th>
@@ -41,12 +42,13 @@
     <tr>
         <td>{{ obj.name }}</td>
         <td>{{ obj.ip_address }}</td>
-        <td><form action="delete" method="GET"><button class = "btn btn-default" name="ComputeDelete" value="{{ obj.id }}">Delete</button> </form></td>
+        <td width="2%"><form action="delete" method="GET"><button class = "btn btn-danger" name="ComputeDelete" value="{{ obj.id }}">Delete</button> </form></td>
     </tr>
     {% endfor %}
 
     </tbody>
 </table>
 {% endif %}
+    </div>
 {% endblock %}
 
