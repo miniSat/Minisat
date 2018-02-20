@@ -1,5 +1,6 @@
 {% extends 'form_template.html' %} 
 {% block form_content %}
+<div>
 {% if message == True %}
 <div class="alert alert-success alert-dismissable fade in">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -52,7 +53,8 @@
     {% endif %}
 
 </form>
-{% endblock %}
+</div>
+    {% endblock %}
 
 {% block exist_content %}
 
