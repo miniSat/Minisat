@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block extrascript %}
+
 <script type="text/javascript" src="/static/dockerlist.js"></script>
 {% endblock %}
 {% block content %}
@@ -9,7 +10,7 @@
 </div>
 <br>
 <div class="col-md-2 col-lg-2"></div>
-<div class="col-md-8 col-lg-8 well well-lg well-primary" style="border:1px solid blue" >
+<div class="col-md-8 col-lg-8 well well-lg well-primary myBox " style="border:1px solid blue" >
     <ul class="nav nav-tabs text-size" role="tablist">
         <li class="nav-item active">
             <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"><b>Local Images</b></a>
@@ -32,8 +33,9 @@
                       <option value="{{key}}">{{ value }}</option>
                       {% endif %}
                   {% endfor %}
-                  </select>
-            <table class="table" id="table_docker">
+                  </select><br><br>
+
+            <table class="table table-bordered table-striped " id="table_docker">
               <thead>
                 <tr>
                   <th>Image ID</th>
@@ -47,10 +49,12 @@
     
               </tbody>
             </table>
+
             </form>
            {% endif %}
         </div>
     </div>
 </div>
 <div class="col-md-2 col-lg-2"></div>
-{% endblock %}
+
+    {% endblock %}
