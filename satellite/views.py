@@ -410,12 +410,16 @@ def post_product(request):
 def delete(request):
     if (request.GET.get('ComputeDelete')):
         Compute_resource_model.objects.filter(id=request.GET.get('ComputeDelete')).delete()
+        return HttpResponseRedirect("compute_resource")
     if (request.GET.get('ProfileDelete')):
         Profile_model.objects.filter(id=request.GET.get('ProfileDelete')).delete()
+        return HttpResponseRedirect("profile")
     if (request.GET.get('ProductDelete')):
         Product_model.objects.filter(id=request.GET.get('ProductDelete')).delete()
+        return HttpResponseRedirect("product")
     if (request.GET.get('OSDelete')):
         Operating_system_model.objects.filter(id=request.GET.get('OSDelete')).delete()
+        return HttpResponseRedirect("operating_system")
     return HttpResponseRedirect("/")
 
 
