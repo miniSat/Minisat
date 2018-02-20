@@ -126,7 +126,7 @@ def profile(request):
                   'infrastructure/profile.html',
                   {'title_name': 'Profile',
                    'form': form,
-                   'message':False,
+                   'message': False,
                    'profile_obj': profile_list})
 
 
@@ -320,6 +320,8 @@ def post_local_images(request):
 
 
 def vm_info(request, cname, vm_id):
+    print("Welcome to Vm Page=========================================================")
+    print(vm_id)
     compute = Compute_resource_model.objects.filter(name=cname).values_list()[0]
     compute_ip = compute[2]
     details = vm.vm_details(compute_ip, vm_id)
