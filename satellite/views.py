@@ -320,7 +320,6 @@ def post_local_images(request):
 
 
 def vm_info(request, cname, vm_id):
-    print("Welcome to Vm Page=========================================================")
     print(vm_id)
     compute = Compute_resource_model.objects.filter(name=cname).values_list()[0]
     compute_ip = compute[2]
@@ -377,18 +376,35 @@ def product(request):
                   'Content/product.html',
                   {'title_name': 'Product',
                    'form': form,
-                   'product_obj': product_list})
+                   'product_obj': product_list,
+                   'message':False})
 
 
 def post_product(request):
     form = Product_form(request.POST)
+    product_list=Product_model.objects.all()
+    message = ""
     if form.is_valid():
         product = Product_model(
             product_name=form.cleaned_data["product_name"],
             product_location=form.cleaned_data["product_location"]
         )
-        product.save()
-    return HttpResponseRedirect('/')
+        check_product_name=Product_model.objects.filter(product_name=product.product_name).exists()
+        if not check_product_name:
+            product.save()
+            form = Product_form
+            message=True
+        else:
+            message="Product name Already Exist"
+    else:
+        message = "Invalid Values"
+
+    return render(request,
+                  'Content/product.html',
+                  {'title_name': 'Product',
+                   'form': form,
+                   'product_obj': product_list,
+                   'message':message})
 
 
 def delete(request):
