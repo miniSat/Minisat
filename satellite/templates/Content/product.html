@@ -1,41 +1,56 @@
 {% extends 'form_template.html' %}
 {% block form_content %}
 <div class="myBox">
+    {% if message == True %}
+    <div class="alert alert-success alert-dismissable fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Product Added Successfully</strong>
+    </div>
+    {% elif message != False %}
+    <div class="alert alert-danger alert-dismissable fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>{{ message }}</strong>
+    </div>
+    {% endif %}
     <form action="post_product" method="post" autocomplete="off">
-      {% csrf_token %}
-      {% for field in form %}
+        {% csrf_token %}
+        {% for field in form %}
         <div class="form-group">
-          {{ field.label_tag }}<br>
-          {{ field }}
+            {{ field.label_tag }}<br>
+            {{ field }}
         </div>
-      {% endfor %}
-      <button type="submit" class="btn btn-primary">Add</button>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Add</button>
     </form>
 </div>
 {% endblock %}
 
 {% block exist_content %}
 <div class="myBox">
-{% if product_obj %}
-<table class="table table-bordered table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Location</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for obj in product_obj %}
-    <tr>
-      <td>{{ obj.product_name }}</td>
-      <td>{{ obj.product_location }}</td>
-      <td><form action="delete" method="GET"><button class = "btn btn-danger" name="ProductDelete" value="{{ obj.id }}">Delete</button> </form></td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
-    </div>
+    {% if product_obj %}
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for obj in product_obj %}
+        <tr>
+            <td>{{ obj.product_name }}</td>
+            <td>{{ obj.product_location }}</td>
+            <td>
+                <form action="delete" method="GET">
+                    <button class="btn btn-danger" name="ProductDelete" value="{{ obj.id }}">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% else %}
 <h1>No Products Added</h1>
 {% endif %}

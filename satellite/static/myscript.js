@@ -1,7 +1,7 @@
 $(document).ready(function(e){
      $(document).on('submit','#compute_form',function(e){
      var ip_addr=$('#id_ip_address').val();
-     result = validateEmail(ip_addr);
+     result = validateIP(ip_addr);
      if (result == true) {
         e.preventDefault();
         $.ajax({
@@ -63,7 +63,7 @@ $(document).ready(function(e){
 
 });
 
-function validateEmail(ip_addr) {
+function validateIP(ip_addr) {
     var filter = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     if (filter.test(ip_addr)) {
         if(ip_addr != "127.0.0.1")
@@ -80,15 +80,3 @@ function validateEmail(ip_addr) {
     }
 }
 
-//Toast Msg function
-
-function myFunction() {
-    var x = document.getElementById("snackbar")
-    x.className = "show";
-    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
-}
-
-
-$(document).on('submit','#compute_form',function(e){
-    
-});

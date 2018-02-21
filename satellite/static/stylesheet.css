@@ -47,13 +47,18 @@ font-size:15px;
 
 
 .myBox {
-height: 330px;
+height: 300px;
 overflow: auto;
 }
 
 .vm_pack {
 height: 400px;
 overflow: auto;
+}
+
+.views_display{
+height:250px;
+overflow:auto
 }
 
 .vl {

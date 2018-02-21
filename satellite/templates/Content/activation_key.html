@@ -21,7 +21,7 @@
         {{ form.select_view.label_tag }}
         <br>
         {% if view_dict %}
-        <div class="myBox">
+        <div class="views_display">
             <table class="table table-bordered">
                 <thead>
                 <tr>
@@ -52,6 +52,7 @@
                 </tbody>
             </table>
         </div>
+    <br>
         <input type="submit" id="btn-refresh" class="btn btn-primary" value="Add">
         {% else %}
         <h1>No Views Found</h1>
