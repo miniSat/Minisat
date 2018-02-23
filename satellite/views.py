@@ -2,7 +2,7 @@ from django.views.generic import TemplateView  # NOQA
 import docker
 import os
 from django.shortcuts import render
-from satellite.modules.docker_manage import make_connection, get_docker_images, start_cont, stop_cont
+from satellite.modules.docker_manage import make_connection, get_docker_images, start_cont, stop_cont, destroy_cont
 from django.http import JsonResponse
 # We'll use render to display our templates.
 
@@ -376,6 +376,14 @@ def stop_container(request):
     cont_name = request.GET.get('cont_name', None)
     compute_name = request.GET.get('compute_name', None)
     container_status = stop_cont(cont_name, compute_name)
+    res = {'status': container_status, 'cont_name': cont_name}
+    return JsonResponse(res)
+
+
+def destroy_container(request):
+    cont_name = request.GET.get('cont_name', None)
+    compute_name = request.GET.get('compute_name', None)
+    container_status = destroy_cont(cont_name, compute_name)
     res = {'status': container_status, 'cont_name': cont_name}
     return JsonResponse(res)
 

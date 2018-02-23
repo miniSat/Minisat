@@ -114,6 +114,26 @@ function pause_docker_cont(cont_name, compute_name)
 }
 
 
+function destroy_docker_cont(cont_name, compute_name)
+{
+    $("#action_"+name).prop("disabled", true);
+    $("#cont-spinner").show();
+    console.log(cont_name+" "+compute_name);
+    $.ajax({
+        url: '/containers/destroy_container/',
+        dataType: 'json',
+        data: {
+            'cont_name': cont_name,
+            'compute_name': compute_name
+        },
+        success: function(vals){
+            console.log(vals);
+            $("#dash_cont "+"#"+vals.cont_name+" .cont_status").html("<p style='color:red'>Destroyed</p>");
+            $("#cont-spinner").hide();
+        }
+    });
+}
+
 
 function ajax_vm(){
     $("#vm-spinner").show();
@@ -201,6 +221,7 @@ function ajax_containers() {
                     '<ul class="dropdown-menu" role="menu" aria-labelledby="action_docker">'+
                     '<li role="presentation"><a role="menuitem" tabindex="-1" id="docker_start" onclick="return start_docker_cont(\''+each_cont[0]+'\',\''+each_cont[3]+'\')">Start</a></li>'+
                     '<li role="presentation"><a role="menuitem" tabindex="-1" id = "docker_pause" onclick="return pause_docker_cont(\''+each_cont[0]+'\',\''+each_cont[3]+'\')">Pause</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" id = "docker_destroy" onclick="return destroy_docker_cont(\''+each_cont[0]+'\',\''+each_cont[3]+'\')">Destroy</a></li>'+
                     '</ul></div></td>'
                 ele.innerHTML=str;
                 myTable.appendChild(ele);
