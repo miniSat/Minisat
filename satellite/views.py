@@ -565,20 +565,23 @@ def post_host_group(request):
     select_os = Operating_system_model.objects.values_list("os_name", flat=True)
     select_activation = Activation_model.objects.values_list("activation_name", flat=True).distinct()
     message = ""
-    if form.is_valid() and not Host_group_model.objects.all().filter(
+    if form.is_valid():
+        if not Host_group_model.objects.all().filter(
             host_group_name=form.cleaned_data['host_group_name']).exists():
-        form = Host_group_model(
-            host_group_name=form.cleaned_data['host_group_name'],
-            select_compute=form.cleaned_data['select_compute'],
-            select_profile=form.cleaned_data['select_profile'],
-            select_os=form.cleaned_data['select_os'],
-            select_activation=form.cleaned_data['select_activation'],
-        )
-        form.save()
-        form = Host_group_form()
-        message = True
+            form = Host_group_model(
+                host_group_name=form.cleaned_data['host_group_name'],
+                select_compute=form.cleaned_data['select_compute'],
+                select_profile=form.cleaned_data['select_profile'],
+                select_os=form.cleaned_data['select_os'],
+                select_activation=form.cleaned_data['select_activation'],
+            )
+            form.save()
+            message = True
+            form = Host_group_form()
+        else:
+            message = "Host Group Already Exists"
     else:
-        message = "Host Group Already Exists"
+        message = "Invalid Fields"
 
     return render(request, 'host_group/host_group.html', {
         'title_name': "Host Group",
