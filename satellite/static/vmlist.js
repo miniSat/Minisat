@@ -52,6 +52,25 @@ function pause_vm(name,compute_name)
     });
 }
 
+function delete_vm(name,compute_name)
+{
+    $("#action_"+name).prop("disabled", true);
+    $("#vm-spinner").show();
+    $.ajax({
+        url: 'vm_delete',
+        data: {
+            'vm_name':name,
+            'compute_name':compute_name
+        },
+        dataType:'json',
+        success:function(vals){
+            $("#dash_vms "+"#"+vals.vm_name+" .vm_status").html("<p style='color:red'>Deleted</p>");
+            $("#vm-spinner").hide();
+        }
+
+    });
+}
+
 function start_docker_cont(cont_name, compute_name)
 {
     $("#action_"+name).prop("disabled", true);
@@ -129,8 +148,8 @@ function ajax_vm(){
                     '<ul class="dropdown-menu" role="menu" aria-labelledby="action">'+
                     '<li role="presentation"><a role="menuitem" tabindex="-1" class="start_'+each_vm[1]+'" onclick="start_vm(\''+each_vm[1]+'\',\''+each_vm[3]+'\')">Start</a></li>'+
                     '<li role="presentation"><a role="menuitem" tabindex="-1" class = "pause_'+each_vm[1]+'" onclick="pause_vm(\''+each_vm[1]+'\',\''+each_vm[3]+'\')">Shutdown</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" class = "delete_'+each_vm[1]+'" onclick="delete_vm(\''+each_vm[1]+'\',\''+each_vm[3]+'\')">Delete</a></li>'+
                     '</ul></div></td>'
-//                $("#this-"+each_vm[0]).attr("href","vm_info/"+each_vm[0]);
                 ele.innerHTML=str;
                 myTable.appendChild(ele);
             }

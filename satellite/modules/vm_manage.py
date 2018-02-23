@@ -43,6 +43,13 @@ def virsh_pause_vm(vm_name, com_ip):
     return shut_vm_flag
 
 
+def virsh_delete_vm(vm_name, com_ip):
+    cmd = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system undefine " + str(vm_name)
+    delete_vm_flag = os.system(cmd)
+    time.sleep(6)
+    return delete_vm_flag
+
+
 def vm_ip(vm_name, compute_ip):
     response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_name).readlines()
     vm_mac = response[2].split(" ")[-1]

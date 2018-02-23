@@ -15,10 +15,6 @@ $(document).ready(function(e){
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
             },
             success: function(data){
-                console.log(data['status']);
-                console.log(data['vm-status']);
-                console.log(data['docker-status']);
-                console.log(data);
                 if(Object.keys(data).length == 0)
                 {
                     $("#results").html(

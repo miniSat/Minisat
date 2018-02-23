@@ -353,6 +353,17 @@ def vm_pause(request):
     return JsonResponse(data)
 
 
+def vm_delete(request):
+    data = {}
+    vm_name = request.GET.get('vm_name', None)
+    vm_compute_name = request.GET.get('compute_name', None)
+    com_ip = list(Compute_resource_model.objects.filter(name=vm_compute_name).values_list(flat=True))[2]
+    status = vm.virsh_delete_vm(vm_name, com_ip)
+    data['status'] = status
+    data['vm_name'] = vm_name
+    return JsonResponse(data)
+
+
 def start_container(request):
     cont_name = request.GET.get('cont_name', None)
     compute_name = request.GET.get('compute_name', None)
