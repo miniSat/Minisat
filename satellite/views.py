@@ -80,9 +80,10 @@ def compute_resource(request):
     # We create object of Compute_resource_model and fetch data and store in
     # compute_resource_list variable
     return render(request, 'infrastructure/compute_resource.html',
-                  {'title_name': 'Create New Compute Resource', 'form': form,
+                  {'title_name': 'Create New Compute Resource',
+                   'form': form,
                    'compute_obj': compute_resource_list,
-                   'message' : False})
+                   'message': False})
 
 
 def post_data(request):
@@ -92,9 +93,9 @@ def post_data(request):
     print(message)
     if form.is_valid():
         compute = Compute_resource_model(
-            name = form.cleaned_data["name"],
-            ip_address = form.cleaned_data["ip_address"],
-            root_password = form.cleaned_data["root_password"]
+            name=form.cleaned_data["name"],
+            ip_address=form.cleaned_data["ip_address"],
+            root_password=form.cleaned_data["root_password"]
         )
         check_name = Compute_resource_model.objects.all().filter(name=compute.name).exists()
         check_ip = Compute_resource_model.objects.filter(ip_address=compute.ip_address).exists()
