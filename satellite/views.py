@@ -566,8 +566,7 @@ def post_host_group(request):
     select_activation = Activation_model.objects.values_list("activation_name", flat=True).distinct()
     message = ""
     if form.is_valid():
-        if not Host_group_model.objects.all().filter(
-            host_group_name=form.cleaned_data['host_group_name']).exists():
+        if not Host_group_model.objects.all().filter(host_group_name=form.cleaned_data['host_group_name']).exists():
             form = Host_group_model(
                 host_group_name=form.cleaned_data['host_group_name'],
                 select_compute=form.cleaned_data['select_compute'],
