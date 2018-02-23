@@ -51,7 +51,7 @@ def home(request):
     :param request: .html page
     :return: home.html
     """
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'title_name': "Dashboard"})
 
 
 def get_virtual_mc(request):

@@ -1,4 +1,5 @@
 import os
+import time
 
 
 def make_connection(ip_address, name):
@@ -30,6 +31,7 @@ def get_docker_images(compute=[]):
 def start_cont(cont_name, compute_name):
     start_cmd = "docker-machine ssh " + compute_name + " docker unpause " + cont_name
     cont_response = os.system(start_cmd)
+    time.sleep(4)
     if cont_response == 0:
         return "Paused"
     elif cont_response == 256:
@@ -39,6 +41,7 @@ def start_cont(cont_name, compute_name):
 def stop_cont(cont_name, compute_name):
     start_cmd = "docker-machine ssh " + compute_name + " docker pause " + cont_name
     cont_response = os.popen(start_cmd)
+    time.sleep(4)
     if cont_response == 0:
         return "Running"
     elif cont_response == 256:
@@ -48,6 +51,7 @@ def stop_cont(cont_name, compute_name):
 def destroy_cont(cont_name, compute_name):
     stop_cmd = "docker-machine ssh " + compute_name + " docker container rm -f " + cont_name
     cont_response = os.popen(stop_cmd)
+    time.sleep(4)
     if cont_response == 0:
         return "Destroyed"
     else:
