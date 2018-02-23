@@ -73,7 +73,7 @@ function delete_vm(name,compute_name)
 
 function start_docker_cont(cont_name, compute_name)
 {
-    $("#action_"+name).prop("disabled", true);
+    $("#action_"+cont_name).prop("disabled", true);
     $("#cont-spinner").show();
     $.ajax({
         url: '/containers/start_container/',
@@ -86,7 +86,7 @@ function start_docker_cont(cont_name, compute_name)
             console.log(vals);
             $("#dash_cont "+"#"+vals.cont_name+" .cont_status").html("<p style='color:green'>Running</p>");
             $("#cont-spinner").hide();
-            $("#action_"+name).prop("disabled", false);
+            $("#action_"+cont_name).prop("disabled", false);
         }
     });
 }
@@ -94,7 +94,7 @@ function start_docker_cont(cont_name, compute_name)
 
 function pause_docker_cont(cont_name, compute_name)
 {
-    $("#action_"+name).prop("disabled", true);
+    $("#action_"+cont_name).prop("disabled", true);
     $("#cont-spinner").show();
     console.log(cont_name+" "+compute_name);
     $.ajax({
@@ -108,7 +108,7 @@ function pause_docker_cont(cont_name, compute_name)
             console.log(vals);
             $("#dash_cont "+"#"+vals.cont_name+" .cont_status").html("<p style='color:red'>Paused</p>");
             $("#cont-spinner").hide();
-            $("#action_"+name).prop("disabled", false);
+            $("#action_"+cont_name).prop("disabled", false);
         }
     });
 }
@@ -116,7 +116,7 @@ function pause_docker_cont(cont_name, compute_name)
 
 function destroy_docker_cont(cont_name, compute_name)
 {
-    $("#action_"+name).prop("disabled", true);
+    $("#action_"+cont_name).prop("disabled", true);
     $("#cont-spinner").show();
     console.log(cont_name+" "+compute_name);
     $.ajax({
@@ -137,6 +137,7 @@ function destroy_docker_cont(cont_name, compute_name)
 
 function ajax_vm(){
     $("#vm-spinner").show();
+    $("#btn-refresh").prop("disabled", true);
     $.ajax({
         url: 'get_virtual_mc',
         cache: false,
@@ -184,11 +185,13 @@ function ajax_vm(){
                 }
             });
             $("#vm-spinner").hide();
+            $("#btn-refresh").prop("disabled", false);
         }
     });
 }
 function ajax_containers() {
     $("#cont-spinner").show();
+    $("#btn-refresh").prop("disabled", true);
     $.ajax({
         url: 'get_running_containers',
         dataType: 'json',
@@ -216,7 +219,7 @@ function ajax_containers() {
                 str= str+"<td class='cont_compute'>"+each_cont[3]+' ('+each_cont[6]+' )'+"</td>";
                 str= str+"<td class='cont_status'>"+each_cont[4]+"</td>";
                 str=str+'<td><div class="dropdown">'+
-                    '<button class="btn btn-default dropdown-toggle" type="button" id="action_'+each_cont[1]+'" data-toggle="dropdown">Action'+
+                    '<button class="btn btn-default dropdown-toggle" type="button" id="action_'+each_cont[0]+'" data-toggle="dropdown">Action'+
                     '<span class="caret"></span></button>'+
                     '<ul class="dropdown-menu" role="menu" aria-labelledby="action_docker">'+
                     '<li role="presentation"><a role="menuitem" tabindex="-1" id="docker_start" onclick="return start_docker_cont(\''+each_cont[0]+'\',\''+each_cont[3]+'\')">Start</a></li>'+
@@ -236,6 +239,7 @@ function ajax_containers() {
                 }
             });
             $("#cont-spinner").hide();
+            $("#btn-refresh").prop("disabled", false);
         }
     });
 }
