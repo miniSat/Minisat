@@ -47,9 +47,8 @@ def stop_cont(cont_name, compute_name):
 
 def destroy_cont(cont_name, compute_name):
     stop_cmd = "docker-machine ssh " + compute_name + " docker container rm -f " + cont_name
-    # rm_cmd = "docker-machine ssh " + compute_name + " docker container rm " + cont_name
     cont_response = os.popen(stop_cmd)
     if cont_response == 0:
-        return "Distroyed"
+        return "Destroyed"
     else:
         return 0
