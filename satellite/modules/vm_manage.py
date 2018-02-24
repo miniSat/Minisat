@@ -77,10 +77,16 @@ def vm_details(compute_ip, vm_id):
     vm_state = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domstate " + vm_id).readline()
     details["State"] = vm_state[:-1]
     try:
-        vm_allocated_mem = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system dommemstat " + vm_id).readline()
-        details["Allocated memory "] = str(int(int(vm_allocated_mem.split()[1]) / 1024)) + "MB"
+        vm_allocated_mem = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system dommemstat " + vm_id).readlines()
+        details["Total Allocated Memory "] = str(int(int(vm_allocated_mem[0].split()[1]) / 1024)) + " MB"
+        details["Free Memory"] = str(int(int(vm_allocated_mem[2].split()[1]) / 1024)) + " MB"
+
+        vm_cpu = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system dominfo " + vm_id).readlines()
+        details["Virtual CPUs"] = vm_cpu[5].split()[1]
     except IndexError:
-        details["Allocated memory "] = "-"
+        details["Total Allocated Memory "] = "-"
+        details["Free Memory"] = "-"
+        details["Virtual CPUs"] = '-'
     details["IP Address"] = vm_ip(details["Name"], compute_ip)
     list = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_id).readlines()[2].split()
     vm_mac = list[4]
@@ -89,10 +95,7 @@ def vm_details(compute_ip, vm_id):
 
 
 def get_packages(compute_ip, vm_ip, root_passwd):
-    print(compute_ip, vm_ip, root_passwd)
     vm_ip = vm_ip.split("/")[0]
-    str1 = "ssh root@" + compute_ip + " 'sshpass -p " + root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " rpm -qa'"
-    print(str1)
     package_info = os.popen("ssh root@" + compute_ip + " 'sshpass -p " + root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " rpm -qa'").readlines()
     package_info = package_info[2:]
     return package_info
