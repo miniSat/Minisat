@@ -90,7 +90,6 @@ def post_data(request):
     form = Compute_resource_form(request.POST)
     compute_resource_list = Compute_resource_model.objects.all()
     message = ""
-    print(message)
     if form.is_valid():
         compute = Compute_resource_model(
             name=form.cleaned_data["name"],
@@ -120,7 +119,7 @@ def post_data(request):
             message = "Compute name already exists"
     else:
         message = "Invalid Field Data"
-    print(message)
+
     return render(request, 'infrastructure/compute_resource.html',
                   {'title_name': 'Create New Compute Resource',
                    'form': form,
@@ -331,7 +330,6 @@ def post_local_images(request):
 
 
 def vm_info(request, cname, vm_id):
-    print(vm_id)
     compute = Compute_resource_model.objects.filter(name=cname).values_list()[0]
     compute_ip = compute[2]
     details = vm.vm_details(compute_ip, vm_id)
