@@ -13,6 +13,7 @@ def get_vms(ip_list=[]):
                 "virsh -c qemu+ssh://root@" +
                 ip +
                 "/system list --all").readlines()
+
             for vm in range(2, len(vm_list) - 1):
                 vm_names = vm_list[vm].split()
                 vm_details = os.popen(
@@ -29,6 +30,11 @@ def get_vms(ip_list=[]):
                 vm_det.append(vm_status[1])
                 vm_det.append(tuple[1])
                 vm_det.append(ip)
+                # print(vm_det)
+
+                if vm_det[2] == 'running':
+                    vm_det[2] = vm_funcs.get_status(vm_det[3], vm_det[4], vm_det[1])
+
                 final_dict[count] = vm_det
                 count = count + 1
         else:

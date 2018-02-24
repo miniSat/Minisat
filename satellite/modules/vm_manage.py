@@ -3,8 +3,10 @@ import time
 from satellite.models import (
     Product_model,
     Activation_model,
-    View_model
+    View_model,
+    Create_host_model
 )
+
 
 
 def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_loc):
@@ -111,3 +113,16 @@ def get_repo(activation_name):
         else:
             repo[each[0][1]] = each[0][2]
     return repo
+
+
+def get_status(compute_name, compute_ip, vm_name):
+    root_passwd = Create_host_model.objects.filter(select_compute=compute_name, vm_name=vm_name).values_list()[0][6]
+    vm_ipaddress = vm_ip(vm_name, compute_ip).split("/")[0]
+    cmd = "ssh root@" + compute_ip + " sshpass -p " + root_passwd + " ssh root@" + vm_ipaddress + " hostname"
+    # print(cmd)
+    response = os.system(cmd)
+    # print(response)
+    if response == 0:
+        return "running"
+    elif response == 65280:
+        return "processing"
