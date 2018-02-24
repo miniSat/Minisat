@@ -1,19 +1,29 @@
 {% extends 'form_template.html' %}
 
 {% block form_content %}
-<div class="myBox">
-<div id="results" name="results"></div>
 
-<form id="compute_form">{% csrf_token %}
+{% if message == True %}
+<div class="alert alert-success alert-dismissable fade in">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Compute Resource Added Successfully</strong>
+</div>
+{% elif message != False %}
+<div class="alert alert-danger alert-dismissable fade in">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>{{ message }}</strong>
+</div>
+{% endif %}
+
+<form action="post_data" method="post" >{% csrf_token %}
     {% for field in form %}
     <div class="form-group">
         {{ field.label_tag }}<br>
         {{ field }}
     </div>
     {% endfor %}
-    <button type="submit" class="btn btn-primary" name="sub_compute" onclick="myFunction()">Submit</button>
+    <button type="submit" class="btn btn-primary">SUBMIT</button>
 </form>
-</div>
+
 
 {% endblock %}
 

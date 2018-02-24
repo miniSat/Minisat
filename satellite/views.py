@@ -80,41 +80,52 @@ def compute_resource(request):
     # We create object of Compute_resource_model and fetch data and store in
     # compute_resource_list variable
     return render(request, 'infrastructure/compute_resource.html',
-                  {'title_name': 'Create New Compute Resource', 'form': form,
-                   'compute_obj': compute_resource_list})
+                  {'title_name': 'Create New Compute Resource',
+                   'form': form,
+                   'compute_obj': compute_resource_list,
+                   'message': False})
 
 
 def post_data(request):
-    message = {}
-    if (request.is_ajax() and request.method == 'POST'):
-        name = request.POST["name"]
-        ip_address = request.POST["ip_address"]
-        root_password = request.POST["root_password"]
-        check_name = Compute_resource_model.objects.all().filter(name=name).exists()
-        check_ip = Compute_resource_model.objects.filter(ip_address=ip_address).exists()
+    form = Compute_resource_form(request.POST)
+    compute_resource_list = Compute_resource_model.objects.all()
+    message = ""
+    print(message)
+    if form.is_valid():
+        compute = Compute_resource_model(
+            name=form.cleaned_data["name"],
+            ip_address=form.cleaned_data["ip_address"],
+            root_password=form.cleaned_data["root_password"]
+        )
+        check_name = Compute_resource_model.objects.all().filter(name=compute.name).exists()
+        check_ip = Compute_resource_model.objects.filter(ip_address=compute.ip_address).exists()
         if not check_name:
             if not check_ip:
-                if vm.isOnline(ip_address):
-                    vm_result = ssh.make_connection(ip_address, root_password)
+                if vm.isOnline(compute.ip_address):
+                    vm_result = ssh.make_connection(compute.ip_address, compute.root_password)
                     if vm_result == "True":
-                        if make_connection(ip_address, name) == "True":
-                            compute_obj = Compute_resource_model(
-                                name=name,
-                                ip_address=ip_address,
-                                root_password=root_password
-                            )
-                            compute_obj.save()
+                        if make_connection(compute.ip_address, compute.name) == "True":
+                            compute.save()
+                            form = Compute_resource_form()
+                            message = True
                         else:
-                            message['docker-status'] = "Could not add compute for Docker"
+                            message = "Could not add compute for Docker"
                     else:
-                        message['vm-status'] = vm_result
+                        message = vm_result
                 else:
-                    message["status"] = "System is unreachable"
+                    message = "System is unreachable"
             else:
-                message["status"] = "IP address already exists"
+                message = "IP address already exists"
         else:
-            message["status"] = "Compute name already exists"
-    return JsonResponse(message)
+            message = "Compute name already exists"
+    else:
+        message = "Invalid Field Data"
+    print(message)
+    return render(request, 'infrastructure/compute_resource.html',
+                  {'title_name': 'Create New Compute Resource',
+                   'form': form,
+                   'compute_obj': compute_resource_list,
+                   'message': message})
 
 
 def profile(request):
@@ -597,7 +608,6 @@ def post_host_group(request):
 def host_group_data(request):
     host_group = request.GET.get("host_group")
     host_data = list(Host_group_model.objects.all().filter(host_group_name=host_group).values_list(flat=True))
-    print(host_data[5])
     data = {
         'host_group_name': host_data[1],
         'compute': host_data[2],
@@ -605,5 +615,4 @@ def host_group_data(request):
         'operating_system': host_data[4],
         'activation_key': host_data[5]
     }
-    print(data)
     return JsonResponse(data)
