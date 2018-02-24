@@ -179,7 +179,7 @@ function ajax_vm(){
                     $(this).css('color','green');
                     $(this).text("Running");
                 }
-                else if ($(this).text() == "processing") {
+                else if ($(this).text() == "initializing") {
                     $(this).css('color','blue');
                     $(this).text("Initializing");
                 }

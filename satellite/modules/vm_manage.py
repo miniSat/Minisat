@@ -8,7 +8,6 @@ from satellite.models import (
 )
 
 
-
 def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_loc):
     final_cmd = 'virt-install --connect qemu+ssh://root@' + compute_ip + '/system --name ' + name + ' --ram ' + str(
         ram) + ' --vcpus ' + str(
@@ -125,4 +124,4 @@ def get_status(compute_name, compute_ip, vm_name):
     if response == 0:
         return "running"
     elif response == 65280:
-        return "processing"
+        return "initializing"
