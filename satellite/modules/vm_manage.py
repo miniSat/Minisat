@@ -78,13 +78,12 @@ def vm_details(compute_ip, vm_id):
     details["State"] = vm_state[:-1]
     try:
         vm_allocated_mem = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system dommemstat " + vm_id).readlines()
-        details["Total Allocated Memory "] = str(int(int(vm_allocated_mem[0].split()[1]) / 1024)) + " MB"
-        details["Free Memory"] = str(int(int(vm_allocated_mem[2].split()[1]) / 1024)) + " MB"
-
+        details["Total Allocated Memory"] = str(int(int(vm_allocated_mem[0].split()[1]) / 1024)) + " MB"
+        details["Free Memory"] = str(int(int(vm_allocated_mem[-2].split()[1]) / 1024)) + " MB"
         vm_cpu = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system dominfo " + vm_id).readlines()
         details["Virtual CPUs"] = vm_cpu[5].split()[1]
     except IndexError:
-        details["Total Allocated Memory "] = "-"
+        details["Total Allocated Memory"] = "-"
         details["Free Memory"] = "-"
         details["Virtual CPUs"] = '-'
     details["IP Address"] = vm_ip(details["Name"], compute_ip)
@@ -121,10 +120,18 @@ def get_status(compute_name, compute_ip, vm_name):
     root_passwd = Create_host_model.objects.filter(select_compute=compute_name, vm_name=vm_name).values_list()[0][6]
     vm_ipaddress = vm_ip(vm_name, compute_ip).split("/")[0]
     cmd = "ssh root@" + compute_ip + " sshpass -p " + root_passwd + " ssh root@" + vm_ipaddress + " hostname"
-    # print(cmd)
     response = os.system(cmd)
-    # print(response)
     if response == 0:
         return "running"
     elif response == 65280:
         return "initializing"
+
+
+# TO get chart details
+
+def get_chart_details(allocated_mem, free_mem):
+    chartdetail = {}
+    chartdetail["allocated"] = int(allocated_mem.split('M')[0])
+    chartdetail["free_mem"] = int(free_mem.split('M')[0])
+    chartdetail["used_memory"] = chartdetail["allocated"] - chartdetail["free_mem"]
+    return chartdetail

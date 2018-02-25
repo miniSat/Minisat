@@ -337,7 +337,8 @@ def vm_info(request, cname, vm_id):
     details["Operating System"] = OS
     root_passwd = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][6]
     packages = vm.get_packages(compute_ip, details["IP Address"], root_passwd)
-    return render(request, 'VM_info.html', {"details": details, "packages": packages})
+    chartDetail = vm.get_chart_details(details["Total Allocated Memory"], details["Free Memory"])
+    return render(request, 'VM_info.html', {"details": details, "packages": packages, "chartDetail": chartDetail})
 
 
 def vm_start(request):
