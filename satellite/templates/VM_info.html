@@ -2,6 +2,25 @@
 
 {% block vmpackages %}
 <script src="/static/vm_packages.js"></script>
+<script>
+    var ctxD = document.getElementById("doughnutChart").getContext('2d');
+var myLineChart = new Chart(ctxD, {
+    type: 'doughnut',
+    data: {
+        labels: ["Free","Used"],
+        datasets: [
+            {
+                data: [{{ chartDetail.free_mem }}, {{ chartDetail.used_memory }}],
+                backgroundColor: ["#46BFBD", "#FDB45C"],
+                hoverBackgroundColor: ["#5AD3D1", "#FFC870"]
+            }
+        ],
+    },
+    options: {
+        responsive: true
+    }
+});
+</script>
 {% endblock %}
 
 {% block content %}
@@ -17,8 +36,14 @@
                     </h2>
                     <div class="btn-group card-pf-title" style="float:right;top:-60px;">
                     </div>
-
                 </div>
+
+                <div style="float:right;margin-right:100px;margin-bottom:25px">
+                <canvas height="250px" id="doughnutChart">
+                    <canvas height="100px" id="doug"></canvas>
+                </canvas>
+                </div>
+
                 <div class="card-pf-body" id="vm_info_font">
                     {% for key,value in details.items %}
                     <label> {{ key }} : {{ value }} </label><br>
@@ -48,7 +73,7 @@
                         <tbody id="vm_packages_table">
                         {% for pack_name in packages %}
                         <tr>
-                            <td> {{ pack_name }} </td>
+                            <td> {{ pack_name }}</td>
                         </tr>
                         {% endfor %}
                         </tbody>

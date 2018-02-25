@@ -1,5 +1,4 @@
 from django.views.generic import TemplateView  # NOQA
-import docker
 import os
 from django.shortcuts import render
 from satellite.modules.docker_manage import make_connection, get_docker_images, start_cont, stop_cont, destroy_cont
@@ -216,18 +215,36 @@ def operating_system(request):
                   'host/operating_system.html',
                   {'title_name': 'Add Operating System',
                    'form': form,
-                   'os_obj': operating_system_list})
+                   'os_obj': operating_system_list,
+                   'message': False})
 
 
 def post_operating_system(request):
     form = Operating_system_form(request.POST)
+    operating_system_list = Operating_system_model.objects.all()
+    message = ""
     if form.is_valid():
         operating_sys = Operating_system_model(
             os_name=form.cleaned_data["os_name"],
             os_location=form.cleaned_data["os_location"]
         )
-        operating_sys.save()
-    return HttpResponseRedirect('/')
+        check_os_name = Operating_system_model.objects.filter(os_name=operating_sys.os_name).exists()
+        check_os_location = Operating_system_model.objects.filter(os_location=operating_sys.os_location).exists()
+        if not check_os_name:
+            if not check_os_location:
+                operating_sys.save()
+                message = True
+                form = Operating_system_form()
+            else:
+                message = "Location already exist"
+        else:
+            message = "OS Name already exist"
+    return render(request,
+                  'host/operating_system.html',
+                  {'title_name': 'Add Operating System',
+                   'form': form,
+                   'os_obj': operating_system_list,
+                   'message': message})
 
 
 def post_create_host(request):
@@ -304,12 +321,10 @@ def post_new_container(request):
                           "cont_port"] + " --name " + new_cont.container_name + " " + \
                       new_cont.image_name + ":" + new_cont.tag_name
         os.system(create_cont)
-        # form.save()
     return HttpResponseRedirect('/')
 
 
 def local_images(request):
-    client = docker.from_env()  # NOQA
     compute_name = Compute_resource_model.objects.values_list("name", flat=True)
     if not compute_name:
         compute_name = False
@@ -337,7 +352,8 @@ def vm_info(request, cname, vm_id):
     details["Operating System"] = OS
     root_passwd = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][6]
     packages = vm.get_packages(compute_ip, details["IP Address"], root_passwd)
-    return render(request, 'VM_info.html', {"details": details, "packages": packages})
+    chartDetail = vm.get_chart_details(details["Total Allocated Memory"], details["Free Memory"])
+    return render(request, 'VM_info.html', {"details": details, "packages": packages, "chartDetail": chartDetail})
 
 
 def vm_start(request):
