@@ -216,18 +216,36 @@ def operating_system(request):
                   'host/operating_system.html',
                   {'title_name': 'Add Operating System',
                    'form': form,
-                   'os_obj': operating_system_list})
+                   'os_obj': operating_system_list,
+                   'message': False})
 
 
 def post_operating_system(request):
     form = Operating_system_form(request.POST)
+    operating_system_list = Operating_system_model.objects.all()
+    message = ""
     if form.is_valid():
         operating_sys = Operating_system_model(
             os_name=form.cleaned_data["os_name"],
             os_location=form.cleaned_data["os_location"]
         )
-        operating_sys.save()
-    return HttpResponseRedirect('/')
+        check_os_name = Operating_system_model.objects.filter(os_name = operating_sys.os_name).exists()
+        check_os_location = Operating_system_model.objects.filter(os_location = operating_sys.os_location).exists()
+        if not check_os_name:
+            if not check_os_location:
+                operating_sys.save()
+                message = True
+                form = Operating_system_form()
+            else:
+                message = "Location already exist"
+        else:
+            message = "OS Name already exist"
+    return render(request,
+                  'host/operating_system.html',
+                  {'title_name': 'Add Operating System',
+                   'form': form,
+                   'os_obj': operating_system_list,
+                   'message': message})
 
 
 def post_create_host(request):

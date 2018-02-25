@@ -1,6 +1,18 @@
 {% extends 'form_template.html' %}
 {% block form_content %}
 <div class="myBox">
+    {% if message == True %}
+    <div class="alert alert-success alert-dismissable fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Operating System Added Successfully</strong>
+    </div>
+    {% elif message != False %}
+    <div class="alert alert-danger alert-dismissable fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>{{ message }}</strong>
+    </div>
+    {% endif %}
+
     <form action="post_operating_system" method="post" autocomplete="off">
         {% csrf_token %}
         {% for field in form %}
