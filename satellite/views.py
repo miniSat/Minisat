@@ -1,5 +1,4 @@
 from django.views.generic import TemplateView  # NOQA
-import docker
 import os
 from django.shortcuts import render
 from satellite.modules.docker_manage import make_connection, get_docker_images, start_cont, stop_cont, destroy_cont
@@ -229,8 +228,8 @@ def post_operating_system(request):
             os_name=form.cleaned_data["os_name"],
             os_location=form.cleaned_data["os_location"]
         )
-        check_os_name = Operating_system_model.objects.filter(os_name = operating_sys.os_name).exists()
-        check_os_location = Operating_system_model.objects.filter(os_location = operating_sys.os_location).exists()
+        check_os_name = Operating_system_model.objects.filter(os_name=operating_sys.os_name).exists()
+        check_os_location = Operating_system_model.objects.filter(os_location=operating_sys.os_location).exists()
         if not check_os_name:
             if not check_os_location:
                 operating_sys.save()
