@@ -14,7 +14,6 @@ def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_lo
         cpus) + ' --disk path=/var/lib/libvirt/images/' + name + '.qcow2,bus=virtio,size=' + str(
         disk_size) + ' --location ' + location_url + ' --extra-args=\'ks=' + kickstart_loc + \
         ' ksdevice=ens3\' --network bridge:virbr0 > /dev/null 2>&1 &'
-    print(final_cmd)
     response = os.system(final_cmd)
     if response == 0:
         return True
@@ -60,7 +59,6 @@ def vm_ip(vm_name, compute_ip):
             for each in range(len(response)):
                 vm_ipaddress = response[each].split()[4]
                 if isOnline(vm_ipaddress):
-                    print(vm_ipaddress)
                     break
         else:
             vm_ipaddress = response[0].split()[4]

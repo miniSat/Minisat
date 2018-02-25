@@ -304,12 +304,10 @@ def post_new_container(request):
                           "cont_port"] + " --name " + new_cont.container_name + " " + \
                       new_cont.image_name + ":" + new_cont.tag_name
         os.system(create_cont)
-        # form.save()
     return HttpResponseRedirect('/')
 
 
 def local_images(request):
-    client = docker.from_env()  # NOQA
     compute_name = Compute_resource_model.objects.values_list("name", flat=True)
     if not compute_name:
         compute_name = False
