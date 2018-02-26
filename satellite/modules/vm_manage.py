@@ -115,7 +115,10 @@ def get_repo(activation_name):
 
 
 def get_status(compute_name, compute_ip, vm_name):
-    root_passwd = Create_host_model.objects.filter(select_compute=compute_name, vm_name=vm_name).values_list()[0][6]
+    try:
+        root_passwd = Create_host_model.objects.filter(select_compute=compute_name, vm_name=vm_name).values_list()[0][6]
+    except IndexError:
+        return "Unable to fetch data"
     vm_ipaddress = vm_ip(vm_name, compute_ip).split("/")[0]
     cmd = "ssh root@" + compute_ip + " sshpass -p " + root_passwd + " ssh root@" + vm_ipaddress + " hostname"
     response = os.system(cmd)
@@ -126,7 +129,6 @@ def get_status(compute_name, compute_ip, vm_name):
 
 
 # TO get chart details
-
 def get_chart_details(allocated_mem, free_mem):
     chartdetail = {}
     chartdetail["allocated"] = int(allocated_mem.split('M')[0])
