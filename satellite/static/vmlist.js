@@ -183,6 +183,10 @@ function ajax_vm(){
                     $(this).css('color','blue');
                     $(this).text("Initializing");
                 }
+                else if ($(this).text() == "Unable to fetch data") {
+                    $(this).css('color','blue');
+                    $(this).text("-");
+                }
                 else {
                     $(this).css('color','red');
                     $(this).text("Shutdown");
