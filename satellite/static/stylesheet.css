@@ -75,3 +75,8 @@ table.padded-table td{
   padding:10px;
 }
 
+.anyClass {
+  height:150px;
+  overflow-y: scroll;
+}
+
