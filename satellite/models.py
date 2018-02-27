@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import RegexValidator
 
 # import the models class
 
@@ -23,9 +23,9 @@ class Compute_resource_model(models.Model):
 # Model for profile
 class Profile_model(models.Model):
     profile_name = models.CharField(max_length=10)
-    ram = models.IntegerField()
-    cpus = models.IntegerField()
-    disk_size = models.IntegerField()
+    ram = models.CharField(max_length=6)
+    cpus = models.CharField(max_length=1)
+    disk_size = models.CharField(max_length=5)
 
     def __str__(self):
         return self.profile_name
