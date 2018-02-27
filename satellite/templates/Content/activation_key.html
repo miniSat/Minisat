@@ -62,49 +62,103 @@
 {% endblock %}
 {% block exist_content %}
 {% if act_dict %}
-<div class="myBox">
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Activation Key</th>
-            <th>Content View</th>
-            <th>Product Name</th>
-            <th>Product URL</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for act_key,act_value in act_dict.items %}
-        <tr>
-            {% for view_key,view_value in act_value.items %}
-        <tr>
-            {% if forloop.first %}
-            {% update_value tmp_var act_key as tmp_var %}
-            {% else %}
-            {% update_value tmp_var empty_var as tmp_var %}
-            {% endif %}
-            {% for product_key,product_value in view_value.items %}
-        <tr>
-            {% if forloop.first %}
-            <td>{{tmp_var}}</td>
-            {% else %}
-            <td></td>
-            {% endif %}
-            {% if forloop.first %}
-            <td>{{ view_key }}</td>
-            {% else %}
-            <td></td>
-            {% endif %}
-            <td>{{ product_key }}</td>
-            <td>{{ product_value }}</td>
-        </tr>
-        {% endfor %}
-        </tr>
-        {% endfor %}
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+
+        <div class="list-group list-view-pf list-view-pf-view">
+            {% for act_key,act_value in act_dict.items %}
+                <div class="list-group-item">
+                    <div class="list-group-item-header">
+                        <div class="list-view-pf-expand">
+                            <span class="fa fa-angle-right"></span>
+                        </div>
+                        <div class="list-view-pf-checkbox" style="height:22px"></div>
+                        <div class="list-view-pf-actions">
+                            <form action="delete" method="get"><button class="btn btn-danger" name="ViewDelete" value="{{key}}">Delete</button></form>
+                        </div>
+                        <div class="list-view-pf-main-info">
+                            <div class="list-view-pf-body">
+                                <div class="list-view-pf-description">
+                                    <div class="list-group-item-heading">
+                                        {{act_key}}
+                                    </div>
+                                    <div class="list-group-item-text">
+                                        {% for view_key,view_values in act_value.items %}
+                                        <strong>{{view_key}}</strong>
+                                        <div style="margin-left:20px">
+                                        {% for product_name,product_values in view_values.items %}
+                                            {% if forloop.last %}
+                                                {{product_name}}
+                                            {% else %}
+                                                {{product_name}} /
+                                            {% endif %}
+                                        {% endfor %}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group-item-container container-fluid hidden">
+                        <div class="close">
+                            <span class="pficon pficon-close"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <dl class="dl-horizontal">
+                                {% for view_key,view_values in act_value.items %}
+                                    <p style="margin-left:75px"><strong>{{view_key}}</strong></p>
+                                    <div>
+                                    {% for product_name,product_values in view_values.items %}
+                                        <dt>{{product_name}}</dt>
+                                        <dd>{{product_values}}</dd>
+                                    {% endfor %}
+                                    </div>
+                                    {% if not forloop.last %}
+                                    <hr>
+                                    {% endif %}
+                                {% endfor %}
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    <script>
+      $(document).ready(function () {
+
+        // toggle dropdown menu
+        $('.list-view-pf-actions').on('show.bs.dropdown', function () {
+          var $this = $(this);
+          var $dropdown = $this.find('.dropdown');
+          var space = $(window).height() - $dropdown[0].getBoundingClientRect().top - $this.find('.dropdown-menu').outerHeight(true);
+          $dropdown.toggleClass('dropup', space < 10);
+        });
+
+        // click the list-view heading then expand a row
+        $(".list-group-item-header").click(function(event){
+          if(!$(event.target).is("button, a, input, .fa-ellipsis-v")){
+            $(this).find(".fa-angle-right").toggleClass("fa-angle-down")
+              .end().parent().toggleClass("list-view-pf-expand-active")
+                .find(".list-group-item-container").toggleClass("hidden");
+          } else {
+          }
+        })
+
+        // click the close button, hide the expand row and remove the active status
+        $(".list-group-item-container .close").on("click", function (){
+          $(this).parent().addClass("hidden")
+            .parent().removeClass("list-view-pf-expand-active")
+              .find(".fa-angle-right").removeClass("fa-angle-down");
+        })
+
+      });
+
+    </script>
+
 {% else %}
 <h1>No Activation Key Added</h1>
 {% endif %}

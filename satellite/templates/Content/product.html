@@ -26,31 +26,37 @@
 {% endblock %}
 
 {% block exist_content %}
-<div class="myBox">
-    {% if product_obj %}
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Location</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
+
+{% if product_obj %}
+    <div class="list-group list-view-pf list-view-pf-view">
         {% for obj in product_obj %}
-        <tr>
-            <td>{{ obj.product_name }}</td>
-            <td>{{ obj.product_location }}</td>
-            <td>
-                <form action="delete" method="GET">
+        <div class="list-group-item">
+            <div class="list-group-item-header">
+                <div class="list-view-pf-expand">
+                    <span class="fa fa-angle-right"></span>
+                </div>
+            <div class="list-view-pf-checkbox" style="height:22px"></div>
+            <div class="list-view-pf-actions">
+                <form action="delete" method="get">
                     <button class="btn btn-danger" name="ProductDelete" value="{{ obj.id }}">Delete</button>
                 </form>
-            </td>
-        </tr>
+            </div>
+            <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                    <div class="list-view-pf-description">
+                        <div class="list-group-item-heading">
+                            {{ obj.product_name }}
+                        </div>
+                        <div class="list-group-item-text">
+                            {{ obj.product_location }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
         {% endfor %}
-        </tbody>
-    </table>
-</div>
+    </div>
 {% else %}
 <h1>No Products Added</h1>
 {% endif %}
