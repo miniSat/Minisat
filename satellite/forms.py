@@ -1,6 +1,7 @@
 from django import forms
 from django.core.validators import RegexValidator
 
+
 class Compute_resource_form(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'size': '50', 'id': 'compute_name'}), label="Name", max_length=10)
     ip_address = forms.CharField(widget=forms.TextInput(attrs={'size': '50', 'id': 'compute_ip'}), label="IP Address")
