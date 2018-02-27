@@ -459,11 +459,18 @@ def delete(request):
         Profile_model.objects.filter(id=request.GET.get('ProfileDelete')).delete()
         return HttpResponseRedirect("profile")
     if (request.GET.get('ProductDelete')):
+        product_name = Product_model.objects.filter(id=request.GET.get('ProductDelete')).values_list('product_name', flat=True)[0]
         Product_model.objects.filter(id=request.GET.get('ProductDelete')).delete()
+        View_model.objects.all().filter(select_product=product_name).delete()
         return HttpResponseRedirect("product")
     if (request.GET.get('OSDelete')):
         Operating_system_model.objects.filter(id=request.GET.get('OSDelete')).delete()
         return HttpResponseRedirect("operating_system")
+    if(request.GET.get('ViewDelete')):
+        view_name = request.GET.get('ViewDelete')
+        View_model.objects.filter(view_name=view_name).delete()
+        Activation_model.objects.filter(select_view=view_name).delete()
+        return HttpResponseRedirect('view')
     return HttpResponseRedirect("/")
 
 
