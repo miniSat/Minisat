@@ -36,6 +36,7 @@ def test_web_ui():
 def test_compute_resource():
     options = Options()
     de = {}
+    options.add_argument('-headless')
     driver = webdriver.Firefox(firefox_options=options)
     driver.get("http://localhost:8000/compute_resource")
     name = driver.find_element_by_id("compute_name")
