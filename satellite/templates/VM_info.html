@@ -3,8 +3,9 @@
 {% block vmpackages %}
 <script src="/static/vm_packages.js"></script>
 <script>
-    var ctxD = document.getElementById("doughnutChart").getContext('2d');
-var myLineChart = new Chart(ctxD, {
+
+var ctxD = document.getElementById("doughnutChart")
+var ChartDetail = new Chart(ctxD, {
     type: 'doughnut',
     data: {
         labels: ["Free","Used"],
@@ -12,14 +13,20 @@ var myLineChart = new Chart(ctxD, {
             {
                 data: [{{ chartDetail.free_mem }}, {{ chartDetail.used_memory }}],
                 backgroundColor: ["#46BFBD", "#FDB45C"],
-                hoverBackgroundColor: ["#5AD3D1", "#FFC870"]
+                hoverBackgroundColor: ["#5AD3D1", "#FFC870"],
+                borderWidth: 2
             }
         ],
     },
     options: {
+
+        cutoutPercentage: 75,
         responsive: true
-    }
+
+    },
 });
+
+
 </script>
 {% endblock %}
 
@@ -38,12 +45,11 @@ var myLineChart = new Chart(ctxD, {
                     </div>
                 </div>
 
-                <div style="float:right;margin-right:100px;margin-bottom:25px">
-                <canvas height="250px" id="doughnutChart">
-                    <canvas height="100px" id="doug"></canvas>
-                </canvas>
-                </div>
 
+                <div style="float:right;margin-right:300px;">
+                    <canvas height="250px" id="doughnutChart"></canvas>
+
+                </div>
                 <div class="card-pf-body" id="vm_info_font">
                     {% for key,value in details.items %}
                     <label> {{ key }} : {{ value }} </label><br>

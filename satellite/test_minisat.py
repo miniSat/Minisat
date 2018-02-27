@@ -10,7 +10,7 @@ def test_pep8():
     assert response == 0
 
 
-def test_compute_resource():
+def test_web_ui():
     options = Options()
     options.add_argument('-headless')
     driver = webdriver.Firefox(firefox_options=options)

@@ -14,14 +14,14 @@
 </div>
 {% endif %}
 
-<form action="post_data" method="post" >{% csrf_token %}
+<form action="post_data" method="post">{% csrf_token %}
     {% for field in form %}
     <div class="form-group">
         {{ field.label_tag }}<br>
         {{ field }}
     </div>
     {% endfor %}
-    <button type="submit" class="btn btn-primary">SUBMIT</button>
+    <button type="submit" class="btn btn-primary" id="compute_submit">SUBMIT</button>
 </form>
 
 
@@ -29,36 +29,37 @@
 
 {% block exist_content %}
 <div class="myBox">
-{% if compute_obj == False %}
+    {% if compute_obj == False %}
 
-<h1>No Compute Resources Found</h1>
-{% else %}
-<script>
-    console.log("{{compute_obj}}");
+    <h1>No Compute Resources Found</h1>
+    {% else %}
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>IP Address</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
 
-</script>
-<table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>IP Address</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
+        {% for obj in compute_obj %}
 
-    {% for obj in compute_obj %}
+        <tr>
+            <td>{{ obj.name }}</td>
+            <td>{{ obj.ip_address }}</td>
+            <td width="2%">
+                <form action="delete" method="GET">
+                    <button class="btn btn-danger" name="ComputeDelete" value="{{ obj.id }}">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
 
-    <tr>
-        <td>{{ obj.name }}</td>
-        <td>{{ obj.ip_address }}</td>
-        <td width="2%"><form action="delete" method="GET"><button class = "btn btn-danger" name="ComputeDelete" value="{{ obj.id }}">Delete</button> </form></td>
-    </tr>
-    {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
 
-    </tbody>
-</table>
-{% endif %}
-    </div>
 {% endblock %}
 

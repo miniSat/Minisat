@@ -1,18 +1,19 @@
 from django import forms
+from django.core.validators import RegexValidator
 
 
 class Compute_resource_form(forms.Form):
-    name = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}), label="Name", max_length=10)
-    ip_address = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}), label="IP Address")
-    root_password = forms.CharField(widget=forms.PasswordInput(attrs={'size': '50'}), label="Root Password",
+    name = forms.CharField(widget=forms.TextInput(attrs={'size': '50', 'id': 'compute_name'}), label="Name", max_length=10)
+    ip_address = forms.CharField(widget=forms.TextInput(attrs={'size': '50', 'id': 'compute_ip'}), label="IP Address")
+    root_password = forms.CharField(widget=forms.PasswordInput(attrs={'size': '50', 'id': 'compute_password'}), label="Root Password",
                                     max_length=20)
 
 
 class Profile_form(forms.Form):
     profile_name = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}), label="Profile Name", max_length=10)
-    ram = forms.IntegerField(label="RAM(MB)")
-    cpus = forms.IntegerField(label="CPUs")
-    disk_size = forms.IntegerField(label="Disk Size(GB)")
+    ram = forms.CharField(label="RAM", min_length=4, max_length=6, validators=[RegexValidator(r'^\d{1,10}$')])
+    cpus = forms.CharField(label="CPUs", max_length=1, validators=[RegexValidator(r'^\d{1,10}$')])
+    disk_size = forms.CharField(label="Disk Size(GB)", max_length=5, validators=[RegexValidator(r'^\d{1,10}$')])
 
 
 class Create_host_form(forms.Form):
