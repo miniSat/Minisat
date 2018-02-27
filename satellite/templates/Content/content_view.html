@@ -18,34 +18,32 @@
         {{ form.view_name }}
         <br>
         <br> {{ form.select_product.label_tag }}
-        <br>
-        <br>
         {% if products %}
-        <div class="myBox">
-            <table class="table table-striped table-bordered">
-                <thead>
-                <tr>
-                    <th width="3%"></th>
-                    <th width="15%">Product Name</th>
-                    <th>Product Url</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for product in products %}
-                <tr>
-                    <td>
-                        <input type="checkbox" name="products[]" value="{{ product.product_name }}"></input>
-                    </td>
-                    <td>
-                        {{ product.product_name }}
-                    </td>
-                    <td>
-                        {{ product.product_location }}
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+        <div class="list-group list-view-pf list-view-pf-view">
+        {% for product in products %}
+        <div class="list-group-item">
+            <div class="list-group-item-header">
+                <div class="list-view-pf-expand">
+                    <span class="fa fa-angle-right"></span>
+                </div>
+            <div class="list-view-pf-checkbox">
+                <input type="checkbox" name="products[]" value="{{ product.product_name }}">
+            </div>
+            <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                    <div class="list-view-pf-description">
+                        <div class="list-group-item-heading">
+                            {{ product.product_name }}
+                        </div>
+                        <div class="list-group-item-text">
+                            {{ product.product_location }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
         </div>
         <input type="submit" class="btn btn-primary" value="Add">
         {% else %}

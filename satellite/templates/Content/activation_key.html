@@ -19,39 +19,57 @@
         {{ form.activation_name }}
         <br><br>
         {{ form.select_view.label_tag }}
-        <br>
+
         {% if view_dict %}
-        <div class="views_display">
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th width=3%></th>
-                    <th width=10%>View</th>
-                    <th width=15%>Product</th>
-                    <th>Product Url</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for key,value in view_dict.items %}
-                <tr>
-                    {% for each in value %}
-                <tr>
-                    {% if forloop.first %}
-                    <td><input type="checkbox" name="views[]" value="{{ key }}"></input></td>
-                    <td>{{ key }}</td>
-                    {% else %}
-                    <td></td>
-                    <td></td>
-                    {% endif %}
-                    <td>{{ each.0 }}</td>
-                    <td>{{ each.1 }}</td>
-                </tr>
-                {% endfor %}
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+
+        <div class="list-group list-view-pf list-view-pf-view">
+        {% for key,value in view_dict.items %}
+        <div class="list-group-item">
+            <div class="list-group-item-header">
+                <div class="list-view-pf-expand">
+                    <span class="fa fa-angle-right"></span>
+                </div>
+            <div class="list-view-pf-checkbox" style="height:22px">
+                <input type="checkbox" name="views[]" value="{{ key }}"></input></td>
+            </div>
+            <div class="list-view-pf-actions">
+            </div>
+            <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                    <div class="list-view-pf-description">
+                        <div class="list-group-item-heading">
+                            {{key}}
+                        </div>
+                        <div class="list-group-item-text">
+                            {% for each in value %}{% if forloop.last %}{{each.0}}{% else %}{{each.0}} / {% endif %}{% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="list-group-item-container container-fluid hidden">
+                <div class="close">
+                    <span class="pficon pficon-close"></span>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <dl class="dl-horizontal">
+                        {% for each in value %}
+                        <dt>{{each.0}}</dt>
+                        <dd>{{each.1}}</dd>
+                        {% endfor %}
+                    </dl>
+                </div>
+            </div>
         </div>
+        {% endfor %}
+    </div>
+
+
+
     <br>
         <input type="submit" id="btn-refresh" class="btn btn-primary" value="Add">
         {% else %}
