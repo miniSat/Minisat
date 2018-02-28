@@ -232,7 +232,7 @@ def post_operating_system(request):
         check_os_name = Operating_system_model.objects.filter(os_name=operating_sys.os_name).exists()
         check_os_location = Operating_system_model.objects.filter(os_location=operating_sys.os_location).exists()
         val_url = validators.url(operating_sys.os_location)
-        if val_url == True:
+        if val_url is True:
             if not check_os_name:
                 if not check_os_location:
                     operating_sys.save()

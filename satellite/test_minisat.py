@@ -29,3 +29,53 @@ def test_web_ui():
     driver.get("http://localhost:8000/local_images")
     assert "MiniSat" in driver.title
     driver.close()
+
+
+def test_profile():
+    options = Options()
+    options.add_argument('-headless')
+    driver = webdriver.Firefox(firefox_options=options)
+    test_case = [("test1", "1000", "2", "30"), ("test2", "500", "2", "30"), ("test3", "1000", "-2", "30")]
+    result = []
+    expect_results = ["Pass", "Fail", "Fail"]
+    for tup in test_case:
+        driver.get("http://localhost:8000/profile")
+        pname = driver.find_element_by_id("id_profile_name")
+        pname.send_keys(tup[0])
+        pram = driver.find_element_by_id("id_ram")
+        pram.send_keys(tup[1])
+        pcpu = driver.find_element_by_id("id_cpus")
+        pcpu.send_keys(tup[2])
+        pdisk = driver.find_element_by_id("id_disk_size")
+        pdisk.send_keys(tup[3])
+        psubmit = driver.find_element_by_id("id_submit")
+        psubmit.click()
+        if "Profile Added Successfully" in driver.page_source:
+            result.append("Pass")
+        else:
+            result.append("Fail")
+    assert result == expect_results
+    driver.close()
+
+
+def test_operating_system():
+    options = Options()
+    options.add_argument('-headless')
+    driver = webdriver.Firefox(firefox_options=options)
+    test_case = [("fedora25", "https://getfedora.org/en/workstation/"), ("fedora26", "https://getfedora.org/"), ("fedora25", "fedora26")]
+    result = []
+    expected_result = ["Pass", "Pass", "Fail"]
+    for tup in test_case:
+        driver.get("http://localhost:8000/operating_system")
+        name = driver.find_element_by_id("id_os_name")
+        name.send_keys(tup[0])
+        location = driver.find_element_by_id("id_os_location")
+        location.send_keys(tup[1])
+        submit = driver.find_element_by_id("add_os")
+        submit.click()
+
+        if "Operating System Added Successfully" in driver.page_source:
+            result.append('Pass')
+        else:
+            result.append("Fail")
+    assert result == expected_result

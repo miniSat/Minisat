@@ -44,8 +44,10 @@ def virsh_pause_vm(vm_name, com_ip):
 
 
 def virsh_delete_vm(vm_name, com_ip):
-    cmd = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system undefine " + str(vm_name)
-    delete_vm_flag = os.system(cmd)
+    cmd = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system shutdown " + str(vm_name)
+    cmd2 = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system undefine " + str(vm_name)
+    os.system(cmd)
+    delete_vm_flag = os.system(cmd2)
     time.sleep(6)
     return delete_vm_flag
 
