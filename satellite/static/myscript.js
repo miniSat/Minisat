@@ -75,4 +75,3 @@ function validateIP(ip_addr) {
         return false;
     }
 }
-
