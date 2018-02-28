@@ -3,6 +3,7 @@ import os
 from django.shortcuts import render
 from satellite.modules.docker_manage import make_connection, get_docker_images, start_cont, stop_cont, destroy_cont
 from django.http import JsonResponse
+import validators
 # We'll use render to display our templates.
 
 from .forms import (
@@ -230,15 +231,21 @@ def post_operating_system(request):
         )
         check_os_name = Operating_system_model.objects.filter(os_name=operating_sys.os_name).exists()
         check_os_location = Operating_system_model.objects.filter(os_location=operating_sys.os_location).exists()
-        if not check_os_name:
-            if not check_os_location:
-                operating_sys.save()
-                message = True
-                form = Operating_system_form()
+        val_url = validators.url(operating_sys.os_location)
+        if val_url == True:
+            if not check_os_name:
+                if not check_os_location:
+                    operating_sys.save()
+                    message = True
+                    form = Operating_system_form()
+                else:
+                    message = "Location already exist"
             else:
-                message = "Location already exist"
+                message = "OS Name already exist"
         else:
-            message = "OS Name already exist"
+            message = "Invalid URL"
+    else:
+        message = "Invalid Values"
     return render(request,
                   'host/operating_system.html',
                   {'title_name': 'Add Operating System',
@@ -466,7 +473,7 @@ def delete(request):
     if (request.GET.get('OSDelete')):
         Operating_system_model.objects.filter(id=request.GET.get('OSDelete')).delete()
         return HttpResponseRedirect("operating_system")
-    if(request.GET.get('ViewDelete')):
+    if (request.GET.get('ViewDelete')):
         view_name = request.GET.get('ViewDelete')
         View_model.objects.filter(view_name=view_name).delete()
         Activation_model.objects.filter(select_view=view_name).delete()
