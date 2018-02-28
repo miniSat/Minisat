@@ -1,8 +1,10 @@
 from django.views.generic import TemplateView  # NOQA
 import os
+import _thread
 from django.shortcuts import render
 from satellite.modules.docker_manage import make_connection, get_docker_images, start_cont, stop_cont, destroy_cont
 from django.http import JsonResponse
+from queue import Queue
 # We'll use render to display our templates.
 
 from .forms import (
@@ -36,7 +38,8 @@ from satellite.modules import vm_manage as vm
 from satellite.modules import (
     kickstart,
     ssh_connect as ssh,
-    dashboard_details as dash
+    dashboard_details as dash,
+    compute_details as cmp_det
 )
 
 
@@ -78,11 +81,19 @@ def compute_resource(request):
         compute_resource_list = False
     # We create object of Compute_resource_model and fetch data and store in
     # compute_resource_list variable
+    compute_ips = Compute_resource_model.objects.all().values_list('ip_address', flat=True)
+    myQueue = Queue()
+    final_compute_details = {}
+    for each_ip in compute_ips:
+        _thread.start_new_thread(cmp_det.get_compute_details, (each_ip, myQueue))
+        final_compute_details[each_ip] = myQueue.get()
     return render(request, 'infrastructure/compute_resource.html',
                   {'title_name': 'Create New Compute Resource',
                    'form': form,
                    'compute_obj': compute_resource_list,
-                   'message': False})
+                   'message': False,
+                   'compute_details': final_compute_details
+                   })
 
 
 def post_data(request):
