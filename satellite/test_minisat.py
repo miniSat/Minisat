@@ -39,8 +39,6 @@ def test_profile():
     result = []
     expect_results = ["Pass", "Fail", "Fail"]
     for tup in test_case:
-        print(tup[0], tup[1], tup[2], tup[3])
-
         driver.get("http://localhost:8000/profile")
         pname = driver.find_element_by_id("id_profile_name")
         pname.send_keys(tup[0])
@@ -58,3 +56,26 @@ def test_profile():
             result.append("Fail")
     assert result == expect_results
     driver.close()
+
+
+def test_operating_system():
+    options = Options()
+    options.add_argument('-headless')
+    driver = webdriver.Firefox(firefox_options=options)
+    test_case = [("fedora25", "fedora25"), ("fedora26", "fedora26"), ("fedora25", "fedora26")]
+    result = []
+    expected_result = ["Pass", "Pass", "Fail"]
+    for tup in test_case:
+        driver.get("http://localhost:8000/operating_system")
+        name = driver.find_element_by_id("id_os_name")
+        name.send_keys(tup[0])
+        location = driver.find_element_by_id("id_os_location")
+        location.send_keys(tup[1])
+        submit = driver.find_element_by_id("add_os")
+        submit.click()
+
+        if "Operating System Added Successfully" in driver.page_source:
+            result.append('Pass')
+        else:
+            result.append("Fail")
+    assert result == expected_result
