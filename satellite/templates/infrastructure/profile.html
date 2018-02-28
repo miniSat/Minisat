@@ -13,56 +13,60 @@
 </div>
 {% endif %}
 
-    <form action="post_profile" method="post" autocomplete="off">
-        {% csrf_token %}
-        {{compute_resource_name}}
-        {% for field in form %}
-        <div class="form-group">
-            {{ field.label_tag }}<br>
-            {{ field }}
-        </div>
-        {% endfor %}
-        <button type="submit" class="btn btn-primary">Submit</button>
+<form action="post_profile" method="post" autocomplete="off">
+    {% csrf_token %}
+    {{compute_resource_name}}
+    {% for field in form %}
+    <div class="form-group">
+        {{ field.label_tag }}<br>
+        {{ field }}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Submit</button>
 
-    </form>
+</form>
 
 {% endblock %}
 
 {% block exist_content %}
-<div class="myBox">
-    {% if profile_obj == False %}
-    <h1>No Profiles Found</h1>
-    {% else %}
-    <div class="myBox">
-        <table class="table table-bordered table-striped">
-            <thead>
-            <tr>
-                <th>Profile Name</th>
-                <th>RAM</th>
-                <th>CPUs</th>
-                <th>Disk Size</th>
-                <th>Action</th>
-            </tr>
-            </thead>
 
-            <tbody>
+{% if profile_obj == False %}
+<h1>No Profiles Found</h1>
+{% else %}
 
-            {% for obj in profile_obj %}
-            <tr>
-                <td>{{ obj.profile_name }}</td>
-                <td>{{ obj.ram }}</td>
-                <td>{{ obj.cpus }}</td>
-                <td>{{ obj.disk_size }}</td>
-                <td width="2%">
+<div class="container-fluid container-cards-pf" id="card-container">
+    <div class="row row-cards-pf">
+        {% for obj in profile_obj %}
+        <div class="col-xs-12 col-sm-4 col-md-3">
+            <div class="card-pf card-pf-view card-pf-view-select card-pf-view-multi-select">
+                <div class="card-pf-body">
+                    <h2 class="card-pf-title text-center">
+                        <b>{{ obj.profile_name }}</b>
+                    </h2>
+                    <div class="card-pf-items text-center">
+                        <span class="card-pf-item-text">RAM(MB): {{ obj.ram }}</span>
+                    </div>
+                    <p class="card-pf-info text-center">VCPUs: {{ obj.cpus }}</p>
+                    <p class="card-pf-info text-center">Disk Space(GB): {{ obj.disk_size }}</p>
+                </div>
+                <div class="text-center" style="margin-bottom:10px">
                     <form action="delete" method="GET">
                         <button class="btn btn-danger" name="ProfileDelete" value="{{ obj.id }}">Delete</button>
                     </form>
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endif %}
 </div>
+{% endif %}
+
+<script>
+  $(function() {
+    // matchHeight the contents of each .card-pf and then the .card-pf itself
+    $(".row-cards-pf > [class*='col'] > .card-pf > .card-pf-body").matchHeight();
+  });
+</script>
+
+
 {% endblock %}
