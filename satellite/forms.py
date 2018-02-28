@@ -11,7 +11,7 @@ class Compute_resource_form(forms.Form):
 
 class Profile_form(forms.Form):
     profile_name = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}), label="Profile Name", max_length=10)
-    ram = forms.CharField(label="RAM", min_length=4, max_length=6, validators=[RegexValidator(r'^\d{1,10}$')])
+    ram = forms.CharField(label="RAM(MB)", min_length=4, max_length=6, validators=[RegexValidator(r'^\d{1,10}$')])
     cpus = forms.CharField(label="CPUs", max_length=1, validators=[RegexValidator(r'^\d{1,10}$')])
     disk_size = forms.CharField(label="Disk Size(GB)", max_length=5, validators=[RegexValidator(r'^\d{1,10}$')])
 
