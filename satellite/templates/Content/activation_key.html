@@ -52,7 +52,7 @@
                 </tbody>
             </table>
         </div>
-    <br>
+        <br>
         <input type="submit" id="btn-refresh" class="btn btn-primary" value="Add">
         {% else %}
         <h1>No Views Found</h1>
@@ -63,71 +63,73 @@
 {% block exist_content %}
 {% if act_dict %}
 
-        <div class="list-group list-view-pf list-view-pf-view">
-            {% for act_key,act_value in act_dict.items %}
-                <div class="list-group-item">
-                    <div class="list-group-item-header">
-                        <div class="list-view-pf-expand">
-                            <span class="fa fa-angle-right"></span>
+<div class="list-group list-view-pf list-view-pf-view">
+    {% for act_key,act_value in act_dict.items %}
+    <div class="list-group-item">
+        <div class="list-group-item-header">
+            <div class="list-view-pf-expand">
+                <span class="fa fa-angle-right"></span>
+            </div>
+
+            <div class="list-view-pf-actions">
+                <form action="delete" method="get">
+                    <button class="btn btn-danger" name="ViewDelete" value="{{key}}">Delete</button>
+                </form>
+            </div>
+            <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                    <div class="list-view-pf-description">
+                        <div class="list-view-pf list-group-item-heading">
+                            {{act_key}}
                         </div>
-                        <div class="list-view-pf-checkbox" style="height:22px"></div>
-                        <div class="list-view-pf-actions">
-                            <form action="delete" method="get"><button class="btn btn-danger" name="ViewDelete" value="{{key}}">Delete</button></form>
-                        </div>
-                        <div class="list-view-pf-main-info">
-                            <div class="list-view-pf-body">
-                                <div class="list-view-pf-description">
-                                    <div class="list-group-item-heading">
-                                        {{act_key}}
-                                    </div>
-                                    <div class="list-group-item-text">
-                                        {% for view_key,view_values in act_value.items %}
-                                        <strong>{{view_key}}</strong>
-                                        <div style="margin-left:20px">
-                                        {% for product_name,product_values in view_values.items %}
-                                            {% if forloop.last %}
-                                                {{product_name}}
-                                            {% else %}
-                                                {{product_name}} /
-                                            {% endif %}
-                                        {% endfor %}
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="list-group-item-container container-fluid hidden">
-                        <div class="close">
-                            <span class="pficon pficon-close"></span>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                            </div>
-                        </div>
-                        <div class="col-md-9">
-                            <dl class="dl-horizontal">
-                                {% for view_key,view_values in act_value.items %}
-                                    <p style="margin-left:75px"><strong>{{view_key}}</strong></p>
-                                    <div>
-                                    {% for product_name,product_values in view_values.items %}
-                                        <dt>{{product_name}}</dt>
-                                        <dd>{{product_values}}</dd>
-                                    {% endfor %}
-                                    </div>
-                                    {% if not forloop.last %}
-                                    <hr>
-                                    {% endif %}
+                        <div class="list-group-item-text">
+                            {% for view_key,view_values in act_value.items %}
+                            <strong>{{view_key}}</strong>
+                            <div style="margin-left:20px">
+                                {% for product_name,product_values in view_values.items %}
+                                {% if forloop.last %}
+                                {{product_name}}
+                                {% else %}
+                                {{product_name}} /
+                                {% endif %}
                                 {% endfor %}
-                            </dl>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
-            {% endfor %}
+            </div>
         </div>
+        <div class="list-group-item-container container-fluid hidden">
+            <div class="close">
+                <span class="pficon pficon-close"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-8">
+                    {% for view_key,view_values in act_value.items %}
+                    <p><strong>{{view_key}}</strong></p>
+                    {% for product_name,product_values in view_values.items %}
 
-    <script>
+                    <dt>{{product_name}}</dt>
+                    <dd style="width:100%;">{{product_values}}</dd>
+                    {% endfor %}
+
+                    {% if not forloop.last %}
+                    <hr>
+                    {% endif %}
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
       $(document).ready(function () {
 
         // toggle dropdown menu
@@ -157,7 +159,13 @@
 
       });
 
-    </script>
+
+
+
+
+
+
+</script>
 
 {% else %}
 <h1>No Activation Key Added</h1>
