@@ -62,7 +62,7 @@ def test_operating_system():
     options = Options()
     options.add_argument('-headless')
     driver = webdriver.Firefox(firefox_options=options)
-    test_case = [("fedora25", "fedora25"), ("fedora26", "fedora26"), ("fedora25", "fedora26")]
+    test_case = [("fedora25", "https://getfedora.org/en/workstation/"), ("fedora26", "https://getfedora.org/"), ("fedora25", "fedora26")]
     result = []
     expected_result = ["Pass", "Pass", "Fail"]
     for tup in test_case:
