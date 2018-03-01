@@ -83,11 +83,9 @@ def compute_resource(request):
     # We create object of Compute_resource_model and fetch data and store in
     # compute_resource_list variable
     compute_ips = Compute_resource_model.objects.all().values_list('ip_address', flat=True)
-    myQueue = Queue()
     final_compute_details = {}
     for each_ip in compute_ips:
-        _thread.start_new_thread(cmp_det.get_compute_details, (each_ip, myQueue))
-        final_compute_details[each_ip] = myQueue.get()
+        final_compute_details[each_ip] = cmp_det.get_compute_details(each_ip)
     return render(request, 'infrastructure/compute_resource.html',
                   {'title_name': 'Create New Compute Resource',
                    'form': form,

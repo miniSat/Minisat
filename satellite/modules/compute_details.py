@@ -1,7 +1,7 @@
 import os
 
 
-def get_compute_details(ip_address, outQueue):
+def get_compute_details(ip_address):
     compute_details = {}
     memory_details = os.popen('ssh root@' + ip_address + ' free -m').readlines()
     ram_details = memory_details[1].split()
@@ -25,6 +25,4 @@ def get_compute_details(ip_address, outQueue):
     compute_details['disk'] = tmp_dict
 
     tmp_dict['disk-percent-use'] = str(round(float(tmp_dict['used']) / float(tmp_dict['free']) * 100, 2))
-    outQueue.put(compute_details)
-    print(outQueue)
-    print(outQueue.get())
+    return compute_details
