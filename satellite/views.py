@@ -1,10 +1,8 @@
 from django.views.generic import TemplateView  # NOQA
 import os
-import _thread
 from django.shortcuts import render
 from satellite.modules.docker_manage import make_connection, get_docker_images, start_cont, stop_cont, destroy_cont
 from django.http import JsonResponse
-from queue import Queue
 import validators
 # We'll use render to display our templates.
 
