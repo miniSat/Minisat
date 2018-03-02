@@ -69,7 +69,7 @@ def vm_ip(vm_name, compute_ip):
     return vm_ipaddress
 
 
-def vm_details(compute_ip, vm_id):
+def vm_details(compute_name, compute_ip, vm_id):
     details = {}
     details["Id"] = vm_id
     vm_name = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domname " + vm_id).readline()
@@ -90,6 +90,7 @@ def vm_details(compute_ip, vm_id):
     list = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_id).readlines()[2].split()
     vm_mac = list[4]
     details["MAC Address"] = vm_mac
+    details["Compute Resource"] = compute_name + ' (' + compute_ip + ')'
     return details
 
 
@@ -128,12 +129,3 @@ def get_status(compute_name, compute_ip, vm_name):
         return "running"
     elif response == 65280:
         return "initializing"
-
-
-# TO get chart details
-def get_chart_details(allocated_mem, free_mem):
-    chartdetail = {}
-    chartdetail["allocated"] = int(allocated_mem.split('M')[0])
-    chartdetail["free_mem"] = int(free_mem.split('M')[0])
-    chartdetail["used_memory"] = chartdetail["allocated"] - chartdetail["free_mem"]
-    return chartdetail
