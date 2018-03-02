@@ -4,27 +4,7 @@
 <script src="/static/vm_packages.js"></script>
 <script>
 
-var ctxD = document.getElementById("doughnutChart")
-var ChartDetail = new Chart(ctxD, {
-    type: 'doughnut',
-    data: {
-        labels: ["Free","Used"],
-        datasets: [
-            {
-                data: [{{ chartDetail.free_mem }}, {{ chartDetail.used_memory }}],
-                backgroundColor: ["#46BFBD", "#FDB45C"],
-                hoverBackgroundColor: ["#5AD3D1", "#FFC870"],
-                borderWidth: 2
-            }
-        ],
-    },
-    options: {
 
-        cutoutPercentage: 75,
-        responsive: true
-
-    },
-});
 
 </script>
 {% endblock %}
@@ -37,8 +17,8 @@ var ChartDetail = new Chart(ctxD, {
             <div class="card-pf card-pf-utilization">
                 <div class="card-pf-heading">
 
-                    <h2 class="card-pf-title">
-                        {{ details.Name }}
+                    <h2 id="head_vm_name" class="card-pf-title">
+
                     </h2>
                     <div class="btn-group card-pf-title" style="float:right;top:-60px;">
                     </div>
@@ -49,10 +29,12 @@ var ChartDetail = new Chart(ctxD, {
                     <canvas height="250px" id="doughnutChart"></canvas>
 
                 </div>
+                <div id="vm-info-spinner" class="progress-description">
+                        <div class="spinner spinner-xs spinner-inline"></div> <strong>Gathering Facts :</strong> Please wait..
+                </div>
                 <div class="card-pf-body" id="vm_info_font">
-                    {% for key,value in details.items %}
-                    <label id="{{forloop.counter}}"> {{ key }} : {{ value }} </label><br>
-                    {% endfor %}
+                    <label  id="vm_id" hidden>{{vm_id}}</label><br>
+                    <label id="compute_ip" hidden>{{compute_ip}}</label>
                 </div>
 
             </div>
