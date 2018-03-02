@@ -38,4 +38,5 @@ urlpatterns = [
     path('post_host_group', views.post_host_group, name="post_host_group"),
     path('host_group_data', views.host_group_data, name='post_group_data'),
     path('vm_delete', views.vm_delete, name='vm_delete'),
+    path('get_vm_packages/<slug:compute_ip>/<slug:compute_name>/<slug:vm_ip>/<slug:vm_name>', views.get_vm_packages, name="get_vm_packages"),
 ]

@@ -364,10 +364,9 @@ def vm_info(request, cname, vm_id):
     details = vm.vm_details(compute_ip, vm_id)
     OS = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][2]
     details["Operating System"] = OS
-    root_passwd = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][6]
-    packages = vm.get_packages(compute_ip, details["IP Address"], root_passwd)
+    details["Compute Resource"] = cname + '(' + compute_ip + ')'
     chartDetail = vm.get_chart_details(details["Total Allocated Memory"], details["Free Memory"])
-    return render(request, 'VM_info.html', {"details": details, "packages": packages, "chartDetail": chartDetail})
+    return render(request, 'VM_info.html', {"details": details, 'compute_ip': compute_ip, 'chartDetail': chartDetail})
 
 
 def vm_start(request):
@@ -650,4 +649,13 @@ def host_group_data(request):
         'operating_system': host_data[4],
         'activation_key': host_data[5]
     }
+    return JsonResponse(data)
+
+
+def get_vm_packages(request, compute_ip, compute_name, vm_ip, vm_name):
+    data = {}
+    compute_ip = compute_ip.replace('-', '.')
+    vm_ip = vm_ip.replace('-', '.')
+    root_passwd = Create_host_model.objects.filter(select_compute=compute_name, vm_name=vm_name).values_list()[0][6]
+    data['packages'] = vm.get_packages(compute_ip, vm_ip, root_passwd)
     return JsonResponse(data)
