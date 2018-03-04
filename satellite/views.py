@@ -670,3 +670,10 @@ def get_vm_facts(request, compute_ip, vm_id):
     OS = Create_host_model.objects.filter(select_compute=compute_name, vm_name=details["Name"]).values_list()[0][2]
     details["Operating System"] = OS
     return JsonResponse(details)
+
+
+def get_added_repo(request, compute_ip, vm_ip, vm_name):
+    compute_ip = compute_ip.replace('-', '.')
+    vm_ip = vm_ip.replace('-', '.')
+    result = vm.get_vm_repo(compute_ip, vm_ip, vm_name)
+    return JsonResponse(result)

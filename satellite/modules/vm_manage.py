@@ -129,3 +129,30 @@ def get_status(compute_name, compute_ip, vm_name):
         return "running"
     elif response == 65280:
         return "initializing"
+
+
+def get_vm_repo(compute_ip, vm_ip, vm_name):
+    vm_root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
+    repo_info = os.popen("ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf repolist all'").readlines()
+    repo_info = [x for x in repo_info if not x.startswith('Last')]
+    repo_info = [x for x in repo_info if not x.startswith('repo')]
+    repo_info = [x.split(None, 1) for x in repo_info]
+    for each in repo_info:
+        each = each.pop(0)
+    repo_info = [j for i in repo_info for j in i]
+    enabled_repos = []
+    disbaled_repos = []
+    repo_info = [each.split(":") for each in repo_info]
+    for repo in repo_info:
+        li = []
+        if repo[0].endswith("enabled"):
+            li.append(repo[0].split()[0].strip())
+            li.append(repo[1][:-1].strip())
+            enabled_repos.append(li)
+        else:
+            li.append(repo[0].split("disabled")[0].strip())
+            disbaled_repos.append(li)
+    repo_info = {}
+    repo_info["enabled"] = enabled_repos
+    repo_info["disabled"] = disbaled_repos
+    return repo_info
