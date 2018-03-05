@@ -44,10 +44,36 @@
             <div class="card-pf card-pf-utilization">
                 <div class="card-pf-heading">
                     <h2 class="card-pf-title">
+                        Added Repositories
+                    </h2>
+                    <div id="vm-repo-spinner" class="progress-description">
+                        <div class="spinner spinner-xs spinner-inline"></div> <strong>Fetching Repositories:</strong> Please wait..
+                    </div>
+                </div>
+                <div class="card-pf-body vm_pack " id="vm_packages">
+                    <table class="table table-striped table-bordered table-hover" id="vm_repos">
+                        <thead>
+                        <tr>
+                            <th>Repository List</th>
+                            <th>Status</th>
+                            <th>Packages</th>
+                        </tr>
+                        </thead>
+                        <tbody id="vm_repo_table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 ">
+            <div class="card-pf card-pf-utilization">
+                <div class="card-pf-heading">
+                    <h2 class="card-pf-title">
                         Packages
                     </h2>
                     <div id="vm-packages-spinner" class="progress-description">
-                        <div class="spinner spinner-xs spinner-inline"></div> <strong>Fetching:</strong> Fetching Packages.. Please wait..
+                        <div class="spinner spinner-xs spinner-inline"></div> <strong>Fetching Packages: </strong>Please wait..
                     </div>
                 </div>
                 <div class="card-pf-body vm_pack " id="vm_packages">

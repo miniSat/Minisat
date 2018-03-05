@@ -40,4 +40,5 @@ urlpatterns = [
     path('vm_delete', views.vm_delete, name='vm_delete'),
     path('get_vm_packages/<slug:compute_ip>/<slug:compute_name>/<slug:vm_ip>/<slug:vm_name>', views.get_vm_packages, name="get_vm_packages"),
     path('get_vm_facts/<slug:compute_ip>/<slug:vm_id>', views.get_vm_facts, name="get_vm_facts"),
+    path('get_added_repo/<slug:compute_ip>/<slug:vm_ip>/<slug:vm_name>', views.get_added_repo, name="get_added_repo"),
 ]
