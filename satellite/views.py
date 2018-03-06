@@ -677,3 +677,8 @@ def get_added_repo(request, compute_ip, vm_ip, vm_name):
     vm_ip = vm_ip.replace('-', '.')
     result = vm.get_vm_repo(compute_ip, vm_ip, vm_name)
     return JsonResponse(result)
+
+
+def get_vm_status(request, compute_ip, vm_name, vm_ip):
+    result = vm.vm_status(compute_ip, vm_name, vm_ip)
+    return JsonResponse(result)

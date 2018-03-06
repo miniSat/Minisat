@@ -41,8 +41,32 @@ $(document).ready(function(){
 
                 },
             });
-            get_packages()
-            get_added_repo(compute_ip)
+            var raw_vm_name = $("#2").text();
+            vm_name = raw_vm_name.split(":")[1].trim();
+            var raw_vm_ip = $("#7").text();
+            vm_ip = raw_vm_ip.split(":")[1].split("/")[0].trim();
+            vm_ip = vm_ip.replace(/\./g,'-');
+            $.ajax({
+                url: '/get_vm_status/'+compute_ip+'/'+vm_name+'/'+vm_ip,
+                dataType: 'json',
+                success: function(result){
+                    if(result["status"]=="running")
+                    {
+                        $("#card-vm-packages").show()
+                        $("#card-vm-repos").show()
+                        get_packages()
+                        get_added_repo(compute_ip)
+                    }
+                    else if(result["status"]=="initializing")
+                    {
+                        $("#head_vm_name").append(" (Preparing VM)")
+                    }
+                    else if(result["status"]=="shutdown")
+                    {
+                        $("#head_vm_name").append(" (Turn on VM to browse details)")
+                    }
+                }
+            });
         }
     });
 });
@@ -89,7 +113,6 @@ function get_added_repo(compute_ip, vm_id)
         url: '/get_added_repo/'+compute_ip+'/'+vm_ip+'/'+vm_name,
         dataType: 'json',
         success: function(result){
-            console.log(result);
             var table = document.getElementById("vm_repo_table")
             repo_str = ""
             for (var repo in result["enabled"])

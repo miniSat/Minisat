@@ -156,3 +156,18 @@ def get_vm_repo(compute_ip, vm_ip, vm_name):
     repo_info["enabled"] = enabled_repos
     repo_info["disabled"] = disbaled_repos
     return repo_info
+
+
+def vm_status(compute_ip, vm_name, vm_ip):
+    status = {}
+    compute_ip = compute_ip.replace('-', '.')
+    vm_ip = vm_ip.replace('-', '.')
+    vm_root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
+    if os.system("ssh root@" + compute_ip + " ping -c 2 " + vm_ip) == 0:
+        if os.system("ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " hostname'") == 0:
+            status["status"] = "running"
+        else:
+            status["status"] = "initializing"
+    else:
+        status["status"] = "shutdown"
+    return status
