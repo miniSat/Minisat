@@ -17,19 +17,19 @@ def test_web_ui():
     options.add_argument('-headless')
     driver = webdriver.Firefox(firefox_options=options)
     driver.get("http://localhost:8000")
-    assert "MiniSat" in driver.title
+    assert "Minisat" in driver.title
     driver.get("http://localhost:8000/compute_resource")
-    assert "MiniSat" in driver.title
+    assert "Minisat" in driver.title
     driver.get("http://localhost:8000/profile")
-    assert "MiniSat" in driver.title
+    assert "Minisat" in driver.title
     driver.get("http://localhost:8000/create_host")
-    assert "MiniSat" in driver.title
+    assert "Minisat" in driver.title
     driver.get("http://localhost:8000/operating_system")
-    assert "MiniSat" in driver.title
+    assert "Minisat" in driver.title
     driver.get("http://localhost:8000/new_container")
-    assert "MiniSat" in driver.title
+    assert "Minisat" in driver.title
     driver.get("http://localhost:8000/local_images")
-    assert "MiniSat" in driver.title
+    assert "Minisat" in driver.title
     driver.close()
 
 
