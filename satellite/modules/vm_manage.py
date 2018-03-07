@@ -69,6 +69,18 @@ def vm_ip(vm_name, compute_ip):
     return vm_ipaddress
 
 
+def get_memory(compute_ip, vm_name, vm_ip):
+    vm_ip = vm_ip.split("/")[0]
+    root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
+    cmd = "ssh root@" + str(compute_ip) + " 'sshpass -p " + str(root_passwd) + " ssh -o StrictHostKeyChecking=no root@" + str(vm_ip) + " free'"
+    memory = os.popen(cmd).readlines()
+    memory = memory[1].split()
+    total_mem, free_mem = memory[1], memory[2]
+    total_mem = str(int(int(total_mem) / 1024)) + " MB "
+    free_mem = str(int(int(free_mem) / 1024)) + " MB "
+    return total_mem, free_mem
+
+
 def vm_details(compute_name, compute_ip, vm_id):
     details = {}
     details["Id"] = vm_id
@@ -76,17 +88,16 @@ def vm_details(compute_name, compute_ip, vm_id):
     details["Name"] = vm_name[:-1]
     vm_state = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domstate " + vm_id).readline()
     details["State"] = vm_state[:-1]
+    VM_ip = vm_ip(details["Name"], compute_ip)
     try:
-        vm_allocated_mem = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system dommemstat " + vm_id).readlines()
-        details["Total Allocated Memory"] = str(int(int(vm_allocated_mem[0].split()[1]) / 1024)) + " MB"
-        details["Free Memory"] = str(int(int(vm_allocated_mem[-2].split()[1]) / 1024)) + " MB"
+        details["Total Allocated Memory"], details["Free Memory"] = get_memory(compute_ip, details["Name"], VM_ip)
         vm_cpu = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system dominfo " + vm_id).readlines()
         details["Virtual CPUs"] = vm_cpu[5].split()[1]
     except IndexError:
         details["Total Allocated Memory"] = "-"
         details["Free Memory"] = "-"
         details["Virtual CPUs"] = '-'
-    details["IP Address"] = vm_ip(details["Name"], compute_ip)
+    details["IP Address"] = VM_ip
     list = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_id).readlines()[2].split()
     vm_mac = list[4]
     details["MAC Address"] = vm_mac
