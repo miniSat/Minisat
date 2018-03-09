@@ -1,6 +1,6 @@
 {% extends 'form_template.html' %}
 {% block form_content %}
-
+<div class="myBox1">
 {% if message == True %}
 <div class="alert alert-success alert-dismissable fade in">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -13,31 +13,37 @@
 </div>
 {% endif %}
 
-<form action="post_profile" method="post" autocomplete="off">
+<form  class="form-horizontal " action="post_profile" method="post" autocomplete="off">
     {% csrf_token %}
     {{compute_resource_name}}
     {% for field in form %}
     <div class="form-group">
-        {{ field.label_tag }}<br>
-        {{ field }}
+        <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{ field.label_tag }}</label>
+        <div class="col-sm-8">
+            {{ field }}
+        </div>
     </div>
     {% endfor %}
-    <button id="id_submit" type="submit" class="btn btn-primary">Submit</button>
-
+    <div class="form-group">
+    <div class="col-sm-1"></div>
+        <div class="col-sm-8">
+        <button id="id_submit" type="submit" class="btn btn-primary" style="width:100px;">Add</button></div>
+    </div>
 </form>
-
+</div>
 {% endblock %}
 
 {% block exist_content %}
+<div class="myBox">
 {% if profile_obj == False %}
-<h1>No Profiles Found</h1>
+<h2>No Profiles Found</h2>
 {% else %}
 
 <div class="container-fluid container-cards-pf" id="card-container">
     <div class="row row-cards-pf">
         {% for obj in profile_obj %}
-        <div class="col-xs-12 col-sm-4 col-md-3">
-            <div class="card-pf card-pf-view card-pf-view-select card-pf-view-multi-select">
+        <div class="col-xs-12 col-sm-6 col-md-4" >
+            <div class="card-pf card-pf-view card-pf-view-select card-pf-view-multi-select" >
                 <div class="card-pf-body">
                     <h2 class="card-pf-title text-center">
                         <b>{{ obj.profile_name }}</b>
@@ -59,7 +65,7 @@
     </div>
 </div>
 {% endif %}
-
+</div>
 <script>
   $(function() {
     // matchHeight the contents of each .card-pf and then the .card-pf itself

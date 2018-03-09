@@ -1,29 +1,44 @@
 {% extends 'form_template.html' %}
 
 {% block form_content %}
-
+<div class="myBox1">
 {% if message == True %}
-<div class="alert alert-success alert-dismissable fade in">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+
+<div class="alert alert-success">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span class="pficon pficon-close"></span>
+    </button>
+    <span class="pficon pficon-ok"></span>
     <strong>Compute Resource Added Successfully</strong>
 </div>
+
+
 {% elif message != False %}
-<div class="alert alert-danger alert-dismissable fade in">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+<div class="alert alert-danger">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span class="pficon pficon-close"></span>
+    </button>
+    <span class="pficon pficon-error-circle-o"></span>
     <strong>{{ message }}</strong>
 </div>
 {% endif %}
 
-<form action="post_data" method="post">{% csrf_token %}
+<form class="form-horizontal" action="post_data" method="post">{% csrf_token %}
     {% for field in form %}
     <div class="form-group">
-        {{ field.label_tag }}<br>
-        {{ field }}
+        <label class="col-sm-3 control-label" for="i2" style="font-size:13px;">{{ field.label_tag }}</label>
+        <div class="col-sm-8" >
+            {{ field }}
+        </div>
     </div>
-    {% endfor %}
-    <button type="submit" class="btn btn-primary" id="compute_submit">SUBMIT</button>
+{% endfor %}
+   <div class="form-group">
+    <div class="col-sm-1"></div>
+        <div class="col-sm-8">
+        <button id="compute_submit" type="submit" class="btn btn-primary" style="width:100px;">Add</button></div>
+    </div>
 </form>
-
+</div>
 
 {% endblock %}
 
@@ -31,7 +46,7 @@
 <div class="myBox">
     {% if compute_obj == False %}
 
-    <h1>No Compute Resources Found</h1>
+    <h2>No Compute Resources Found</h2>
     {% else %}
     <table class="table table-bordered table-striped">
         <thead>
@@ -56,10 +71,86 @@
         </tr>
         {% endfor %}
 
+
         </tbody>
     </table>
     {% endif %}
 </div>
 
+
+<!--
+<div class="list-group list-view-pf">
+  <div class="list-group-item list-view-pf-stacked">
+    <div class="list-view-pf-actions">
+      <button class="btn btn-default">Action</button>
+    </div>
+    <div class="list-view-pf-main-info">
+      <div class="list-view-pf-left">
+        <span class="fa fa-plane list-view-pf-icon-lg"></span>
+      </div>
+      <div class="list-view-pf-body" >
+
+        <div class="list-view-pf-description">
+
+          <div class="list-group-item-heading">
+            This is EVENT One that is with very LONG and should not overflow and push other elements out of the bounding box.
+            <small>Feb 23, 2015 12:32 am</small>
+          </div>
+          <div class="list-group-item-text">
+            The following snippet of text is <a href="#">rendered as link text</a>.
+
+          </div>
+
+        </div>
+<canvas id="donut-chart-5" style="margin-left:-250px;" height="50"></canvas>
+
+
+
+            <!--<div class="list-view-pf-additional-info-item list-view-pf-additional-info-item-donut-chart">-->
+<!--<span id="donut-chart-5"></span>-->
+<!--</div>-->
+<!--<div class="list-view-pf-additional-info-item list-view-pf-additional-info-item-donut-chart">-->
+<!--<span id="donut-chart-6"></span>-->
+<!--</div>-->
+<!--<div class="list-view-pf-additional-info-item list-view-pf-additional-info-item-donut-chart">-->
+<!--<span id="donut-chart-7"></span>-->
+<!--</div>-->
+<!--<div class="list-view-pf-additional-info-item list-view-pf-additional-info-item-donut-chart">-->
+<!--<span id="donut-chart-8"></span>-->
+<!--</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<script>
+var ctxDx = document.getElementById("donut-chart-5")
+  var ChartDetail = new Chart(ctxDx, {
+      type: 'doughnut',
+      data: {
+          labels: ["Free","Used"],
+          datasets: [
+              {
+                  data: [200, 300],
+                  backgroundColor: ["#46BFBD", "#FDB45C"],
+                  hoverBackgroundColor: ["#5AD3D1", "#FFC870"],
+              }
+          ],
+      },
+      options: {
+
+          cutoutPercentage: 75,
+          responsive: true,
+         legend: {
+  display: false
+},
+      },
+});
+
+</script>
+-->
 {% endblock %}
 

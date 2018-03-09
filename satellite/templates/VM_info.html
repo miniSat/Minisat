@@ -2,11 +2,6 @@
 
 {% block vmpackages %}
 <script src="/static/vm_packages.js"></script>
-<script>
-
-
-
-</script>
 {% endblock %}
 
 {% block content %}
@@ -27,10 +22,18 @@
 
                 </div>
                 <div id="vm-info-spinner" class="progress-description">
+<<<<<<< Updated upstream
                         <div class="spinner spinner-xs spinner-inline"></div> <strong>Gathering Facts :</strong> Please wait..
                 </div>
                 <div class="card-pf-body" id="vm_info_font">
                     <label  id="vm_id" hidden>{{vm_id}}</label><br>
+=======
+                    <div class="spinner spinner-xs spinner-inline"></div>
+                    <strong>Gathering Facts :</strong> Please wait..
+                </div>
+                <div class="card-pf-body" id="vm_info_font">
+                    <label id="vm_id" hidden>{{vm_id}}</label><br>
+>>>>>>> Stashed changes
                     <label id="compute_ip" hidden>{{compute_ip}}</label>
                 </div>
 
@@ -43,7 +46,12 @@
                         Added Repositories
                     </h2>
                     <div id="vm-repo-spinner" class="progress-description">
+<<<<<<< Updated upstream
                         <div class="spinner spinner-xs spinner-inline"></div> <strong>Fetching Repositories:</strong> Please wait..
+=======
+                        <div class="spinner spinner-xs spinner-inline"></div>
+                        <strong>Fetching Repositories:</strong> Please wait..
+>>>>>>> Stashed changes
                     </div>
                 </div>
                 <div class="card-pf-body vm_pack " id="vm_packages">
@@ -53,6 +61,7 @@
                             <th>Repository List</th>
                             <th>Status</th>
                             <th>Packages</th>
+<<<<<<< Updated upstream
                         </tr>
                         </thead>
                         <tbody id="vm_repo_table">
@@ -62,6 +71,19 @@
             </div>
         </div>
 
+=======
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="vm_repo_table">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+>>>>>>> Stashed changes
         <div id="card-vm-packages" class="col-xs-12 " hidden>
             <div class="card-pf card-pf-utilization">
                 <div class="card-pf-heading">
@@ -69,7 +91,12 @@
                         Packages
                     </h2>
                     <div id="vm-packages-spinner" class="progress-description">
+<<<<<<< Updated upstream
                         <div class="spinner spinner-xs spinner-inline"></div> <strong>Fetching Packages: </strong>Please wait..
+=======
+                        <div class="spinner spinner-xs spinner-inline"></div>
+                        <strong>Fetching Packages: </strong>Please wait..
+>>>>>>> Stashed changes
                     </div>
                 </div>
                 <div class="card-pf-body vm_pack " id="vm_packages">
