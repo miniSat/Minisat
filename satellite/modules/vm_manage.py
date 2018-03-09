@@ -1,5 +1,6 @@
 import os
 import time
+import re
 from satellite.models import (
     Product_model,
     Activation_model,
@@ -143,27 +144,33 @@ def get_status(compute_name, compute_ip, vm_name):
         return "initializing"
 
 
-def get_vm_repo(compute_ip, vm_ip, vm_name):
-    vm_root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
-    repo_info = os.popen("ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf repolist all'").readlines()
+def filter_repo(repo_info):
     repo_info = [x for x in repo_info if not x.startswith('Last')]
     repo_info = [x for x in repo_info if not x.startswith('repo')]
     repo_info = [x.split(None, 1) for x in repo_info]
-    for each in repo_info:
-        each = each.pop(0)
-    repo_info = [j for i in repo_info for j in i]
+    repo_info = [x for x in repo_info if x]
+    repo_info = [each.pop(1) for each in repo_info]
+    return repo_info
+
+
+def get_vm_repo(compute_ip, vm_ip, vm_name):
+    vm_root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
+    cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf repolist enabled'"
+    repo_info = os.popen(cmd).readlines()
+    enabled_info = filter_repo(repo_info)
+    cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf repolist disabled'"
+    repo_info = os.popen(cmd).readlines()
+    disabled_info = filter_repo(repo_info)
     enabled_repos = []
     disbaled_repos = []
-    repo_info = [each.split(":") for each in repo_info]
-    for repo in repo_info:
+    for each in enabled_info:
+        li = re.split(r'\s{3}', each)
+        li = [x for x in li if x]
+        enabled_repos.append(li)
+    for each in disabled_info:
         li = []
-        if repo[0].endswith("enabled"):
-            li.append(repo[0].split()[0].strip())
-            li.append(repo[1][:-1].strip())
-            enabled_repos.append(li)
-        else:
-            li.append(repo[0].split("disabled")[0].strip())
-            disbaled_repos.append(li)
+        li.append(each.split('\n')[0].strip())
+        disbaled_repos.append(li)
     repo_info = {}
     repo_info["enabled"] = enabled_repos
     repo_info["disabled"] = disbaled_repos
