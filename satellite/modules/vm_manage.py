@@ -76,6 +76,7 @@ def get_memory(compute_ip, vm_name, vm_ip):
     memory = os.popen(cmd).readlines()
     memory = memory[1].split()
     total_mem, free_mem = memory[1], memory[2]
+    free_mem = int(total_mem) - int(free_mem)
     total_mem = str(int(int(total_mem) / 1024)) + " MB "
     free_mem = str(int(int(free_mem) / 1024)) + " MB "
     return total_mem, free_mem
