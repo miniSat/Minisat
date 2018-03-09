@@ -119,14 +119,33 @@ function get_added_repo(compute_ip, vm_id)
             {
                 var ele = document.createElement("tr");
                 repo_str = repo_str +"<td>"+result["enabled"][repo][0]+"</td>"+"<td>"+"Enabled"+"</td>"+"<td>"+result["enabled"][repo][1]+"</td>"
+                repo_str=repo_str+'<td><div class="dropdown">'+
+                    '<button class="btn btn-default dropdown-toggle" type="button" id="" data-toggle="dropdown">Action'+
+                    '<span class="caret"></span></button>'+
+                    '<ul class="dropdown-menu" role="menu" aria-labelledby="action">'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" class="start_" onclick="start_vm()">Enable</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" class = "pause_" onclick="pause_vm()">Disable</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" class = "delete_" onclick="delete_vm()">Delete</a></li>'+
+                    '</ul></div></td>'
+
                 ele.innerHTML=repo_str
                 vm_repo_table.appendChild(ele)
                 repo_str=""
             }
+            repo_str = ""
             for (var repo in result["disabled"])
             {
                 var ele = document.createElement("tr");
                 repo_str = repo_str +"<td>"+result["disabled"][repo]+"</td>"+"<td>"+"Disabled"+"</td>"+"<td>"+"-"+"</td>"
+                repo_str=repo_str+'<td><div class="dropdown">'+
+                    '<button class="btn btn-default dropdown-toggle" type="button" id="" data-toggle="dropdown">Action'+
+                    '<span class="caret"></span></button>'+
+                    '<ul class="dropdown-menu" role="menu" aria-labelledby="action">'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" class="start_" onclick="start_vm()">Enable</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" class = "pause_" onclick="pause_vm()">Disable</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" class = "delete_" onclick="delete_vm()">Delete</a></li>'+
+                    '</ul></div></td>'
+
                 ele.innerHTML=repo_str
                 vm_repo_table.appendChild(ele)
                 repo_str=""
