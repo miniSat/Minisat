@@ -3,12 +3,18 @@
 <div class="myBox1">
     {% if message == True %}
     <div class="alert alert-success alert-dismissable fade in">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-ok"></span>
         <strong>Operating System Added Successfully</strong>
     </div>
     {% elif message != False %}
     <div class="alert alert-danger alert-dismissable fade in">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-error-circle-o"></span>
         <strong>{{ message }}</strong>
     </div>
     {% endif %}
@@ -21,26 +27,24 @@
             <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{ field.label_tag }}</label>
         <div class="col-sm-8" >
             {{ field }}
-
     </div>
     </div>
-
         {% endfor %}
         <div class="form-group col-sm-4 control-label">
         <button id="add_os" type="submit" class="btn btn-primary" style="width:100px">Add</button></div>
     </form>
 </div>
+
 {% endblock %}
 
 {% block exist_content %}
 
 <div class="myBox">
-
 {% if os_obj %}
-    <div class="list-group list-view-pf list-view-pf-view">
+    <div class="list-group list-view-pf list-view-pf-view" style="background-color:#A9A9A9">
         {% for obj in os_obj %}
         <div class="list-group-item">
-            <div class="list-group-item-header">
+            <div class="list-group-item-header" >
                 <div class="list-view-pf-expand">
                     <span class="fa fa-angle-right"></span>
                 </div>
@@ -53,8 +57,8 @@
                 </form>
             </div>
             <div class="list-view-pf-main-info">
-                <div class="list-view-pf-body">
-                    <div class="list-view-pf-description">
+                <div class="list-view-pf-body" >
+                    <div class="list-view-pf-description" >
                         <div class="list-group-item-heading">
                             {{ obj.os_name }}
                         </div>
@@ -69,6 +73,7 @@
         {% endfor %}
     </div>
 {% else %}
+
 <h2>No Operating System Added</h2>
 {% endif %}
 </div>
