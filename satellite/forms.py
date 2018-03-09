@@ -54,17 +54,19 @@ class Local_Images(forms.Form):
 
 
 class Product_form(forms.Form):
-    product_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), label="Name", max_length=20)
-    product_location = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), label="URL", max_length=100)
+    product_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Name", max_length=20)
+    product_location = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="URL",
+                                       max_length=100)
 
 
 class View_form(forms.Form):
-    view_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), label="Name", max_length=20)
+    view_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Name", max_length=20)
     select_product = forms.CharField(label="Select Products", max_length=20)
 
 
 class Activation_form(forms.Form):
-    activation_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), label='Name', max_length=20)
+    activation_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label='Name',
+                                      max_length=20)
     select_view = forms.CharField(label='Select Views', max_length=20)
 
 
