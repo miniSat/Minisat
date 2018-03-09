@@ -164,11 +164,11 @@ def get_vm_repo(compute_ip, vm_ip, vm_name):
     enabled_repos = []
     disbaled_repos = []
     for each in enabled_info:
-        li = re.split(r'\s{3}',each)
+        li = re.split(r'\s{3}', each)
         li = [x for x in li if x]
         enabled_repos.append(li)
     for each in disabled_info:
-        li=[]
+        li = []
         li.append(each.split('\n')[0].strip())
         disbaled_repos.append(li)
     repo_info = {}
