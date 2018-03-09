@@ -1,8 +1,8 @@
 {% extends 'form_template.html' %}
 
 {% block form_content %}
-<div class="myBox" xmlns="http://www.w3.org/1999/html">
-    <table class="padded-table">
+<div class="myBox1" xmlns="http://www.w3.org/1999/html">
+
         {% if message == True %}
         <div class="alert alert-success alert-dismissable fade in">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -14,48 +14,72 @@
             <strong>{{ message }}</strong>
         </div>
         {% endif %}
-        <form method="post" action="post_host_group">
+        <form class="form-horizontal " method="post" action="post_host_group">
             {% csrf_token %}
-            <tr>
-                <td>{{form.host_group_name.label_tag}}</td>
-                <td>{{form.host_group_name}}</td>
-            </tr>
-            <tr>
-                <td>{{form.select_compute.label_tag}}</td>
-                <td><select name="select_compute">
-                    {% for each in select_compute %}
-                    <option value="{{each}}">{{each}}</option>
-                    {% endfor %}
-                </select></td>
-            </tr>
-            <tr>
-                <td>{{form.select_profile.label_tag}}</td>
-                <td><select name="select_profile">
-                    {% for each in select_profile %}
-                    <option value="{{each}}">{{each}}</option>
-                    {% endfor %}
-                </select></td>
-            </tr>
-            <tr>
-                <td>{{form.select_os.label_tag}}</td>
-                <td><select name="select_os">
-                    {% for each in select_os %}
-                    <option value="{{each}}">{{each}}</option>
-                    {% endfor %}
-                </select></td>
-            </tr>
-            <tr>
-                <td>{{form.select_activation.label_tag}}</td>
-                <td><select name="select_activation">
-                    {% for each in select_activation %}
-                    <option value="{{each}}">{{each}}</option>
-                    {% endfor %}
-                </select></td>
-            </tr>
-            <tr>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{form.host_group_name.label_tag}}</label>
+                <div class="col-sm-8">
+                    {{ form.host_group_name }}
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{form.select_compute.label_tag}}</label>
+                <div class="col-sm-8">
+                    <select name="select_compute" >
+                        {% for each in select_compute %}
+                        <option value="{{each}}">{{each}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label " for="i2"
+                       style="font-size:13px;">{{form.select_profile.label_tag}}</label>
+                <div class="col-sm-8">
+                    <select name="select_profile">
+                        {% for each in select_profile %}
+                        <option value="{{each}}">{{each}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label " for="i2"
+                       style="font-size:13px;">{{form.select_os.label_tag}}</label>
+                <div class="col-sm-8">
+                    <select name="select_os">
+                        {% for each in select_os %}
+                        <option value="{{each}}">{{each}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label " for="i2"
+                       style="font-size:13px;">{{form.select_activation.label_tag}}</label>
+                <div class="col-sm-8">
+                    <select name="select_activation">
+                        {% for each in select_activation %}
+                        <option value="{{each}}">{{each}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+
                 <td><input type="submit" value="Add" class="btn btn-primary" style="width:100px;"></td>
-            </tr>
+
         </form>
+
     </table>
 </div>
 {% endblock %}
@@ -88,6 +112,6 @@
     </table>
 </div>
 {% else %}
-<h1>No Host Groups Added</h1>
+<h2>No Host Groups Added</h2>
 {% endif %}
 {% endblock %}

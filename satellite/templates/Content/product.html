@@ -1,6 +1,6 @@
 {% extends 'form_template.html' %}
 {% block form_content %}
-<div class="myBox">
+<div class="myBox1">
     {% if message == True %}
     <div class="alert alert-success alert-dismissable fade in">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -12,22 +12,29 @@
         <strong>{{ message }}</strong>
     </div>
     {% endif %}
-    <form action="post_product" method="post" autocomplete="off">
+    <form class="form-horizontal " action="post_product" method="post" autocomplete="off">
         {% csrf_token %}
         {% for field in form %}
+
         <div class="form-group">
-            {{ field.label_tag }}<br>
-            {{ field }}
+            <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{ field.label_tag }}</label>
+            <div class="col-sm-8">
+                {{ field }}
+            </div>
         </div>
+
         {% endfor %}
-        <button type="submit" class="btn btn-primary">Add</button>
+        <div class="col-sm-2"></div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" style="width:100px">Add</button>
+        </div>
     </form>
 </div>
 {% endblock %}
 
 {% block exist_content %}
-
-{% if product_obj %}
+<div class="myBox">
+    {% if product_obj %}
     <div class="list-group list-view-pf list-view-pf-view">
         {% for obj in product_obj %}
         <div class="list-group-item">
@@ -35,29 +42,30 @@
                 <div class="list-view-pf-expand">
                     <span class="fa fa-angle-right"></span>
                 </div>
-            <div class="list-view-pf-checkbox" style="height:22px"></div>
-            <div class="list-view-pf-actions">
-                <form action="delete" method="get">
-                    <button class="btn btn-danger" name="ProductDelete" value="{{ obj.id }}">Delete</button>
-                </form>
-            </div>
-            <div class="list-view-pf-main-info">
-                <div class="list-view-pf-body">
-                    <div class="list-view-pf-description">
-                        <div class="list-group-item-heading">
-                            {{ obj.product_name }}
-                        </div>
-                        <div class="list-group-item-text">
-                            {{ obj.product_location }}
+                <div class="list-view-pf-checkbox" style="height:22px"></div>
+                <div class="list-view-pf-actions">
+                    <form action="delete" method="get">
+                        <button class="btn btn-danger" name="ProductDelete" value="{{ obj.id }}">Delete</button>
+                    </form>
+                </div>
+                <div class="list-view-pf-main-info">
+                    <div class="list-view-pf-body">
+                        <div class="list-view-pf-description">
+                            <div class="list-group-item-heading">
+                                {{ obj.product_name }}
+                            </div>
+                            <div class="list-group-item-text">
+                                {{ obj.product_location }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            </div>
         </div>
         {% endfor %}
     </div>
-{% else %}
-<h1>No Products Added</h1>
-{% endif %}
+    {% else %}
+    <h2>No Products Added</h2>
+    {% endif %}
+</div>
 {% endblock %}

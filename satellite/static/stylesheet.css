@@ -45,10 +45,19 @@ font-size : 16px;
 font-size:15px;
 }
 
+label{
+font-weight:normal !important;
+}
 
 .myBox {
-height: 300px;
+height: 230px;
 overflow: auto;
+}
+
+
+.myBox1 {
+height: 230px;
+
 }
 
 .vm_pack {
