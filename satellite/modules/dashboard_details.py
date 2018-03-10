@@ -57,6 +57,8 @@ def running_containers(compute=[]):
             for j in range(1, len(cont_list)):
                 li = cont_list[j].split()
                 newli = []
+                if not li[-2].endswith('/tcp'):
+                    li[-2] = "No Port Assigned"
                 if '(Paused)' in li:
                     newli.extend([li[-1], li[1], li[-2], tuple[1], "Paused", li[0], tuple[2]])
                 else:
@@ -67,4 +69,5 @@ def running_containers(compute=[]):
             error.append(tuple[1])
     if len(error):
         data['error'] = error
+    # print(data)
     return data
