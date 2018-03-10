@@ -1,7 +1,14 @@
 from django.views.generic import TemplateView  # NOQA
 import os
 from django.shortcuts import render
-from satellite.modules.docker_manage import make_connection, get_docker_images, start_cont, stop_cont, destroy_cont
+from satellite.modules.docker_manage import (
+    run_cont,
+    make_connection,
+    get_docker_images,
+    start_cont,
+    stop_cont,
+    destroy_cont
+)
 from django.http import JsonResponse
 import validators
 # We'll use render to display our templates.
@@ -320,7 +327,6 @@ def new_container(request):
 
 def post_new_container(request):
     form = newContainerform(request.POST)
-
     if form.is_valid():
         new_cont = Container_model(
             select_compute=form.data['select_compute'],
@@ -330,11 +336,11 @@ def post_new_container(request):
             host_port=form.data["host_port"],
             cont_port=form.data["cont_port"]
         )
-        create_cont = "docker-machine ssh " + new_cont.select_compute + " docker container run -d -p " + \
-                      form.data["host_port"] + ":" + form.data[
-                          "cont_port"] + " --name " + new_cont.container_name + " " + \
-                      new_cont.image_name + ":" + new_cont.tag_name
-        os.system(create_cont)
+        stat = ''
+        if form.data["container_stat"] == "on":
+            stat = "on"
+
+        run_cont(new_cont, stat)
     return HttpResponseRedirect('/')
 
 

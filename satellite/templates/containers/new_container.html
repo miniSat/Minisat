@@ -12,7 +12,7 @@
             <a class="nav-link active" href="#compute_resource" role="tab" data-toggle="tab"><strong>Run Container</strong></a>
         </li>
     </ul>
-    <form action="post_new_container" method="post">
+    <form action="/post_new_container" method="post">
         {% csrf_token %}
         <div class="tab-content">
             <br>
@@ -31,10 +31,12 @@
                 <br>
                 {{ form.select_compute.label_tag }}
                 <select name="select_compute">
-                {% for key,value in  compute_name %}
+                    {% for key,value in  compute_name %}
                     <option value="{{key}}">{{ value }}</option>
-                {% endfor %}
+                    {% endfor %}
                 </select>
+                <br><br>
+                <input type="checkbox" id="id_container_stat" name="container_stat"> Run Container in background
                 <br><br>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
