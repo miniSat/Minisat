@@ -682,3 +682,8 @@ def get_added_repo(request, compute_ip, vm_ip, vm_name):
 def get_vm_status(request, compute_ip, vm_name, vm_ip):
     result = vm.vm_status(compute_ip, vm_name, vm_ip)
     return JsonResponse(result)
+
+
+def change_repo_state(request, compute_ip, vm_ip, repo_id, repo_flag, vm_name):
+    get_repo_state = vm.change_repo(compute_ip, vm_ip, repo_id, repo_flag, vm_name)
+    return JsonResponse({'flag': get_repo_state})
