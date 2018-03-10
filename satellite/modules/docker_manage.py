@@ -28,6 +28,31 @@ def get_docker_images(compute=[]):
     return docker_dict
 
 
+def run_cont(new_cont, stat):
+    if stat == "on":
+        stat_cmd = " -t "
+    else:
+        stat_cmd = ""
+
+    if new_cont.host_port != "" or new_cont.cont_port != "":
+        port_cmd = "-p " + new_cont.host_port + ":" + new_cont.cont_port + " "
+    else:
+        port_cmd = ""
+
+    if new_cont.tag_name != "":
+        tag_cmd = new_cont.image_name + ":" + new_cont.tag_name + " "
+    else:
+        tag_cmd = " " + new_cont.image_name + ":latest "
+
+    if new_cont.container_name != "":
+        cont_cmd = " --name " + new_cont.container_name + " "
+    else:
+        cont_cmd = ""
+
+    create_cont = "docker-machine ssh " + new_cont.select_compute + " docker container run -d " + stat_cmd + port_cmd + cont_cmd + tag_cmd + " > /dev/null 2>&1 &"
+    os.system(create_cont)
+
+
 def start_cont(cont_name, compute_name):
     start_cmd = "docker-machine ssh " + compute_name + " docker unpause " + cont_name
     cont_response = os.system(start_cmd)
