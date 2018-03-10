@@ -19,7 +19,7 @@
         <span class="pficon pficon-close"></span>
     </button>
     <span class="pficon pficon-error-circle-o"></span>
-    <strong>{{ message }}</strong>
+    <strong>Unfortunately there is a error </strong><a href="#" id="err_message"  data-trigger="focus"   data-toggle="popover" title="Error Message" data-content="{{ message }}">View more details</a>.
 </div>
 {% endif %}
 
@@ -152,5 +152,14 @@ var ctxDx = document.getElementById("donut-chart-5")
 
 </script>
 -->
+<script>
+    $(document).ready(function(){
+
+    $('[data-toggle="popover"]').popover();
+});
+
+</script>
+
 {% endblock %}
+
 

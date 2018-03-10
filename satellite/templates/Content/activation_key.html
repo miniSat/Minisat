@@ -4,12 +4,18 @@
     {% load extra_tags %}
     {% if message == True %}
     <div class="alert alert-success alert-dismissable fade in">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-ok"></span>
         <strong>Activation key added successfuly</strong>
     </div>
     {% elif message != False %}
     <div class="alert alert-danger alert-dismissable fade in">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-error-circle-o"></span>
         <strong>{{ message }}</strong>
     </div>
     {% endif %}

@@ -4,15 +4,21 @@
 <div class="myBox1" xmlns="http://www.w3.org/1999/html">
 
         {% if message == True %}
-        <div class="alert alert-success alert-dismissable fade in">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>Host Group created successfuly</strong>
-        </div>
+    <div class="alert alert-success alert-dismissable fade in">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-ok"></span>
+        <strong>Host Group created successfuly</strong>
+    </div>
         {% elif message != False %}
-        <div class="alert alert-danger alert-dismissable fade in">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>{{ message }}</strong>
-        </div>
+    <div class="alert alert-danger alert-dismissable fade in">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-error-circle-o"></span>
+        <strong>{{ message }}</strong>
+    </div>
         {% endif %}
         <form class="form-horizontal " method="post" action="post_host_group">
             {% csrf_token %}
