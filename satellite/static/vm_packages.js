@@ -1,19 +1,23 @@
 function enable_repo(compute_ip, vm_ip, repo_id, vm_name)
 {
+    $("#action_"+repo_id).prop("disabled", true);
     $.ajax({
         url: '/change_repo_state/'+compute_ip+'/'+vm_ip+'/'+repo_id+'/enable/'+vm_name,
         dataType: 'json',
         success: function(result){
+            $("#action_"+repo_id).prop("disabled", false);
         }
     });
 }
 
 function disable_repo(compute_ip, vm_ip, repo_id, vm_name)
 {
+    $("#action_"+repo_id).prop("disabled", true);
     $.ajax({
         url: '/change_repo_state/'+compute_ip+'/'+vm_ip+'/'+repo_id+'/disable/'+vm_name,
         dataType: 'json',
         success: function(result){
+            $("#action_"+repo_id).prop("disabled", false);
         }
     })
 }
@@ -141,7 +145,7 @@ function get_added_repo(compute_ip, vm_id)
                 var ele = document.createElement("tr");
                 repo_str = repo_str +"<td>"+result["enabled"][repo_id][0]+"</td>"+"<td>"+"Enabled"+"</td>"+"<td>"+result["enabled"][repo_id][1]+"</td>"
                 repo_str=repo_str+'<td><div class="dropdown">'+
-                    '<button class="btn btn-default dropdown-toggle" type="button" id="" data-toggle="dropdown">Action'+
+                    '<button class="btn btn-default dropdown-toggle" type="button" id="action+'+repo_id+'" data-toggle="dropdown">Action'+
                     '<span class="caret"></span></button>'+
                     '<ul class="dropdown-menu" role="menu" aria-labelledby="action">'+
                     '<li role="presentation"><a role="menuitem" tabindex="-1" class="enable_'+repo_id+'" onclick="enable_repo(\''+compute_ip+'\',\''+vm_ip+'\',\''+repo_id+'\',\''+vm_name+'\')">Enable</a></li>'+
@@ -153,16 +157,16 @@ function get_added_repo(compute_ip, vm_id)
                 repo_str=""
             }
             repo_str = ""
-            for (var repo in result["disabled"])
+            for (var repo_id in result["disabled"])
             {
                 var ele = document.createElement("tr");
-                repo_str = repo_str +"<td>"+result["disabled"][repo]+"</td>"+"<td>"+"Disabled"+"</td>"+"<td>"+"-"+"</td>"
+                repo_str = repo_str +"<td>"+result["disabled"][repo_id]+"</td>"+"<td>"+"Disabled"+"</td>"+"<td>"+"-"+"</td>"
                 repo_str=repo_str+'<td><div class="dropdown">'+
-                    '<button class="btn btn-default dropdown-toggle" type="button" id="" data-toggle="dropdown">Action'+
+                    '<button class="btn btn-default dropdown-toggle" type="button" id="action+'+repo_id+'" data-toggle="dropdown">Action'+
                     '<span class="caret"></span></button>'+
                     '<ul class="dropdown-menu" role="menu" aria-labelledby="action">'+
-                    '<li role="presentation"><a role="menuitem" tabindex="-1" class="enable_'+repo+'" onclick="enable_repo(\''+compute_ip+'\',\''+vm_ip+'\',\''+repo+'\',\''+vm_name+'\')">Enable</a></li>'+
-                    '<li role="presentation"><a role="menuitem" tabindex="-1" class = "disable_'+repo+'" onclick="disable_repo(\''+compute_ip+'\',\''+vm_ip+'\',\''+repo+'\',\''+vm_name+'\')">Disable</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" class="enable_'+repo_id+'" onclick="enable_repo(\''+compute_ip+'\',\''+vm_ip+'\',\''+repo_id+'\',\''+vm_name+'\')">Enable</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" class = "disable_'+repo_id+'" onclick="disable_repo(\''+compute_ip+'\',\''+vm_ip+'\',\''+repo_id+'\',\''+vm_name+'\')">Disable</a></li>'+
                     '</ul></div></td>'
 
                 ele.innerHTML=repo_str

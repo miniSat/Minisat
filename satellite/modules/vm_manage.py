@@ -155,19 +155,27 @@ def filter_repo(repo_info):
 
 def get_vm_repo(compute_ip, vm_ip, vm_name):
     vm_root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
-    cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf repolist enabled'"
+    cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf repolist enabled -y'"
     repo_info = os.popen(cmd).readlines()
     enabled_repos = filter_repo(repo_info)
     enabled_repo_id = [each.pop(0) for each in enabled_repos]
-    enabled_repo_id = [''.join([c for c in x if c.isalnum()]) for x in enabled_repo_id]
+    for i in range(len(enabled_repo_id)):
+        if enabled_repo_id[i].startswith('*'):
+            enabled_repo_id[i] = enabled_repo_id[i][1:]
+        else:
+            pass
     enabled_repo_name = [each.pop() for each in enabled_repos]
 
-    cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf repolist disabled'"
+    cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf repolist disabled -y'"
     repo_info = os.popen(cmd).readlines()
     disabled_repos = filter_repo(repo_info)
     disabled_repo_name = [each.pop() for each in disabled_repos]
     disabled_repo_id = [each.pop(0) for each in disabled_repos]
-    disabled_repo_id = [''.join([c for c in x if c.isalnum()]) for x in disabled_repo_id]
+    for i in range(len(disabled_repo_id)):
+        if disabled_repo_id[i].startswith('*'):
+            disabled_repo_id[i] = disabled_repo_id[i][1:]
+        else:
+            pass
     enabled_repos = []
     disbaled_repos = []
     enabled_repo_dict = {}
@@ -209,14 +217,14 @@ def change_repo(compute_ip, vm_ip, repo_id, repo_flag, vm_name):
     vm_ip = vm_ip.replace('-', '.')
     vm_root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
     if repo_flag == "enable":
-        cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf config-manager --set-enabled " + repo_id + "'"
+        cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf config-manager --set-enabled " + repo_id + " -y'"
         res = os.system(cmd)
         if not res:
             return "success"
         else:
             return "failed"
     elif repo_flag == "disable":
-        cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf config-manager --set-disabled " + repo_id + "'"
+        cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf config-manager --set-disabled " + repo_id + " -y'"
         res = os.system(cmd)
         if not res:
             return "success"
