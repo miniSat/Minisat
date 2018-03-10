@@ -1,3 +1,24 @@
+function enable_repo(compute_ip, vm_ip, repo_id, vm_name)
+{
+    $.ajax({
+        url: '/change_repo_state/'+compute_ip+'/'+vm_ip+'/'+repo_id+'/enable/'+vm_name,
+        dataType: 'json',
+        success: function(result){
+        }
+    });
+}
+
+function disable_repo(compute_ip, vm_ip, repo_id, vm_name)
+{
+    $.ajax({
+        url: '/change_repo_state/'+compute_ip+'/'+vm_ip+'/'+repo_id+'/disable/'+vm_name,
+        dataType: 'json',
+        success: function(result){
+        }
+    })
+}
+
+
 $(document).ready(function(){
     var vm_id = $("#vm_id").text().trim();
     var compute_ip = $("#compute_ip").text().trim();
@@ -115,17 +136,16 @@ function get_added_repo(compute_ip, vm_id)
         success: function(result){
             var table = document.getElementById("vm_repo_table")
             repo_str = ""
-            for (var repo in result["enabled"])
+            for (var repo_id in result["enabled"])
             {
                 var ele = document.createElement("tr");
-                repo_str = repo_str +"<td>"+result["enabled"][repo][0]+"</td>"+"<td>"+"Enabled"+"</td>"+"<td>"+result["enabled"][repo][1]+"</td>"
+                repo_str = repo_str +"<td>"+result["enabled"][repo_id][0]+"</td>"+"<td>"+"Enabled"+"</td>"+"<td>"+result["enabled"][repo_id][1]+"</td>"
                 repo_str=repo_str+'<td><div class="dropdown">'+
                     '<button class="btn btn-default dropdown-toggle" type="button" id="" data-toggle="dropdown">Action'+
                     '<span class="caret"></span></button>'+
                     '<ul class="dropdown-menu" role="menu" aria-labelledby="action">'+
-                    '<li role="presentation"><a role="menuitem" tabindex="-1" class="start_" onclick="start_vm()">Enable</a></li>'+
-                    '<li role="presentation"><a role="menuitem" tabindex="-1" class = "pause_" onclick="pause_vm()">Disable</a></li>'+
-                    '<li role="presentation"><a role="menuitem" tabindex="-1" class = "delete_" onclick="delete_vm()">Delete</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" class="enable_'+repo_id+'" onclick="enable_repo(\''+compute_ip+'\',\''+vm_ip+'\',\''+repo_id+'\',\''+vm_name+'\')">Enable</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" class = "disable_'+repo_id+'" onclick="disable_repo(\''+compute_ip+'\',\''+vm_ip+'\',\''+repo_id+'\',\''+vm_name+'\')">Disable</a></li>'+
                     '</ul></div></td>'
 
                 ele.innerHTML=repo_str
@@ -141,9 +161,8 @@ function get_added_repo(compute_ip, vm_id)
                     '<button class="btn btn-default dropdown-toggle" type="button" id="" data-toggle="dropdown">Action'+
                     '<span class="caret"></span></button>'+
                     '<ul class="dropdown-menu" role="menu" aria-labelledby="action">'+
-                    '<li role="presentation"><a role="menuitem" tabindex="-1" class="start_" onclick="start_vm()">Enable</a></li>'+
-                    '<li role="presentation"><a role="menuitem" tabindex="-1" class = "pause_" onclick="pause_vm()">Disable</a></li>'+
-                    '<li role="presentation"><a role="menuitem" tabindex="-1" class = "delete_" onclick="delete_vm()">Delete</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" class="enable_'+repo+'" onclick="enable_repo(\''+compute_ip+'\',\''+vm_ip+'\',\''+repo+'\',\''+vm_name+'\')">Enable</a></li>'+
+                    '<li role="presentation"><a role="menuitem" tabindex="-1" class = "disable_'+repo+'" onclick="disable_repo(\''+compute_ip+'\',\''+vm_ip+'\',\''+repo+'\',\''+vm_name+'\')">Disable</a></li>'+
                     '</ul></div></td>'
 
                 ele.innerHTML=repo_str

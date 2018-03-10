@@ -42,4 +42,5 @@ urlpatterns = [
     path('get_vm_facts/<slug:compute_ip>/<slug:vm_id>', views.get_vm_facts, name="get_vm_facts"),
     path('get_added_repo/<slug:compute_ip>/<slug:vm_ip>/<slug:vm_name>', views.get_added_repo, name="get_added_repo"),
     path('get_vm_status/<slug:compute_ip>/<slug:vm_name>/<slug:vm_ip>', views.get_vm_status, name="get_vm_status"),
+    path('change_repo_state/<slug:compute_ip>/<slug:vm_ip>/<slug:repo_id>/<slug:repo_flag>/<slug:vm_name>', views.change_repo_state, name="change_repo_state"),
 ]

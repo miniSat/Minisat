@@ -149,7 +149,7 @@ def filter_repo(repo_info):
     repo_info = [x for x in repo_info if not x.startswith('repo')]
     repo_info = [x.split(None, 1) for x in repo_info]
     repo_info = [x for x in repo_info if x]
-    repo_info = [each.pop(1) for each in repo_info]
+    # repo_info = [each.pop(1) for each in repo_info]
     return repo_info
 
 
@@ -157,23 +157,35 @@ def get_vm_repo(compute_ip, vm_ip, vm_name):
     vm_root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
     cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf repolist enabled'"
     repo_info = os.popen(cmd).readlines()
-    enabled_info = filter_repo(repo_info)
+    enabled_repos = filter_repo(repo_info)
+    enabled_repo_id = [each.pop(0) for each in enabled_repos]
+    enabled_repo_id = [''.join([c for c in x if c.isalnum()]) for x in enabled_repo_id]
+    enabled_repo_name = [each.pop() for each in enabled_repos]
+
     cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf repolist disabled'"
     repo_info = os.popen(cmd).readlines()
-    disabled_info = filter_repo(repo_info)
+    disabled_repos = filter_repo(repo_info)
+    disabled_repo_name = [each.pop() for each in disabled_repos]
+    disabled_repo_id = [each.pop(0) for each in disabled_repos]
+    disabled_repo_id = [''.join([c for c in x if c.isalnum()]) for x in disabled_repo_id]
     enabled_repos = []
     disbaled_repos = []
-    for each in enabled_info:
+    enabled_repo_dict = {}
+    disabled_repo_dict = {}
+    for each in enabled_repo_name:
         li = re.split(r'\s{3}', each)
         li = [x for x in li if x]
+        li = [x.strip() for x in li]
         enabled_repos.append(li)
-    for each in disabled_info:
+    enabled_repo_dict = dict(zip(enabled_repo_id, enabled_repos))
+    for each in disabled_repo_name:
         li = []
         li.append(each.split('\n')[0].strip())
         disbaled_repos.append(li)
+    disabled_repo_dict = dict(zip(disabled_repo_id, disbaled_repos))
     repo_info = {}
-    repo_info["enabled"] = enabled_repos
-    repo_info["disabled"] = disbaled_repos
+    repo_info["enabled"] = enabled_repo_dict
+    repo_info["disabled"] = disabled_repo_dict
     return repo_info
 
 
@@ -190,3 +202,23 @@ def vm_status(compute_ip, vm_name, vm_ip):
     else:
         status["status"] = "shutdown"
     return status
+
+
+def change_repo(compute_ip, vm_ip, repo_id, repo_flag, vm_name):
+    compute_ip = compute_ip.replace('-', '.')
+    vm_ip = vm_ip.replace('-', '.')
+    vm_root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
+    if repo_flag == "enable":
+        cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf config-manager --set-enabled " + repo_id + "'"
+        res = os.system(cmd)
+        if not res:
+            return "success"
+        else:
+            return "failed"
+    elif repo_flag == "disable":
+        cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf config-manager --set-disabled " + repo_id + "'"
+        res = os.system(cmd)
+        if not res:
+            return "success"
+        else:
+            return "failed"
