@@ -31,12 +31,12 @@ class Operating_system_form(forms.Form):
 
 
 class newContainerform(forms.Form):
-    select_compute = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Compute", max_length=20)
-    image_name = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Image Name", max_length=20)
-    tag_name = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Tag", max_length=20, required=False)
-    container_name = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}), label="Container Name", max_length=20, required=False)
-    host_port = forms.IntegerField(widget=forms.TextInput(attrs={'size': '12'}), label="Ports", required=False)
-    cont_port = forms.IntegerField(widget=forms.TextInput(attrs={'size': '12'}), required=False)
+    select_compute = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Compute", max_length=20)
+    image_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Image Name", max_length=20)
+    tag_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Tag", max_length=20)
+    container_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Container Name", max_length=20)
+    host_port = forms.IntegerField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Ports", required=False)
+    cont_port = forms.IntegerField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
 
 
 class Local_Images(forms.Form):
@@ -45,8 +45,7 @@ class Local_Images(forms.Form):
 
 class Product_form(forms.Form):
     product_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Name", max_length=20)
-    product_location = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="URL",
-                                       max_length=100)
+    product_location = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="URL", max_length=100)
 
 
 class View_form(forms.Form):
