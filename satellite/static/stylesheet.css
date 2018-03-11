@@ -1,7 +1,34 @@
 @import url(https://fonts.googleapis.com/css?family=Dosis:300,400);
 
+
+#navigation{
+/*background-image:url("/static/images/background1.jpg");
+background-size: cover;
+}
+
+div {*/
+
+ /* top: calc(50% - 100px);
+  left: calc(50% - 200px);
+  width: 400px;
+  height: 200px;-*/
+  background-color: white;
+  border: solid 1px #fff;
+  box-shadow:
+    inset 60px 0 58px #1A62FF,
+    inset -60px 0 58px #1A62FF;
+}
+
+#title_bar{
+font-size:25px;
+height:50px;
+margin-top:-20px;
+
+padding:5px;
+border-bottom:1px solid grey;
+}
 .title-bg{
-padding:15px;
+font-family:Palatino bold;
 }
 .well {
 border:1px solid blue;
@@ -29,17 +56,18 @@ font-size : 16px;
 
   opacity: 0;
   z-index=-1;
-
-	-webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
-	transition: opacity 0.35s, transform 0.35s;
+background-color:#165d98;
+	-webkit-transition: opacity 0.05s, -webkit-transform 0.05s;
+	transition: opacity 0.05s, transform 0.05s;
 	-webkit-transform: scale(0,1);
 	transform: scale(0,1);
-	color:#337ab7;
+	color:#165d98;
 }
 
 .effect-underline:hover:after {
-  opacity: 1;
-	-webkit-transform: scale(1);
+  background-color:#165d98;
+  opacity:0.4;
+	-webkit-transform: scale(0.1);
 	transform: scale(1);
 }
 
