@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Dosis:300,400);
 
 
-#navigation{
+/*#navigation{
 /*background-image:url("/static/images/background1.jpg");
 background-size: cover;
 }
@@ -11,12 +11,15 @@ div {*/
  /* top: calc(50% - 100px);
   left: calc(50% - 200px);
   width: 400px;
-  height: 200px;-*/
+  height: 200px;
   background-color: white;
   border: solid 1px #fff;
   box-shadow:
     inset 60px 0 58px #1A62FF,
     inset -60px 0 58px #1A62FF;
+}*/
+#navigation{
+background-color:black;
 }
 
 #title_bar{
@@ -56,17 +59,17 @@ font-size : 16px;
 
   opacity: 0;
   z-index=-1;
-background-color:#165d98;
+background-color:#d9d9d9;
 	-webkit-transition: opacity 0.05s, -webkit-transform 0.05s;
 	transition: opacity 0.05s, transform 0.05s;
 	-webkit-transform: scale(0,1);
 	transform: scale(0,1);
-	color:#165d98;
+	color:#d9d9d9;
 }
 
 .effect-underline:hover:after {
-  background-color:#165d98;
-  opacity:0.4;
+  background-color:#d9d9d9;
+  opacity:0.2;
 	-webkit-transform: scale(0.1);
 	transform: scale(1);
 }
