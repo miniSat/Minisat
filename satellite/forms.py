@@ -33,8 +33,8 @@ class Operating_system_form(forms.Form):
 class newContainerform(forms.Form):
     select_compute = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Compute", max_length=20)
     image_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Image Name", max_length=20)
-    tag_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Tag", max_length=20)
-    container_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Container Name", max_length=20)
+    tag_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Tag", max_length=20, required=False)
+    container_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Container Name", max_length=20, required=False)
     host_port = forms.IntegerField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Ports", required=False)
     cont_port = forms.IntegerField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
 

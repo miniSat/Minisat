@@ -1,6 +1,6 @@
 {% extends 'form_template.html' %}
 {% block form_content %}
-<div class="myBox1">
+<div style="height:100%">
     {% if message == True %}
     <div class="alert alert-success alert-dismissable fade in">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -56,7 +56,12 @@
         </div>
         {% endfor %}
         </div>
-        <input type="submit" class="btn btn-primary" value="Add">
+         <div class="form-group">
+             <div class="col-sm-1"></div>
+             <div class="col-sm-8">
+                 <input type="submit" class="btn btn-primary" value="Add" style="width:100px;">
+             </div>
+         </div>
         {% else %}
         <h2>No Products Found</h2>
         {% endif %}
@@ -66,7 +71,7 @@
 {% endblock %}
 
 {% block exist_content %}
-<div class="myBox1">
+
 {% if view_dict %}
 
     <div class="list-group list-view-pf list-view-pf-view">
@@ -152,5 +157,5 @@
 {% else %}
 <h2>No Views Added</h2>
 {% endif %}
-    </div>
+
 {% endblock %}
