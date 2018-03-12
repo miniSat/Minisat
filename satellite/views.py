@@ -337,8 +337,11 @@ def post_new_container(request):
             cont_port=form.data["cont_port"]
         )
         stat = ''
-        if form.data["container_stat"] == "on":
-            stat = "on"
+        try:
+            if form.data["container_stat"] == "on":
+                stat = "on"
+        except:
+            stat = ""
 
         run_cont(new_cont, stat)
     return HttpResponseRedirect('/')
