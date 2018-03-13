@@ -34,9 +34,7 @@
         {% for product in products %}
         <div class="list-group-item">
             <div class="list-group-item-header">
-                <div class="list-view-pf-expand">
-                    <span class="fa fa-angle-right"></span>
-                </div>
+
             <div class="list-view-pf-checkbox">
                 <input type="checkbox" name="products[]" value="{{ product.product_name }}">
             </div>
@@ -88,7 +86,7 @@
             <div class="list-view-pf-main-info">
                 <div class="list-view-pf-body">
                     <div class="list-view-pf-description">
-                        <div class="list-group-item-heading">
+                        <div class="list-group-item-heading list-view-pf-expand">
                             {{key}}
                         </div>
                         <div class="list-group-item-text">
@@ -103,10 +101,10 @@
                     <span class="pficon pficon-close"></span>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-3 col-sm-3">
                     </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-9 col-sm-9">
                     <dl class="dl-horizontal">
                         {% for each in value %}
                         <dt>{{each.0}}</dt>

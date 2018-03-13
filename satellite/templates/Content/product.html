@@ -45,9 +45,6 @@
         {% for obj in product_obj %}
         <div class="list-group-item">
             <div class="list-group-item-header">
-                <div class="list-view-pf-expand">
-                    <span class="fa fa-angle-right"></span>
-                </div>
                 <div class="list-view-pf-checkbox" style="height:22px"></div>
                 <div class="list-view-pf-actions">
                     <form action="delete" method="get">
@@ -57,7 +54,7 @@
                 <div class="list-view-pf-main-info">
                     <div class="list-view-pf-body">
                         <div class="list-view-pf-description">
-                            <div class="list-group-item-heading">
+                            <div class="list-group-item-heading list-view-pf-expand">
                                 {{ obj.product_name }}
                             </div>
                             <div class="list-group-item-text">

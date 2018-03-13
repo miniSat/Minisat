@@ -1,4 +1,18 @@
+
+
 $(document).ready(function(e){
+     $("#visible_host_group").click(function(){
+        $("#host_group_data").toggle();
+     });
+     $("#create").css('border-top','4px solid #FA5700');
+     $("#create").click(function(){
+        $(this).css('border-top','4px solid #FA5700');
+        $("#view").css('border-top','1px solid white' )
+        });
+     $("#view").click(function(){
+        $(this).css('border-top','4px solid #FA5700');
+        $("#create").css('border-top','1px solid white');
+        });
      $(document).on('submit','#compute_form',function(e){
      var ip_addr=$('#id_ip_address').val();
      result = validateIP(ip_addr);

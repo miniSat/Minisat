@@ -4,22 +4,24 @@
 {% endblock %}
 {% block content %}
 
-<div class="myBox1">
-<div class="bg-primary" style="height:50px;margin-top:-25px">
-    <h3 class="title-bg">
-        <center>{{ title_name }}</center>
-    </h3>
+
+<div  style="font-size:25px; margin-top:-20px;background-color:#f0f3f4;margin-bottom:2px;">
+    <div class="col-md-1"></div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item active">
+            <a class="title-bg nav-link active" style="outline: none;font-size:25px;margin-top:20px;">{{ title_name }}</a>
+        </li>
+    </ul>
 </div>
 <br>
 <div class="myBox1">
     <div class="col-md-1 col-lg-1 "></div>
-    <div class="col-md-10 col-lg-10 w3-container w3-card-4"
-         style="background: rgba(242, 243, 243, 0.1);padding:80px 0px;">
+    <div class="col-md-10 col-lg-10 w3-container w3-card-4" style="background: rgba(242, 243, 243, 0.1);padding:80px 0px; margin-bottom:50px;">
         <div class="col-md-1 col-lg-1"></div>
         <div class="col-md-10 col-lg-10  ">
             <ul class="nav nav-tabs text-size" role="tablist">
                 <li class="nav-item active">
-                    <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"><b>Create New</b></a>
+                    <a class="nav-link active" id="create" href="#profile" role="tab" data-toggle="tab"><b>Create New</b></a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -39,8 +41,8 @@
 
                             <div class="form-group">
                                 <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{form.select_compute.label_tag}}</label>
-                                <div class="col-sm-8">
-                                    <select name="select_compute" id="select_compute">
+                                <div class="col-sm-4">
+                                    <select class="form-control" name="select_compute" id="select_compute" style="background-color:#f1f1f4">
                                         {% for key,value in compute_name %}
                                         <option value="{{key}}">{{ value }}</option>
                                         {% endfor %}
@@ -51,8 +53,8 @@
 
                             <div class="form-group">
                                 <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{form.select_vm_profile.label_tag }}</label>
-                                <div class="col-sm-8">
-                                    <select name="select_vm_profile" id="select_profile">
+                                <div class="col-sm-4">
+                                    <select class="form-control" name="select_vm_profile" id="select_profile" style="background-color:#f1f1f4">
                                         {% for key,value in profile_name %}
                                         <option value="{{key}}">{{ value }}</option>
                                         {% endfor %}
@@ -62,8 +64,8 @@
 
                             <div class="form-group">
                                 <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{form.vm_os.label_tag }}</label>
-                                <div class="col-sm-8">
-                                    <select name="vm_os" id="select_os">
+                                <div class="col-sm-4">
+                                    <select class="form-control" name="vm_os" id="select_os" style="background-color:#f1f1f4">
                                         {% for key,value in os_name %}
                                         <option value="{{key}}">{{ value }}</option>
                                         {% endfor %}
@@ -72,25 +74,12 @@
                             </div>
 
 
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{form.select_host_group.label_tag}}</label>
-                                <div class="col-sm-8">
-                                    <select name="select_host_group" id="select_host_group"
-                                            onchange="host_group_change()">
-                                        <option value="none">Choose Host Group</option>
-                                        {% for each in host_group %}
-                                        <option value="{{each}}">{{each}}</option>
-                                        {% endfor %}
-                                    </select>
-
-                                </div>
-                            </div>
 
 
                             <div class="form-group">
                                 <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{ form.activation_name.label_tag }}</label>
-                                <div class="col-sm-8">
-                                    <select name="activation_name" id="select_activation">
+                                <div class="col-sm-4">
+                                    <select class="  form-control " name="activation_name" id="select_activation" style="background-color:#f1f1f4">
                                     {% for key,value in activation_name %}
                                     <option value="{{key}}">{{ value }}</option>
                                     {% endfor %}
@@ -98,7 +87,27 @@
 
                                 </div>
                             </div>
-                                <div class="form-group">
+                            <div class="form-group"  id="host_group_data" hidden>
+                                <label class="col-sm-3 control-label" for="i2" style="font-size:13px;">{{form.select_host_group.label_tag}}</label>
+                                <div class="col-sm-4">
+                                    <select class=" form-control" name="select_host_group" id="select_host_group" onchange="host_group_change()">
+                                        <option value="none">Choose Host Group</option>
+                                        {% for each in host_group %}
+                                        <option value="{{each}}">{{each}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                            <div class="col-sm-3 control-label "></div>
+                             <div class="col-sm-8">
+                                 <p id="visible_host_group" style="color:blue;">If you already have Host Group Click Here</p>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{ form.password.label_tag }}</label>
                                 <div class="col-sm-8">
                                     {{ form.password }}
@@ -125,6 +134,8 @@
         </div>
     </div>
 </div>
-<div class="col-md-2 col-lg-2"></div>
 
+<script>
+    console.log();
+</script>
     {% endblock %}
