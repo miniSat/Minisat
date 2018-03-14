@@ -40,7 +40,7 @@
 {% endblock %}
 
 {% block exist_content %}
-<div class="myBox">
+<div class="myBox1">
 {% if profile_obj == False %}
 <h2>No Profiles Found</h2>
 {% else %}
@@ -49,7 +49,7 @@
     <div class="row row-cards-pf">
         {% for obj in profile_obj %}
         <div class="col-xs-12 col-sm-6 col-md-4" >
-            <div class="card-pf card-pf-view card-pf-view-select card-pf-view-multi-select" >
+            <div class="card-pf card-pf-view card-pf-view-select card-pf-view-multi-select" style="border-top:4px solid #4578fe;background-color:#f1f2f4;font-size:14px;" >
                 <div class="card-pf-body">
                     <h2 class="card-pf-title text-center">
                         <b>{{ obj.profile_name }}</b>

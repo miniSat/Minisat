@@ -1,23 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div style="font-size:25px;height:50px; margin-top:-10px;">
-    <h3 class="title-bg"><center>{{ title_name }}</center></h3>
-    <hr>
+<div style="margin-top:-20px;background-color:#edf6f7;margin-bottom:2px;">
+    <div class="col-md-1"></div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item active">
+            <a class="title-bg nav-link active" style="outline: none;font-size:20px;margin-top:20px;">{{ title_name }}</a>
+        </li>
+    </ul>
 </div>
 <br>
+
 <div class="col-md-1 col-lg-1 "></div>
-<div class="col-md-10 col-lg-10 w3-container w3-card-4" style="background: rgba(242, 243, 243, 0.1);padding:80px 0px;">
+<div class="col-md-10 col-lg-10 w3-container w3-card-4" style="background: rgba(242, 243, 243, 0.1);padding:80px 0px;margin-bottom:30px;">
     <div class="col-md-1 col-lg-1"></div>
 <div class="col-md-10 col-lg-10  ">
 
 
     <ul class="nav nav-tabs text-size" role="tablist" >
         <li class="nav-item active" >
-            <a class="nav-link active" href="#profile" role="tab" data-toggle="tab" style="background: none;outline: none;"><b>Create New</b></a>
+            <a class="nav-link active "  id="create" href="#profile" role="tab" data-toggle="tab" style="outline: none;"><b>Create New</b></a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link " href="#buzz" role="tab" data-toggle="tab" style="background: none;outline: none;"><b>View Existing</b></a>
+        <li class="nav-item" >
+            <a class="nav-link" href="#buzz" id="view"  role="tab" data-toggle="tab" style="outline: none;" ><b>View Existing</b></a>
         </li>
     </ul>
     <div class="col-md-1 col-lg-1"></div>

@@ -19,7 +19,7 @@
         <strong>{{ message }}</strong>
     </div>
     {% endif %}
-    <form method="post" action="post_activation_view" autocomplete="off">
+    <form method="post" class="form-horizontal" action="post_activation_view" autocomplete="off">
         {% csrf_token %}
         <div class="form-group">
             <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{ form.activation_name.label_tag }}</label>
@@ -103,9 +103,6 @@
     {% for act_key,act_value in act_dict.items %}
     <div class="list-group-item">
         <div class="list-group-item-header">
-            <div class="list-view-pf-expand">
-                <span class="fa fa-angle-right"></span>
-            </div>
 
             <div class="list-view-pf-actions">
                 <form action="delete" method="get">
@@ -115,6 +112,10 @@
             <div class="list-view-pf-main-info">
                 <div class="list-view-pf-body">
                     <div class="list-view-pf-description">
+                        <div class="list-view-pf-expand">
+                            <span class="fa fa-angle-right"></span>
+                        </div>
+
                         <div class="list-view-pf list-group-item-heading">
                             {{act_key}}
                         </div>
@@ -141,8 +142,9 @@
                 <span class="pficon pficon-close"></span>
             </div>
             <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-8">
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <dl class="dl-horizontal">
                     {% for view_key,view_values in act_value.items %}
                     <p><strong>{{view_key}}</strong></p>
                     {% for product_name,product_values in view_values.items %}
@@ -156,6 +158,8 @@
                     {% endif %}
 
                     {% endfor %}
+                    </dl>
+
                 </div>
             </div>
         </div>

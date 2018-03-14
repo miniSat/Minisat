@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div style="font-size:25px;height:50px; margin-top:-10px;">
-    <h3 class="title-bg"><center>{{ title_name }}</center></h3>
-    <hr>
+
+<div  style="margin-top:-20px;background-color:#f0f3f4;margin-bottom:2px;">
+    <div class="col-md-1"></div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item active">
+            <a class="title-bg nav-link active" style="outline: none;font-size:20px;margin-top:20px;">{{ title_name }}</a>
+        </li>
+    </ul>
 </div>
 <br>
 <div class="myBox1">
@@ -13,7 +18,7 @@
 <div class="col-md-10 col-lg-10  ">
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item active">
-            <a class="nav-link active" href="#compute_resource" role="tab" data-toggle="tab"><strong>Run Container</strong></a>
+            <a class="nav-link active" id="create" href="#compute_resource" role="tab" data-toggle="tab"><strong>Run Container</strong></a>
         </li>
     </ul>
     <form class="form-horizontal "  action="/post_new_container" method="post">
@@ -53,7 +58,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label " for="i2" style="font-size:13px;"> {{ form.select_compute.label_tag }}</label>
                     <div class="col-sm-8">
-                        <select name="select_compute">
+                        <select class="selectpicker" name="select_compute">
                             {% for key,value in compute_name %}
                             <option value="{{key}}">{{ value }}</option>
                             {% endfor %}

@@ -92,7 +92,7 @@ def compute_resource(request):
     for each_ip in compute_ips:
         final_compute_details[each_ip] = cmp_det.get_compute_details(each_ip)
     return render(request, 'infrastructure/compute_resource.html',
-                  {'title_name': 'Create New Compute Resource',
+                  {'title_name': 'Compute Resource',
                    'form': form,
                    'compute_obj': compute_resource_list,
                    'message': False,
@@ -135,7 +135,7 @@ def post_data(request):
         message = "Invalid Field Data"
 
     return render(request, 'infrastructure/compute_resource.html',
-                  {'title_name': 'Create New Compute Resource',
+                  {'title_name': 'Compute Resource',
                    'form': form,
                    'compute_obj': compute_resource_list,
                    'message': message})
@@ -213,7 +213,7 @@ def create_host(request):
 
     return render(request,
                   'host/create_host.html',
-                  {'title_name': 'Create A New Host',
+                  {'title_name': 'New Host',
                    'form': form,
                    'os_name': os_name,
                    'compute_name': compute_name,
@@ -228,7 +228,7 @@ def operating_system(request):
     operating_system_list = Operating_system_model.objects.all()
     return render(request,
                   'host/operating_system.html',
-                  {'title_name': 'Add Operating System',
+                  {'title_name': 'Operating System',
                    'form': form,
                    'os_obj': operating_system_list,
                    'message': False})
@@ -262,7 +262,7 @@ def post_operating_system(request):
         message = "Invalid Values"
     return render(request,
                   'host/operating_system.html',
-                  {'title_name': 'Add Operating System',
+                  {'title_name': 'Operating System',
                    'form': form,
                    'os_obj': operating_system_list,
                    'message': message})
