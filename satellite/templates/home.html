@@ -19,7 +19,8 @@
         <li class="nav-item">
             <a class="nav-link " href="#buzz" role="tab" data-toggle="tab"><b>Docker Containers</b></a>
         </li>
-        <input type="button" class="btn btn-primary" style="float:right" id="btn-refresh" value="Refresh">
+        <button class="btn btn-success" style="float:right" id="btn-refresh" ><span class="fa fa-refresh"></span>&nbsp;Refresh</button>
+        <span class="pficon pficon-paused"></span>
     </ul>
     
     <div class="tab-content">
@@ -33,7 +34,7 @@
                     <th>Name</th>
                     <th>Status</th>
                     <th>Compute Name ( IP Address )</th>
-                    <th>Action</th>
+                    <th><span class="glyphicon glyphicon-cog"></span>&nbsp;Actions</th>
                 </tr>
                 </thead>
                 <tbody id="vm_table">
@@ -50,7 +51,7 @@
                     <th>Port</th>
                     <th>Compute Name ( IP Address )</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th><span class="glyphicon glyphicon-cog"></span>&nbsp;Action</th>
                 </tr>
                 </thead>
                 <tbody id="docker_table">
