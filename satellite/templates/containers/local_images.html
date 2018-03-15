@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 
-<div  style="margin-top:-20px;background-color:#f0f3f4;margin-bottom:2px;">
+<div  style="margin-top:-20px;background-color:#edf6f7;margin-bottom:2px;">
     <div class="col-md-1"></div>
     <ul class="nav nav-tabs">
         <li class="nav-item active">
@@ -33,7 +33,7 @@
                     <form action="post_local_images" method="post">
                         {% csrf_token %}
                         <strong>Images on :</strong>
-                        <select  class="form-control" name="select_compute" id="compute_name" onchange="return getDockerImages()" style="width:150px;">
+                        <select  class="selectpicker" name="select_compute" id="compute_name" onchange="return getDockerImages()" style="width:150px;">
                             {% for key,value in compute_name %}
                             {% if value == cpt_name %}
                             <option value="{{key}}" selected>{{ value }}</option>
