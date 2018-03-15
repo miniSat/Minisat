@@ -495,6 +495,12 @@ def delete(request):
         View_model.objects.filter(view_name=view_name).delete()
         Activation_model.objects.filter(select_view=view_name).delete()
         return HttpResponseRedirect('view')
+
+    elif request.GET.get('HostGroupDelete'):
+        host_group_name = request.GET.get('HostGroupDelete')
+        Host_group_model.objects.filter(host_group_name=host_group_name).delete()
+        return HttpResponseRedirect('host_group')
+
     return HttpResponseRedirect("/")
 
 
