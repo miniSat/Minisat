@@ -49,6 +49,7 @@ def virsh_delete_vm(vm_name, com_ip):
     cmd2 = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system undefine " + str(vm_name)
     os.system(cmd)
     delete_vm_flag = os.system(cmd2)
+    os.system("ssh root@" + com_ip + " rm -f /var/lib/libvirt/images/" + vm_name + ".qcow2")
     time.sleep(6)
     return delete_vm_flag
 
@@ -134,11 +135,13 @@ def get_status(compute_name, compute_ip, vm_name):
     try:
         root_passwd = Create_host_model.objects.filter(select_compute=compute_name, vm_name=vm_name).values_list()[0][6]
     except IndexError:
-        return "Unable to fetch data"
+        return "running"
     vm_ipaddress = vm_ip(vm_name, compute_ip).split("/")[0]
     cmd = "ssh root@" + compute_ip + " sshpass -p " + root_passwd + " ssh root@" + vm_ipaddress + " hostname"
+    ping = "ssh root@" + compute_ip + " ping -c 2 " + vm_ipaddress
+    ping_response = os.system(ping)
     response = os.system(cmd)
-    if response == 0:
+    if response == 0 or ping_response == 0:
         return "running"
     elif response == 65280:
         return "initializing"
@@ -149,7 +152,6 @@ def filter_repo(repo_info):
     repo_info = [x for x in repo_info if not x.startswith('repo')]
     repo_info = [x.split(None, 1) for x in repo_info]
     repo_info = [x for x in repo_info if x]
-    # repo_info = [each.pop(1) for each in repo_info]
     return repo_info
 
 
