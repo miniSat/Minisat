@@ -9,7 +9,7 @@ class Compute_resource_form(forms.Form):
 
 
 class Profile_form(forms.Form):
-    profile_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control",}), label="Name", max_length=10)
+    profile_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}), label="Profile Name", max_length=10)
     ram = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}), label="RAM(MB)", min_length=4, max_length=6, validators=[RegexValidator(r'^\d{1,10}$')])
     cpus = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}), label="CPUs", max_length=1, validators=[RegexValidator(r'^\d{1,10}$')])
     disk_size = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}), label="Disk Size(GB)", max_length=5, validators=[RegexValidator(r'^\d{1,10}$')])
