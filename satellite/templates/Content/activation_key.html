@@ -121,7 +121,7 @@
                         </div>
                         <div class="list-group-item-text">
                             {% for view_key,view_values in act_value.items %}
-                            <strong>{{view_key}}</strong>
+                            <h6>{{view_key}}</h6>
                             <div style="margin-left:20px">
                                 {% for product_name,product_values in view_values.items %}
                                 {% if forloop.last %}
@@ -142,15 +142,25 @@
                 <span class="pficon pficon-close"></span>
             </div>
             <div class="row">
-                <div class="col-md-6"></div>
-                <div class="col-md-6">
-                    <dl class="dl-horizontal">
-                    {% for view_key,view_values in act_value.items %}
-                    <p><strong>{{view_key}}</strong></p>
-                    {% for product_name,product_values in view_values.items %}
+                <div class="col-md-3 col-sm-3">
+                </div>
+            </div>
+            <div class="col-md-9 col-sm-9">
+                <div class="col-md-1"></div>
+                <div class="col-md-8">
+                <table>
+                <tbody>
+                {% for view_key,view_values in act_value.items %}
+                    <tr>
+                        <td>{{view_key}}</td>
 
-                    <dt>{{product_name}}</dt>
-                    <dd style="width:100%;">{{product_values}}</dd>
+                    </tr>
+                    {% for product_name,product_values in view_values.items %}
+                    <tr>
+                        <td>{{product_name}}</td>
+
+                        <td>{{product_values}}</td>
+                    </tr>
                     {% endfor %}
 
                     {% if not forloop.last %}
@@ -158,10 +168,11 @@
                     {% endif %}
 
                     {% endfor %}
-                    </dl>
-
+                </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
         </div>
         <div class="col-md-1">
         </div>

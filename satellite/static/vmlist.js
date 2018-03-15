@@ -246,7 +246,6 @@ function ajax_containers() {
                 }
             });
             $("#cont-spinner").hide();
-            $("#btn-refresh").prop("disabled", false);
         }
     });
 }
