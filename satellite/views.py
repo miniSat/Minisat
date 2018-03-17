@@ -451,7 +451,7 @@ def post_product(request):
             product_location=form.cleaned_data["product_location"]
         )
         check_product_name = Product_model.objects.filter(product_name=product.product_name).exists()
-        val_url = validators.url([product.product_location])
+        val_url = validators.url(product.product_location)
         if val_url is True:
             if not check_product_name:
                 product.save()
