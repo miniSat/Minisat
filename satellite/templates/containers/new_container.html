@@ -1,44 +1,86 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="bg-primary" style="height:50px;margin-top:-25px">
-    <h3 class="title-bg"><center>{{ title_name }}</center></h3>
-</div>
-<br>
-<div class="col-md-2 col-lg-2"></div>
-<div class="col-md-8 col-lg-8 well well-lg well-primary" style="border:1px solid blue" >
-    <ul class="nav nav-tabs" role="tablist">
+
+
+<div  style="margin-top:-20px;background-color:#edf6f7;margin-bottom:2px;">
+    <div class="col-md-1"></div>
+    <ul class="nav nav-tabs">
         <li class="nav-item active">
-            <a class="nav-link active" href="#compute_resource" role="tab" data-toggle="tab"><strong>Run Container</strong></a>
+            <a class="title-bg nav-link active" style="outline: none;font-size:20px;margin-top:20px;">{{ title_name }}</a>
         </li>
     </ul>
-    <form action="post_new_container" method="post">
+</div>
+<br>
+<div class="myBox1">
+<div class="col-md-1 col-lg-1 "></div>
+<div class="col-md-10 col-lg-10 w3-container w3-card-4" style="background: rgba(242, 243, 243, 0.1);padding:80px 0px;">
+    <div class="col-md-1 col-lg-1"></div>
+<div class="col-md-10 col-lg-10  ">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item active">
+            <a class="nav-link active" id="create" href="#compute_resource" role="tab" data-toggle="tab"><strong>Run Container</strong></a>
+        </li>
+    </ul>
+    <form class="form-horizontal "  action="/post_new_container" method="post">
         {% csrf_token %}
         <div class="tab-content">
             <br>
             <div role="tabpanel" class="tab-pane fade in active" id="compute_resource">
-                {{ form.image_name.label_tag }}<br>
-                {{ form.image_name }}
-                <br><br>
-                {{ form.tag_name.label_tag }}<br>
-                {{ form.tag_name }}
-                <br><br>
-                {{ form.container_name.label_tag }}<br>
-                {{ form.container_name }}
-                <br><br>
-                {{ form.host_port.label_tag }}<br>
-                {{ form.host_port }}<strong> : </strong>{{ form.cont_port }}<br>
-                <br>
-                {{ form.select_compute.label_tag }}<br>
-                <select name="select_compute">
-                {% for key,value in  compute_name %}
-                    <option value="{{key}}">{{ value }}</option>
-                {% endfor %}
-                </select>
-                <br><br>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label " for="i2" style="font-size:13px;"> {{ form.image_name.label_tag }}</label>
+                    <div class="col-sm-8">
+                        {{ form.image_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{ form.tag_name.label_tag }}</label>
+                    <div class="col-sm-8">
+                        {{ form.tag_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{ form.container_name.label_tag }}</label>
+                    <div class="col-sm-8">
+                        {{ form.container_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{ form.host_port.label_tag }}</label>
+                    <div class="col-sm-8">
+                        <div class="col-sm-4">
+                            {{ form.host_port }}</div>
+                        <div class="col-sm-1"><b>:</b></div>
+                        <div class="col-sm-4">
+                            {{ form.cont_port }}</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label " for="i2" style="font-size:13px;"> {{ form.select_compute.label_tag }}</label>
+                    <div class="col-sm-8">
+                        <select class="selectpicker" name="select_compute">
+                            {% for key,value in compute_name %}
+                            <option value="{{key}}">{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">Run Container in background</label>
+                    <div class="col-sm-8">
+                         <input type="checkbox" id="id_container_stat" name="container_stat">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2"></div>
+                    <button type="submit" class="btn btn-primary " style="width:100px;">Run</button>
+                </div>
             </div>
         </div>
     </form>
 </div>
-<div class="col-md-2 col-lg-2"></div>
+ <div class="col-md-1 col-lg-1"></div>
+</div>
+<div class="col-md-1 col-lg-1"></div>
+</div>
 {% endblock %}

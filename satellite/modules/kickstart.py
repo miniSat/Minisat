@@ -2,10 +2,9 @@
 kickgen function create a kickstart and save it in /var/www/html folder
 httpd.service should be running
 """
-import os
 
 
-def kick_gen(passwd, location):
+def kick_gen(passwd, location, repo):
     with open("/tmp/ks.cfg", "w+") as ks:
         ks.write("install \n"
                  "keyboard 'us' \n"
@@ -27,7 +26,10 @@ def kick_gen(passwd, location):
                  "%post \n"
                  "systemctl restart sshd \n"
                  "systemctl enable sshd \n"
-                 "%end "
                  )
-    os.system("scp /tmp/ks.cfg root@172.22.26.102:/var/www/html/")
-    return "http://172.22.26.102/ks.cfg"
+
+        for name, baseurl in repo.items():
+            ks.write("echo -e '[" + name + "] \\nname=" + name + " \\nbaseurl=" + baseurl + " \\ngpgcheck=0 \\nenabled=1' >/etc/yum.repos.d/" + name + ".repo \n")
+        ks.write("%end \n")
+
+    return "/tmp/ks.cfg"

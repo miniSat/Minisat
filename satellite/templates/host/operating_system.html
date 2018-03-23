@@ -1,36 +1,80 @@
 {% extends 'form_template.html' %}
 {% block form_content %}
+<div class="myBox1" style="height:100%;">
+    {% if message == True %}
+    <div class="alert alert-success alert-dismissable fade in">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-ok"></span>
+        <strong>Operating System Added Successfully</strong>
+    </div>
+    {% elif message != False %}
+    <div class="alert alert-danger alert-dismissable fade in">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-error-circle-o"></span>
+        <strong>{{ message }}</strong>
+    </div>
+    {% endif %}
 
-    <form action="post_operating_system" method="post" autocomplete="off">
-      {% csrf_token %}
-      {% for field in form %}
-        <div class="form-group">
-          {{ field.label_tag }}<br>
-          {{ field }}
+    <form  class="form-horizontal" action="post_operating_system" method="post" autocomplete="off">
+        {% csrf_token %}
+        {% for field in form %}
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{ field.label_tag }}</label>
+                <div class="col-sm-8">
+                    {{ field }}
+                </div>
+            </div>
+        {% endfor %}
+        <div class="form-group col-sm-4 control-label">
+            <button id="add_os" type="submit" class="btn btn-primary" style="width:100px">Add</button>
         </div>
-      {% endfor %}
-      <button type="submit" class="btn btn-primary">Add</button>
     </form>
+</div>
 
 {% endblock %}
 
 {% block exist_content %}
-<table class="table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Location</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for obj in os_obj %}
-    <tr>
-      <td>{{ obj.os_name }}</td>
-      <td>{{ obj.os_location }}</td>
-      <td><form action="delete" method="GET"><button class = "btn btn-default" name="OSDelete" value="{{ obj.id }}">Delete</button> </form></td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+
+
+{% if os_obj %}
+    <div class="list-group list-view-pf list-view-pf-view" style="background-color:#A9A9A9">
+        {% for obj in os_obj %}
+        <div class="list-group-item">
+            <div class="list-group-item-header" >
+
+            <div class="list-view-pf-checkbox" style="height:22px"></div>
+            <div class="list-view-pf-actions">
+                <form action="delete" method="get">
+
+                    <button class="btn btn-danger" name="OSDelete" value="{{ obj.id }}">Delete</button>
+
+                </form>
+            </div>
+            <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body" >
+                    <div class="list-view-pf-description" >
+                        <div class="list-group-item-heading">
+                            {{ obj.os_name }}
+                        </div>
+                        <div class="list-group-item-text">
+                            {{ obj.os_location }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+
+<h2>No Operating System Added</h2>
+{% endif %}
+
+
 {% endblock %}

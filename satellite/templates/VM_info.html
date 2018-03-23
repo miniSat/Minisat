@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+
+{% block vmpackages %}
+<script src="/static/vm_packages.js"></script>
+{% endblock %}
+
 {% block content %}
-
-<script src="components/c3/c3.min.js"></script>
-<script src="components/d3/d3.min.js"></script>
-
 <body class="cards-pf">
 <div class="container-fluid container-cards-pf">
     <div class="row row-cards-pf">
@@ -11,55 +12,86 @@
             <div class="card-pf card-pf-utilization">
                 <div class="card-pf-heading">
 
-                    <h2 class="card-pf-title">
-                        {{ details.Name }}
-                    </h2>
+                    <h2 id="head_vm_name" class="card-pf-title"></h2>
                     <div class="btn-group card-pf-title" style="float:right;top:-60px;">
-                        <!--<button class="btn btn-success">Start</button>-->
-                        <!--<button class="btn btn-warning">Pause</button>-->
-                        <!--<button class="btn btn-danger">Stop</button>-->
                     </div>
+                </div>
+
+                <div style="float:right;margin-right:175px;">
+                    <canvas height="250px" id="doughnutChart"></canvas>
 
                 </div>
+                <div id="vm-info-spinner" class="progress-description">
+                    <div class="spinner spinner-xs spinner-inline"></div>
+                    <strong>Gathering Facts :</strong> Please wait..
+                </div>
                 <div class="card-pf-body" id="vm_info_font">
-                    {% for key,value in details.items %}
-                    <label > {{ key }} : {{ value }} </label><br>
-                    {% endfor %}
-                    <br>
-                    <button class="btn btn-default">Installed Packages</button>
+                    <label id="vm_id" hidden>{{vm_id}}</label><br>
+                    <label id="compute_ip" hidden>{{compute_ip}}</label>
                 </div>
 
             </div>
         </div>
-        <div class="col-xs-12">
+        <div id="card-vm-repos" class="col-xs-12 " hidden>
             <div class="card-pf card-pf-utilization">
                 <div class="card-pf-heading">
                     <h2 class="card-pf-title">
-                        Packages
+                        Added Repositories
                     </h2>
+                    <div id="vm-repo-spinner" class="progress-description">
+
+                        <div class="spinner spinner-xs spinner-inline"></div>
+                        <strong>Fetching Repositories:</strong> Please wait..
+                    </div>
                 </div>
-                <div class="card-pf-body" id="vm_packages">
-                    <table class="table table-striped table-bordered table-hover">
+                <div class="card-pf-body vm_pack " id="vm_packages">
+                    <table class="table table-striped table-bordered table-hover" id="vm_repos">
                         <thead>
                         <tr>
-                            <th>Package Name</th>
+                            <th>Repository List</th>
+                            <th>Status</th>
+                            <th>Packages</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
-                        <tbody id="vm_packages_table">
-                        {% for pack_name in packages %}
-                        <tr>
-                            <td> {{ pack_name }} </td>
-                        </tr>
-                        {% endfor %}
+                        <tbody id="vm_repo_table">
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    </div><!-- /row -->
-</div><!-- /container -->
-</body>
 
+        <div id="card-vm-packages" class="col-xs-12 " hidden>
+            <div class="card-pf card-pf-utilization">
+                <div class="card-pf-heading">
+                    <h2 class="card-pf-title">
+                        Packages
+                    </h2>
+                    <div id="vm-packages-spinner" class="progress-description">
+
+                        <div class="spinner spinner-xs spinner-inline"></div>
+                        <strong>Fetching Packages: </strong>Please wait..
+                    </div>
+                </div>
+                <div class="card-pf-body vm_pack " id="vm_packages">
+                    <table class="table table-striped table-bordered table-hover" id="myPackages">
+                        <thead>
+                        <tr>
+                            <th>Package Name
+                                <input style="float:right" type="text" id="myInput" onkeyup="myFunction()"
+                                       placeholder="Search for packages...">
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody id="vm_packages_table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
 
 
 {% endblock %}

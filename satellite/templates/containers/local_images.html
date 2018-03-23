@@ -1,56 +1,72 @@
 {% extends 'base.html' %}
 {% block extrascript %}
+
 <script type="text/javascript" src="/static/dockerlist.js"></script>
 {% endblock %}
 {% block content %}
 
-<div class="bg-primary" style="height:50px;margin-top:-25px">
-    <h3 class="title-bg"><center>{{ title_name }}</center></h3>
-</div>
-<br>
-<div class="col-md-2 col-lg-2"></div>
-<div class="col-md-8 col-lg-8 well well-lg well-primary" style="border:1px solid blue" >
-    <ul class="nav nav-tabs text-size" role="tablist">
+<div  style="margin-top:-20px;background-color:#edf6f7;margin-bottom:2px;">
+    <div class="col-md-1"></div>
+    <ul class="nav nav-tabs">
         <li class="nav-item active">
-            <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"><b>Local Images</b></a>
+            <a class="title-bg nav-link active" style="outline: none;font-size:20px;margin-top:20px;">{{ title_name }}</a>
         </li>
     </ul>
-    <div class="tab-content">
-        <br>
-        <div role="tabpanel" class="tab-pane fade in active" id="profile">
-          {% if compute_name == False %}
-            <h1>No Compute Resources Found</h1>
-          {% else %}
-          <form action="post_local_images" method="post">
-            {% csrf_token %}
-            <strong>Images on :</strong>
-            <select name="select_compute" id="compute_name" onchange="return getDockerImages()">
-                  {% for key,value in  compute_name %}
-                      {% if value == cpt_name %}
-                      <option value="{{key}}" selected>{{ value }}</option>
-                      {% else %}
-                      <option value="{{key}}">{{ value }}</option>
-                      {% endif %}
-                  {% endfor %}
-                  </select>
-            <table class="table" id="table_docker">
-              <thead>
-                <tr>
-                  <th>Image ID</th>
-                  <th>Repository</th>
-                  <th>Tag</th>
-                  <th>Created On</th>
-                  <th>Size(MiB)</th>
-                </tr>
-              </thead>
-              <tbody id="docker_images">
-    
-              </tbody>
-            </table>
-            </form>
-           {% endif %}
-        </div>
-    </div>
 </div>
-<div class="col-md-2 col-lg-2"></div>
+<br>
+
+    <div class="col-md-1 col-lg-1 "></div>
+    <div class="col-md-10 col-lg-10 w3-container w3-card-4" style="background: rgba(242, 243, 243, 0.1);padding:80px 0px;margin-bottom:50px;">
+        <div class="col-md-1 col-lg-1"></div>
+        <div class="col-md-10 col-lg-10  ">
+            <ul class="nav nav-tabs text-size" role="tablist">
+                <li class="nav-item active">
+                    <a class="nav-link active" id="create" href="#profile" role="tab" data-toggle="tab"><b>Local Images</b></a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <br>
+                <div role="tabpanel" class="tab-pane fade in active" id="profile">
+                    {% if compute_name == False %}
+                    <h1>No Compute Resources Found</h1>
+                    {% else %}
+                    <form action="post_local_images" method="post">
+                        {% csrf_token %}
+                        <strong>Images on :</strong>
+                        <select  class="selectpicker" name="select_compute" id="compute_name" onchange="return getDockerImages()" style="width:150px;">
+                            {% for key,value in compute_name %}
+                            {% if value == cpt_name %}
+                            <option value="{{key}}" selected>{{ value }}</option>
+                            {% else %}
+                            <option value="{{key}}">{{ value }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select><br><br>
+
+                            <table class="table table-bordered table-striped " id="table_docker">
+                                <thead>
+                                <tr>
+                                    <th>Image ID</th>
+                                    <th>Repository</th>
+                                    <th>Tag</th>
+                                    <th>Created On</th>
+                                    <th>Size(MiB)</th>
+                                </tr>
+                                </thead>
+
+                                <tbody id="docker_images">
+
+                                </tbody>
+                            </table>
+
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1 col-lg-1"></div>
+    </div>
+    <div class="col-md-1 col-lg-1"></div>
+
+
 {% endblock %}

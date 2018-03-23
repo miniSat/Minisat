@@ -1,21 +1,32 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="bg-primary" style="height:50px;margin-top:-20px;">
-    <h3 class="title-bg"><center>{{ title_name }}</center></h3>
-</div>
-<br>
-<div class="col-md-2 col-lg-2"></div>
-
-<div class="col-md-8 col-lg-8 well well-lg well-primary" style="border:1px solid blue" >
-    <ul class="nav nav-tabs text-size" role="tablist">
+<div style="margin-top:-20px;background-color:#edf6f7;margin-bottom:2px;">
+    <div class="col-md-1"></div>
+    <ul class="nav nav-tabs">
         <li class="nav-item active">
-            <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"><b>Create New</b></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link " href="#buzz" role="tab" data-toggle="tab"><b>View Existing</b></a>
+            <a class="title-bg nav-link active" style="outline: none;font-size:20px;margin-top:20px;">{{ title_name }}</a>
         </li>
     </ul>
+</div>
+<br>
+
+<div class="col-md-1 col-lg-1 "></div>
+<div class="col-md-10 col-lg-10 w3-container w3-card-4" style="background: rgba(242, 243, 243, 0.1);padding:80px 0px;margin-bottom:30px;">
+    <div class="col-md-1 col-lg-1"></div>
+<div class="col-md-10 col-lg-10  ">
+
+
+    <ul class="nav nav-tabs text-size" role="tablist" >
+        <li class="nav-item active" >
+            <a class="nav-link active "  id="create" href="#profile" role="tab" data-toggle="tab" style="outline: none;"><b>Create New</b></a>
+        </li>
+        <li class="nav-item" >
+            <a class="nav-link" href="#buzz" id="view"  role="tab" data-toggle="tab" style="outline: none;" ><b>View Existing</b></a>
+        </li>
+    </ul>
+    <div class="col-md-1 col-lg-1"></div>
+    <div class="col-md-10 col-lg-10">
     <div class="tab-content">
         <br>
         <div role="tabpanel" class="tab-pane fade in active" id="profile">
@@ -30,9 +41,9 @@
         </div>
     </div>
 </div>
-
-<div class="col-md-2 col-lg-2"></div>
-
-
+    <div class="col-md-1 col-lg-1"></div>
+</div>
+<div class="col-md-1 col-lg-1"></div>
+</div>
 
 {% endblock %}

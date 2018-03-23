@@ -1,9 +1,16 @@
 from django.views.generic import TemplateView  # NOQA
-import docker
 import os
 from django.shortcuts import render
-from satellite.modules.docker_manage import make_connection, get_docker_images, start_cont, stop_cont
+from satellite.modules.docker_manage import (
+    run_cont,
+    make_connection,
+    get_docker_images,
+    start_cont,
+    stop_cont,
+    destroy_cont
+)
 from django.http import JsonResponse
+import validators
 # We'll use render to display our templates.
 
 from .forms import (
@@ -15,7 +22,8 @@ from .forms import (
     newContainerform,
     Product_form,
     View_form,
-    Activation_form
+    Activation_form,
+    Host_group_form,
 )
 from django.http import (
     HttpResponseRedirect
@@ -30,12 +38,14 @@ from .models import (
     Product_model,
     View_model,
     Activation_model,
+    Host_group_model
 )
 from satellite.modules import vm_manage as vm
 from satellite.modules import (
     kickstart,
     ssh_connect as ssh,
-    dashboard_details as dash
+    dashboard_details as dash,
+    compute_details as cmp_det
 )
 
 
@@ -49,7 +59,7 @@ def home(request):
     :param request: .html page
     :return: home.html
     """
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'title_name': "Dashboard"})
 
 
 def get_virtual_mc(request):
@@ -77,43 +87,58 @@ def compute_resource(request):
         compute_resource_list = False
     # We create object of Compute_resource_model and fetch data and store in
     # compute_resource_list variable
+    compute_ips = Compute_resource_model.objects.all().values_list('ip_address', flat=True)
+    final_compute_details = {}
+    for each_ip in compute_ips:
+        final_compute_details[each_ip] = cmp_det.get_compute_details(each_ip)
     return render(request, 'infrastructure/compute_resource.html',
-                  {'title_name': 'Create New Compute Resource', 'form': form,
-                   'compute_obj': compute_resource_list})
+                  {'title_name': 'Compute Resource',
+                   'form': form,
+                   'compute_obj': compute_resource_list,
+                   'message': False,
+                   'compute_details': final_compute_details
+                   })
 
 
 def post_data(request):
-    message = {}
-    if (request.is_ajax() and request.method == 'POST'):
-        name = request.POST["name"]
-        ip_address = request.POST["ip_address"]
-        root_password = request.POST["root_password"]
-        check_name = Compute_resource_model.objects.all().filter(name=name).exists()
-        check_ip = Compute_resource_model.objects.filter(ip_address=ip_address).exists()
+    form = Compute_resource_form(request.POST)
+    compute_resource_list = Compute_resource_model.objects.all()
+    message = ""
+    if form.is_valid():
+        compute = Compute_resource_model(
+            name=form.cleaned_data["name"],
+            ip_address=form.cleaned_data["ip_address"],
+            root_password=form.cleaned_data["root_password"]
+        )
+        check_name = Compute_resource_model.objects.all().filter(name=compute.name).exists()
+        check_ip = Compute_resource_model.objects.filter(ip_address=compute.ip_address).exists()
         if not check_name:
             if not check_ip:
-                if vm.isOnline(ip_address):
-                    vm_result = ssh.make_connection(ip_address, root_password)
+                if vm.isOnline(compute.ip_address):
+                    vm_result = ssh.make_connection(compute.ip_address, compute.root_password)
                     if vm_result == "True":
-                        if make_connection(ip_address, name) == "True":
-                            compute_obj = Compute_resource_model(
-                                name=name,
-                                ip_address=ip_address,
-                                root_password=root_password
-                            )
-                            compute_obj.save()
+                        if make_connection(compute.ip_address, compute.name) == "True":
+                            compute.save()
+                            form = Compute_resource_form()
+                            message = True
                         else:
-                            message['docker-status'] = "Could not add compute for Docker"
+                            message = "Could not add compute for Docker"
                     else:
-                        message['vm-status'] = vm_result
+                        message = vm_result
                 else:
-                    message["status"] = "System is unreachable"
+                    message = "System is unreachable"
             else:
-                message["status"] = "IP address already exists"
+                message = "IP address already exists"
         else:
-            message["status"] = "Compute name already exists"
-    print(message)
-    return JsonResponse(message)
+            message = "Compute name already exists"
+    else:
+        message = "Invalid Field Data"
+
+    return render(request, 'infrastructure/compute_resource.html',
+                  {'title_name': 'Compute Resource',
+                   'form': form,
+                   'compute_obj': compute_resource_list,
+                   'message': message})
 
 
 def profile(request):
@@ -125,11 +150,14 @@ def profile(request):
                   'infrastructure/profile.html',
                   {'title_name': 'Profile',
                    'form': form,
+                   'message': False,
                    'profile_obj': profile_list})
 
 
 def post_profile(request):
     form = Profile_form(request.POST)
+    profile_list = Profile_model.objects.all()
+    message = ""
     if form.is_valid():
         profile = Profile_model(
             profile_name=form.cleaned_data["profile_name"],
@@ -137,36 +165,61 @@ def post_profile(request):
             cpus=form.cleaned_data["cpus"],
             disk_size=form.cleaned_data["disk_size"]
         )
-        profile.save()
-    return HttpResponseRedirect('/')
+        check_profile_name = Profile_model.objects.filter(profile_name=profile.profile_name).exists()
+        if not check_profile_name:
+            profile.save()
+            form = Profile_form()
+            message = True
+
+        else:
+            message = "Name Already exist"
+
+    else:
+        message = "Invalid Values"
+
+    return render(request, 'infrastructure/profile.html',
+                  {'title_name': 'Profile',
+                   'form': form,
+                   'profile_obj': profile_list,
+                   'message': message})
 
 
 def create_host(request):
     form = Create_host_form()
     error = False
     os_name = Operating_system_model.objects.values_list("os_name", flat=True)
+
     if not os_name:
         error = "No Operating System Found"
     else:
         os_name = list(zip(os_name, os_name))
     profile_name = Profile_model.objects.values_list("profile_name", flat=True)
+
     if not profile_name:
         error = "No Profiles Found"
     else:
         profile_name = list(zip(profile_name, profile_name))
     compute_name = Compute_resource_model.objects.values_list(
         "name", flat=True)
+
     if not compute_name:
         error = "No Compute Resource Found"
     else:
         compute_name = list(zip(compute_name, compute_name))
+    activation_list = Activation_model.objects.values_list("activation_name", flat=True)
+    activation_list = set(activation_list)
+    activation_name = list(zip(activation_list, activation_list))
+    activation_name.insert(0, ("Choose Activation Key", "Choose Activation Key"))
+
     return render(request,
                   'host/create_host.html',
-                  {'title_name': 'Create A New Host',
+                  {'title_name': 'New Host',
                    'form': form,
                    'os_name': os_name,
                    'compute_name': compute_name,
                    'profile_name': profile_name,
+                   'activation_name': activation_name,
+                   'host_group': Host_group_model.objects.all(),
                    'error': error})
 
 
@@ -175,20 +228,44 @@ def operating_system(request):
     operating_system_list = Operating_system_model.objects.all()
     return render(request,
                   'host/operating_system.html',
-                  {'title_name': 'Add Operating System',
+                  {'title_name': 'Operating System',
                    'form': form,
-                   'os_obj': operating_system_list})
+                   'os_obj': operating_system_list,
+                   'message': False})
 
 
 def post_operating_system(request):
     form = Operating_system_form(request.POST)
+    operating_system_list = Operating_system_model.objects.all()
+    message = ""
     if form.is_valid():
         operating_sys = Operating_system_model(
             os_name=form.cleaned_data["os_name"],
             os_location=form.cleaned_data["os_location"]
         )
-        operating_sys.save()
-    return HttpResponseRedirect('/')
+        check_os_name = Operating_system_model.objects.filter(os_name=operating_sys.os_name).exists()
+        check_os_location = Operating_system_model.objects.filter(os_location=operating_sys.os_location).exists()
+        val_url = validators.url(operating_sys.os_location)
+        if val_url is True:
+            if not check_os_name:
+                if not check_os_location:
+                    operating_sys.save()
+                    message = True
+                    form = Operating_system_form()
+                else:
+                    message = "Location already exist"
+            else:
+                message = "OS Name already exist"
+        else:
+            message = "Invalid URL"
+    else:
+        message = "Invalid Values"
+    return render(request,
+                  'host/operating_system.html',
+                  {'title_name': 'Operating System',
+                   'form': form,
+                   'os_obj': operating_system_list,
+                   'message': message})
 
 
 def post_create_host(request):
@@ -199,6 +276,7 @@ def post_create_host(request):
             vm_os=form.data['vm_os'],
             select_vm_profile=form.data['select_vm_profile'],
             select_compute=form.data['select_compute'],
+            activation_name=form.data['activation_name'],
             password=form.data['password']
         )
 
@@ -216,7 +294,13 @@ def post_create_host(request):
                 os_name=create_host.vm_os).values_list()[0])
         *not_imp3, location_url = os_details
 
-        kickstart_location = kickstart.kick_gen(create_host.password, location_url)
+        if create_host.activation_name == 'Choose Activation Key':
+            repo = {}
+        else:
+            repo = vm.get_repo(create_host.activation_name)
+
+        kickstart_location = kickstart.kick_gen(create_host.password, location_url, repo)
+
         vm.vm_create(
             compute_ip,
             create_host.vm_name,
@@ -243,7 +327,6 @@ def new_container(request):
 
 def post_new_container(request):
     form = newContainerform(request.POST)
-
     if form.is_valid():
         new_cont = Container_model(
             select_compute=form.data['select_compute'],
@@ -253,18 +336,18 @@ def post_new_container(request):
             host_port=form.data["host_port"],
             cont_port=form.data["cont_port"]
         )
-        create_cont = "docker-machine ssh " + new_cont.select_compute + " docker container run -d -p " + \
-                      form.data["host_port"] + ":" + form.data[
-                          "cont_port"] + " --name " + new_cont.container_name + " " + \
-                      new_cont.image_name + ":" + new_cont.tag_name
-        print(create_cont)
-        os.system(create_cont)
-        # form.save()
+        stat = ''
+        try:
+            if form.data["container_stat"] == "on":
+                stat = "on"
+        except:
+            stat = ""
+
+        run_cont(new_cont, stat)
     return HttpResponseRedirect('/')
 
 
 def local_images(request):
-    client = docker.from_env()  # NOQA
     compute_name = Compute_resource_model.objects.values_list("name", flat=True)
     if not compute_name:
         compute_name = False
@@ -281,20 +364,13 @@ def post_local_images(request):
     com_name = request.GET.get('com_name', None)
     com_det = Compute_resource_model.objects.filter(name=com_name).values_list()
     docker_images = get_docker_images(com_det)
-    print(docker_images)
     return JsonResponse(docker_images)
 
 
 def vm_info(request, cname, vm_id):
-        compute = Compute_resource_model.objects.filter(name=cname).values_list()[0]
-        compute_ip = compute[2]
-        details = vm.vm_details(compute_ip, vm_id)
-        OS = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][2]
-        details["Operating System"] = OS
-        root_passwd = Create_host_model.objects.filter(select_compute=cname, vm_name=details["Name"]).values_list()[0][5]
-        # print(root_passwd)
-        packages = vm.get_packages(compute_ip, details["IP Address"], root_passwd)
-        return render(request, 'VM_info.html', {"details": details, "packages": packages})
+    compute = Compute_resource_model.objects.filter(name=cname).values_list()[0]
+    compute_ip = compute[2]
+    return render(request, 'VM_info.html', {'compute_ip': compute_ip, 'vm_id': vm_id})
 
 
 def vm_start(request):
@@ -319,6 +395,17 @@ def vm_pause(request):
     return JsonResponse(data)
 
 
+def vm_delete(request):
+    data = {}
+    vm_name = request.GET.get('vm_name', None)
+    vm_compute_name = request.GET.get('compute_name', None)
+    com_ip = list(Compute_resource_model.objects.filter(name=vm_compute_name).values_list(flat=True))[2]
+    status = vm.virsh_delete_vm(vm_name, com_ip)
+    data['status'] = status
+    data['vm_name'] = vm_name
+    return JsonResponse(data)
+
+
 def start_container(request):
     cont_name = request.GET.get('cont_name', None)
     compute_name = request.GET.get('compute_name', None)
@@ -335,6 +422,14 @@ def stop_container(request):
     return JsonResponse(res)
 
 
+def destroy_container(request):
+    cont_name = request.GET.get('cont_name', None)
+    compute_name = request.GET.get('compute_name', None)
+    container_status = destroy_cont(cont_name, compute_name)
+    res = {'status': container_status, 'cont_name': cont_name}
+    return JsonResponse(res)
+
+
 def product(request):
     form = Product_form()
     product_list = Product_model.objects.all()
@@ -342,29 +437,74 @@ def product(request):
                   'Content/product.html',
                   {'title_name': 'Product',
                    'form': form,
-                   'product_obj': product_list})
+                   'product_obj': product_list,
+                   'message': False})
 
 
 def post_product(request):
     form = Product_form(request.POST)
+    product_list = Product_model.objects.all()
+    message = ""
     if form.is_valid():
         product = Product_model(
             product_name=form.cleaned_data["product_name"],
             product_location=form.cleaned_data["product_location"]
         )
-        product.save()
-    return HttpResponseRedirect('/')
+        check_product_name = Product_model.objects.filter(product_name=product.product_name).exists()
+        val_url = validators.url(product.product_location)
+        if val_url is True:
+            if not check_product_name:
+                product.save()
+                form = Product_form
+                message = True
+            else:
+                message = "Product name Already Exist"
+        else:
+            message = "Invalid URL"
+    else:
+        message = "Invalid Values"
+
+    return render(request,
+                  'Content/product.html',
+                  {'title_name': 'Product',
+                   'form': form,
+                   'product_obj': product_list,
+                   'message': message})
 
 
 def delete(request):
-    if(request.GET.get('ComputeDelete')):
-        Compute_resource_model.objects.filter(id=request.GET.get('ComputeDelete')).delete()
-    if(request.GET.get('ProfileDelete')):
+    if request.GET.get('ComputeDelete'):
+        Compute_resource_model.objects.filter(name=request.GET.get('ComputeDelete')).delete()
+        name = request.GET.get('ComputeDelete')
+        cmd = "docker-machine rm " + name + " -f "
+        os.system(cmd)
+        return HttpResponseRedirect("compute_resource")
+
+    elif request.GET.get('ProfileDelete'):
         Profile_model.objects.filter(id=request.GET.get('ProfileDelete')).delete()
-    if(request.GET.get('ProductDelete')):
+        return HttpResponseRedirect("profile")
+
+    elif request.GET.get('ProductDelete'):
+        product_name = Product_model.objects.filter(id=request.GET.get('ProductDelete')).values_list('product_name', flat=True)[0]
         Product_model.objects.filter(id=request.GET.get('ProductDelete')).delete()
-    if(request.GET.get('OSDelete')):
+        View_model.objects.all().filter(select_product=product_name).delete()
+        return HttpResponseRedirect("product")
+
+    elif request.GET.get('OSDelete'):
         Operating_system_model.objects.filter(id=request.GET.get('OSDelete')).delete()
+        return HttpResponseRedirect("operating_system")
+
+    elif request.GET.get('ViewDelete'):
+        view_name = request.GET.get('ViewDelete')
+        View_model.objects.filter(view_name=view_name).delete()
+        Activation_model.objects.filter(select_view=view_name).delete()
+        return HttpResponseRedirect('view')
+
+    elif request.GET.get('HostGroupDelete'):
+        host_group_name = request.GET.get('HostGroupDelete')
+        Host_group_model.objects.filter(host_group_name=host_group_name).delete()
+        return HttpResponseRedirect('host_group')
+
     return HttpResponseRedirect("/")
 
 
@@ -398,14 +538,18 @@ def get_updated_activations():
                     li[one[1]] = one[2]
             tmp[each[2]] = li
         act_dict[act] = tmp
-    print(act_dict)
     return act_dict
 
 
 def content_view(request):
     form = View_form()
     product_list = Product_model.objects.all()
-    return render(request, 'Content/content_view.html', {'title_name': "Content View", 'form': form, 'products': product_list, 'message': False, 'view_dict': get_updated_views()})
+    return render(request, 'Content/content_view.html',
+                  {'title_name': "Content View",
+                   'form': form,
+                   'products': product_list,
+                   'message': False,
+                   'view_dict': get_updated_views()})
 
 
 def post_content_view(request):
@@ -427,12 +571,16 @@ def post_content_view(request):
                 message = True
         else:
             message = "Name already exists"
-    return render(request, 'Content/content_view.html', {'title_name': "Content View", 'form': form, 'products': product_list, 'message': message, 'view_dict': get_updated_views()})
+    return render(request, 'Content/content_view.html',
+                  {'title_name': "Content View", 'form': form, 'products': product_list, 'message': message,
+                   'view_dict': get_updated_views()})
 
 
 def activation_view(request):
     form = Activation_form()
-    return render(request, 'Content/activation_key.html', {'title_name': 'Activation Key', 'form': form, 'view_dict': get_updated_views(), 'message': False, 'act_dict': get_updated_activations(), 'tmp_var': ''})
+    return render(request, 'Content/activation_key.html',
+                  {'title_name': 'Activation Key', 'form': form, 'view_dict': get_updated_views(), 'message': False,
+                   'act_dict': get_updated_activations(), 'tmp_var': ''})
 
 
 def post_activation_view(request):
@@ -453,4 +601,108 @@ def post_activation_view(request):
                 message = True
         else:
             message = 'Activation name already exists'
-    return render(request, 'Content/activation_key.html', {'title_name': 'Activation Key', 'form': form, 'message': message, 'view_dict': get_updated_views(), 'act_dict': get_updated_activations()})
+    return render(request, 'Content/activation_key.html',
+                  {'title_name': 'Activation Key', 'form': form, 'message': message, 'view_dict': get_updated_views(),
+                   'act_dict': get_updated_activations()})
+
+
+def host_group_view(request):
+    select_compute = Compute_resource_model.objects.values_list("name", flat=True)
+    select_profile = Profile_model.objects.values_list("profile_name", flat=True)
+    select_os = Operating_system_model.objects.values_list("os_name", flat=True)
+    select_activation = Activation_model.objects.values_list("activation_name", flat=True).distinct()
+    form = Host_group_form()
+    return render(request, 'host_group/host_group.html', {
+        'form': form,
+        'title_name': "Host Group",
+        'select_compute': select_compute,
+        'select_profile': select_profile,
+        'select_os': select_os,
+        'select_activation': select_activation,
+        'message': False,
+        'host_group_dict': Host_group_model.objects.all()
+    })
+
+
+def post_host_group(request):
+    form = Host_group_form(request.POST)
+    select_compute = Compute_resource_model.objects.values_list("name", flat=True)
+    select_profile = Profile_model.objects.values_list("profile_name", flat=True)
+    select_os = Operating_system_model.objects.values_list("os_name", flat=True)
+    select_activation = Activation_model.objects.values_list("activation_name", flat=True).distinct()
+    message = ""
+    if form.is_valid():
+        if not Host_group_model.objects.all().filter(host_group_name=form.cleaned_data['host_group_name']).exists():
+            form = Host_group_model(
+                host_group_name=form.cleaned_data['host_group_name'],
+                select_compute=form.cleaned_data['select_compute'],
+                select_profile=form.cleaned_data['select_profile'],
+                select_os=form.cleaned_data['select_os'],
+                select_activation=form.cleaned_data['select_activation'],
+            )
+            form.save()
+            message = True
+            form = Host_group_form()
+        else:
+            message = "Host Group Already Exists"
+    else:
+        message = "Invalid Fields"
+
+    return render(request, 'host_group/host_group.html', {
+        'title_name': "Host Group",
+        'select_compute': select_compute,
+        'select_profile': select_profile,
+        'select_os': select_os,
+        'select_activation': select_activation,
+        'form': form,
+        'message': message,
+        'host_group_dict': Host_group_model.objects.all(),
+    })
+
+
+def host_group_data(request):
+    host_group = request.GET.get("host_group")
+    host_data = list(Host_group_model.objects.all().filter(host_group_name=host_group).values_list(flat=True))
+    data = {
+        'host_group_name': host_data[1],
+        'compute': host_data[2],
+        'profile': host_data[3],
+        'operating_system': host_data[4],
+        'activation_key': host_data[5]
+    }
+    return JsonResponse(data)
+
+
+def get_vm_packages(request, compute_ip, compute_name, vm_ip, vm_name):
+    data = {}
+    compute_ip = compute_ip.replace('-', '.')
+    vm_ip = vm_ip.replace('-', '.')
+    root_passwd = Create_host_model.objects.filter(select_compute=compute_name, vm_name=vm_name).values_list()[0][6]
+    data['packages'] = vm.get_packages(compute_ip, vm_ip, root_passwd)
+    return JsonResponse(data)
+
+
+def get_vm_facts(request, compute_ip, vm_id):
+    compute_ip = compute_ip.replace('-', '.')
+    compute_name = Compute_resource_model.objects.filter(ip_address=compute_ip).values_list()[0][1]
+    details = vm.vm_details(compute_name, compute_ip, vm_id)
+    OS = Create_host_model.objects.filter(select_compute=compute_name, vm_name=details["Name"]).values_list()[0][2]
+    details["Operating System"] = OS
+    return JsonResponse(details)
+
+
+def get_added_repo(request, compute_ip, vm_ip, vm_name):
+    compute_ip = compute_ip.replace('-', '.')
+    vm_ip = vm_ip.replace('-', '.')
+    result = vm.get_vm_repo(compute_ip, vm_ip, vm_name)
+    return JsonResponse(result)
+
+
+def get_vm_status(request, compute_ip, vm_name, vm_ip):
+    result = vm.vm_status(compute_ip, vm_name, vm_ip)
+    return JsonResponse(result)
+
+
+def change_repo_state(request, compute_ip, vm_ip, repo_id, repo_flag, vm_name):
+    get_repo_state = vm.change_repo(compute_ip, vm_ip, repo_id, repo_flag, vm_name)
+    return JsonResponse({'flag': get_repo_state})

@@ -2,70 +2,88 @@
 {% load staticfiles %}
 <html lang="en">
 <head>
-    <title>MiniSat</title>
+    <title>Minisat</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'stylesheet.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.21/c3.min.css"></link>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.21/c3.min.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 </head>
 <body>
-<header>
-    <nav class=" navbar-inverse navbar-dark fixed-top">
-        <div class="container-fluid">
+<header >
+    <nav class=" navbar navbar-inverse fixed-top  " id="navigation" >
+
+        <div class="container-fluid" >
             <div class="navbar-header">
-                <a class="navbar-brand" href="/">MiniSat</a>
+                <a class="navbar-brand" href="/" style="font-size:25px;font-family:Comic Sans MS;">MiniSat</a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a  class=" dropdown-toggle effect-underline "  href="#" data-toggle="dropdown">Host<b class="caret"></b></a>
+            <div class="col-md-2"></div>
+            <div class="navbar-collapse collapse" >
+
+                <ul class="nav navbar-nav" style="color:red;font-size:13px;">
+                    <li class="nav-item dropdown" >
+
+                        <a class=" dropdown-toggle effect-underline " href="#" data-toggle="dropdown" >Host<b
+                                class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">All Host</a></li>
-                            <li><a href="create_host">Create Host</a></li>
-                            <li><a href="operating_system">Operating System</a></li>
+                            <li><a href="/create_host">Create Host</a></li>
+                            <li><a href="/operating_system">Operating System</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a data-toggle="dropdown" class="  dropdown-toggle effect-underline" href="#"> Host Group <b class="caret"></b></a>
+                        <a data-toggle="dropdown" class="dropdown-toggle effect-underline" href="#" > Host Group <b
+                                class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#"> Host Group</a></li>
+                            <li><a href="/host_group" > Host Group</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle  effect-underline" href="#"> Infrastructure <b class="caret"></b></a>
+                        <a data-toggle="dropdown" class="dropdown-toggle  effect-underline" href="#"> Infrastructure <b
+                                class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="compute_resource"> Compute Resource </a></li>
-                            <li><a href="profile"> Profile </a></li>
-                            <li><a href="#"> Subnet </a></li>
+                            <li><a href="/compute_resource"> Compute Resource </a></li>
+                            <li><a href="/profile"> Profile </a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle  effect-underline" href="#"> Content <b class="caret"></b></a>
+                        <a data-toggle="dropdown" class="dropdown-toggle  effect-underline" href="#" > Content <b
+                                class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="product">Product</a></li>
-                            <li><a href="view">View</a></li>
-                            <li><a href="activation">Activation Key</a></li>
-                            <li><a href="#">Life Cycle Environment</a></li>
+                            <li><a href="/product">Product</a></li>
+                            <li><a href="/view">View</a></li>
+                            <li><a href="/activation">Activation Key</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle  effect-underline" href="#"> Containers <b class="caret"></b></a>
+                        <a data-toggle="dropdown" class="dropdown-toggle  effect-underline" href="#">  Containers <b
+                                class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="new_container">New Container</a></li>
-                            <li><a href="local_images">Local Images</a></li>
-                            <li><a href="#">Running Containers</a></li>
+                            <li><a href="/new_container">New Container</a></li>
+                            <li><a href="/local_images">Local Images</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </div>
+</div>
     </nav>
 </header>
 {% block content %}
@@ -78,6 +96,10 @@
 {% block extrascript %}
 {% endblock %}
 {% block dockerscript %}
+{% endblock %}
+{% block vmpackages %}
+{% endblock %}
+{% block change_host_group %}
 {% endblock %}
 </body>
 </html>
