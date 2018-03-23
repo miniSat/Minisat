@@ -451,12 +451,16 @@ def post_product(request):
             product_location=form.cleaned_data["product_location"]
         )
         check_product_name = Product_model.objects.filter(product_name=product.product_name).exists()
-        if not check_product_name:
-            product.save()
-            form = Product_form
-            message = True
+        val_url = validators.url(product.product_location)
+        if val_url is True:
+            if not check_product_name:
+                product.save()
+                form = Product_form
+                message = True
+            else:
+                message = "Product name Already Exist"
         else:
-            message = "Product name Already Exist"
+            message = "Invalid URL"
     else:
         message = "Invalid Values"
 
