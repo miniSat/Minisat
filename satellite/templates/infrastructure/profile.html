@@ -1,51 +1,84 @@
 {% extends 'form_template.html' %}
 {% block form_content %}
+<div class="myBox1">
+{% if message == True %}
+<div class="alert alert-success alert-dismissable fade in">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span class="pficon pficon-close"></span>
+    </button>
+    <span class="pficon pficon-ok"></span>
+    <strong>Profile Added Successfully</strong>
+</div>
+{% elif message != False %}
+<div class="alert alert-danger alert-dismissable fade in">
+   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span class="pficon pficon-close"></span>
+    </button>
+    <span class="pficon pficon-error-circle-o"></span>
+    <strong>{{ message }}</strong>
+</div>
+{% endif %}
 
-    <form action="post_profile" method="post" autocomplete="off">
-      {% csrf_token %}
-        {{compute_resource_name}}
-      {% for field in form %}
-        <div class="form-group">
-          {{ field.label_tag }}<br>
-          {{ field }}
+<form  class="form-horizontal " action="post_profile" method="post" autocomplete="off">
+    {% csrf_token %}
+    {{compute_resource_name}}
+    {% for field in form %}
+    <div class="form-group">
+        <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{ field.label_tag }}</label>
+        <div class="col-sm-8">
+            {{ field }}
         </div>
-      {% endfor %}
-      <button type="submit" class="btn btn-primary">Submit</button>
-
-    </form>
-
+    </div>
+    {% endfor %}
+    <div class="form-group">
+    <div class="col-sm-1"></div>
+        <div class="col-sm-8">
+        <button id="id_submit" type="submit" class="btn btn-primary" style="width:100px;">Add</button></div>
+    </div>
+</form>
+</div>
 {% endblock %}
 
 {% block exist_content %}
+<div class="myBox1">
 {% if profile_obj == False %}
-<h1>No Profiles Found</h1>
+<h2>No Profiles Found</h2>
 {% else %}
-<div class="myBox">
-<table class="table " >
-  <thead>
-    <tr>
-      <th>Profile Name</th>
-      <th>RAM</th>
-      <th>CPUs</th>
-      <th>Disk Size</th>
-      <th>Action</th>
-    </tr>
-  </thead>
 
-  <tbody>
-
-  {% for obj in profile_obj %}
-    <tr>
-      <td>{{ obj.profile_name }}</td>
-      <td>{{ obj.ram }}</td>
-      <td>{{ obj.cpus }}</td>
-      <td>{{ obj.disk_size }}</td>
-      <td><form action="delete" method="GET"><button class = "btn btn-default" name="ProfileDelete" value="{{ obj.id }}">Delete</button> </form></td>
-    </tr>
-  {% endfor %}
-
-  </tbody>
-  </table>
+<div class="container-fluid container-cards-pf" id="card-container">
+    <div class="row row-cards-pf">
+        {% for obj in profile_obj %}
+        <div class="col-xs-12 col-sm-6 col-md-4" >
+            <div class="card-pf card-pf-view card-pf-view-select card-pf-view-multi-select" style="border-top:4px solid #4578fe;background-color:#f1f2f4;font-size:14px;" >
+                <div class="card-pf-body">
+                    <h2 class="card-pf-title text-center">
+                        <b>{{ obj.profile_name }}</b>
+                    </h2>
+                    <div class="card-pf-items text-center">
+                        <span class="card-pf-item-text">RAM(MB): {{ obj.ram }}</span>
+                    </div>
+                    <p class="card-pf-info text-center">VCPUs: {{ obj.cpus }}</p>
+                    <p class="card-pf-info text-center">Disk Space(GB): {{ obj.disk_size }}</p>
+                </div>
+                <div class="text-center" style="margin-bottom:10px">
+                    <form action="delete" method="GET">
+                        <button class="btn btn-danger" name="ProfileDelete" value="{{ obj.id }}">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endif %}
+</div>
+<script>
+  $(function() {
+    // matchHeight the contents of each .card-pf and then the .card-pf itself
+    $(".row-cards-pf > [class*='col'] > .card-pf > .card-pf-body").matchHeight();
+  });
+
+</script>
+
+
 {% endblock %}

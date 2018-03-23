@@ -1,11 +1,25 @@
 @import url(https://fonts.googleapis.com/css?family=Dosis:300,400);
+@import url("http://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.5.4/bootstrap-select.min.css")
 
+
+
+#title_bar{
+font-size:25px;
+height:50px;
+margin-top:-20px;
+padding:5px;
+border-bottom:1px solid grey;
+}
 .title-bg{
-padding:10px;
+font-family:Palatino bold;
 }
 .well {
 border:1px solid blue;
 background : #e9edfb;
+}
+
+.list-view-pf-view{
+background-color:#A9A9A9;
 }
 
 .text-size{
@@ -25,28 +39,66 @@ font-size : 16px;
 
   opacity: 0;
   z-index=-1;
-
-	-webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
-	transition: opacity 0.35s, transform 0.35s;
+background-color:#d9d9d9;
+	-webkit-transition: opacity 0.05s, -webkit-transform 0.05s;
+	transition: opacity 0.05s, transform 0.05s;
 	-webkit-transform: scale(0,1);
 	transform: scale(0,1);
-	color:#337ab7;
+	color:#d9d9d9;
 }
 
 .effect-underline:hover:after {
-  opacity: 1;
-	-webkit-transform: scale(1);
+  background-color:#d9d9d9;
+  opacity:0.2;
+	-webkit-transform: scale(0.1);
 	transform: scale(1);
 }
-
-
 
 #vm_info_font{
 font-size:15px;
 }
 
+label{
+font-weight:normal !important;
+}
 
-.myBox {
-height: 330px;
+/*.myBox {
+height: 230px;
+overflow: auto;
+}*/
+
+
+.myBox1 {
+min-height: 230px;
+margin-bottom:80px;
+}
+
+.vm_pack {
+height: 400px;
 overflow: auto;
 }
+
+.views_display{
+height:250px;
+overflow:auto
+}
+
+.vl {
+    border-left: 1px solid grey;
+    height: 500px;
+    position: absolute;
+    left: 50%;
+    margin-left: -3px;
+    top: 0;
+}
+
+
+table.padded-table td{
+  padding:10px;
+}
+
+.anyClass {
+  height:150px;
+  overflow-y: scroll;
+}
+

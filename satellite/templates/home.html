@@ -4,26 +4,38 @@
 {% endblock %}
 {% block content %}
 
-<div class="bg-primary" style="height:50px;margin-top:-20px;">
-    <h3 class="title-bg"><center>{{ title_name }}</center></h3>
-</div>
-<br>
-<div class="col-md-2 col-lg-2"></div>
-
-<div class="col-md-8 col-lg-8 well well-lg well-primary" style="border:1px solid blue" >
-    <ul class="nav nav-tabs text-size" role="tablist">
+<div style="margin-top:-20px;background-color:#edf6f7;margin-bottom:2px;">
+    <div class="col-md-1"></div>
+    <ul class="nav nav-tabs">
         <li class="nav-item active">
-            <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"><b>Virtual Machines</b></a>
+            <a class="title-bg nav-link active" style="outline: none;font-size:20px;margin-top:20px;">{{ title_name }}</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link " href="#buzz" role="tab" data-toggle="tab"><b>Docker Containers</b></a>
-        </li>
-        <input type="button" class="btn btn-primary" style="float:right" id="btn-refresh" value="Refresh">
     </ul>
-    
+</div>
+
+<br>
+
+<div class="col-md-1 col-lg-1 "></div>
+<div class="col-md-10 col-lg-10 w3-container w3-card-4 "
+     style="background: rgba(242, 243, 243, 0.1);padding:80px 0px;margin-bottom:30px;">
+    <div class="col-md-1 col-lg-1"></div>
+    <div class="col-md-10 col-lg-10">
+        <ul class="nav nav-tabs text-size" role="tablist">
+            <li class="nav-item active">
+                <a class="nav-link active" id="create" href="#profile" role="tab" data-toggle="tab"
+                   style="outline: none;"><b>Virtual Machines</b></a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link " href="#buzz" id="view" role="tab" data-toggle="tab"><b>Docker Containers</b></a>
+            </li>
+            <button class="btn btn-success" style="float:right" id="btn-refresh"><span class="fa fa-refresh"></span>&nbsp;Refresh
+            </button>
+            <span class="pficon pficon-paused"></span>
+        </ul>
+
     <div class="tab-content">
         <br>
-        
+
         <div role="tabpanel" class="tab-pane fade in active" id="profile">
             <table class="table table-striped table-bordered table-hover" id="dash_vms">
                 <thead>
@@ -32,7 +44,7 @@
                     <th>Name</th>
                     <th>Status</th>
                     <th>Compute Name ( IP Address )</th>
-                    <th>Action</th>
+                    <th><span class="glyphicon glyphicon-cog"></span>&nbsp;Actions</th>
                 </tr>
                 </thead>
                 <tbody id="vm_table">
@@ -49,7 +61,7 @@
                     <th>Port</th>
                     <th>Compute Name ( IP Address )</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th><span class="glyphicon glyphicon-cog"></span>&nbsp;Action</th>
                 </tr>
                 </thead>
                 <tbody id="docker_table">
@@ -59,22 +71,22 @@
         <div id = "error-box-vm" style="display: none;" class="alert alert-danger alert-dismissable fade in">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <strong>Unreachable Compute for VMs: </strong><strong id="error-vm"></strong>
-        </div>
-        <div id = "error-box-cont" style="display: none;" class="alert alert-danger alert-dismissable fade in">
+            </div>
+            <div id="error-box-cont" style="display: none;" class="alert alert-danger alert-dismissable fade in">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <strong>Unreachable Compute for Containers: </strong><strong id="error-cont"></strong>
-        </div>
-        <div id="vm-spinner" class="progress-description">
-                <div class="spinner spinner-xs spinner-inline"></div> <strong>Fetching:</strong> Virtual Machines. Please wait..
-        </div>
-        <div id="cont-spinner" class="progress-description">
-            <div class="spinner spinner-xs spinner-inline"></div> <strong>Fetching:</strong>  Docker Containers. Please wait..
+            </div>
+            <div id="vm-spinner" class="progress-description">
+                <div class="spinner spinner-xs spinner-inline"></div>
+                <strong>Fetching:</strong> Virtual Machines. Please wait..
+            </div>
+            <div id="cont-spinner" class="progress-description">
+                <div class="spinner spinner-xs spinner-inline"></div>
+                <strong>Fetching:</strong> Docker Containers. Please wait..
+            </div>
         </div>
     </div>
-        
-
-<div class="col-md-2 col-lg-2"></div>
-
-
+    <div class="col-md-1"></div>
+</div>
 
 {% endblock %}

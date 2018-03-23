@@ -1,82 +1,159 @@
-{% extends 'form_template.html' %} 
+{% extends 'form_template.html' %}
 {% block form_content %}
-{% if message == True %}
-<div class="alert alert-success alert-dismissable fade in">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+<div style="height:100%">
+    {% if message == True %}
+    <div class="alert alert-success alert-dismissable fade in">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-ok"></span>
         <strong>View created successfuly</strong>
-</div>
-{% elif message != False %}
-<div class="alert alert-danger alert-dismissable fade in">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>{{ message }}</strong>
-</div>
-{% endif %}
-<form action="post_content_view" method="post" autocomplete="off">
-    {% csrf_token %}
-    {{ form.view_name.label_tag }} 
-    {{ form.view_name }}
-    <br>
-    <br> {{ form.select_product.label_tag }}
-    <br>
-    <br>
-    <div class="myBox">
-        <table class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th width="3%"></th>
-                    <th width="15%">Product Name</th>
-                    <th>Product Url</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for product in products %}
-                <tr>
-                    <td>
-                        <input type="checkbox" name="products[]" value="{{ product.product_name }}"></input>
-                    </td>
-                    <td>
-                        {{ product.product_name }}
-                    </td>
-                    <td>
-                        {{ product.product_location }}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
     </div>
-    <input type="submit" class="btn btn-primary"  value="Add">
-</form>
+    {% elif message != False %}
+    <div class="alert alert-danger alert-dismissable fade in">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-error-circle-o"></span>
+        <strong>{{ message }}</strong>
+    </div>
+    {% endif %}
+    <form class="form-horizontal " action="post_content_view" method="post" autocomplete="off">
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="col-sm-3 control-label " for="i2" style="font-size:13px;">{{ form.view_name.label_tag }}</label>
+        <div class="col-sm-8" >
+           {{ form.view_name }}
+        </div>
+
+
+        <br>
+        <br> {{ form.select_product.label_tag }}
+        {% if products %}
+        <div class="list-group list-view-pf list-view-pf-view">
+        {% for product in products %}
+        <div class="list-group-item">
+            <div class="list-group-item-header">
+
+            <div class="list-view-pf-checkbox">
+                <input type="checkbox" name="products[]" value="{{ product.product_name }}">
+            </div>
+            <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                    <div class="list-view-pf-description">
+                        <div class="list-group-item-heading">
+                            {{ product.product_name }}
+                        </div>
+                        <div class="list-group-item-text">
+                            {{ product.product_location }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+         <div class="form-group">
+             <div class="col-sm-1"></div>
+             <div class="col-sm-8">
+                 <input type="submit" class="btn btn-primary" value="Add" style="width:100px;">
+             </div>
+         </div>
+        {% else %}
+        <h2>No Products Found</h2>
+        {% endif %}
+        </div>
+    </form>
+</div>
 {% endblock %}
 
 {% block exist_content %}
-    <div class="myBox">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th width=10%>View</th>
-                    <th width=15%>Product</th>
-                    <th>Product Url</th>
-                </tr>
-            </thead>
-            <tbody>
 
-                {% for key,value in view_dict.items %}
-                    <tr>
+{% if view_dict %}
+
+    <div class="list-group list-view-pf list-view-pf-view">
+        {% for key,value in view_dict.items %}
+        <div class="list-group-item">
+            <div class="list-group-item-header">
+                <div class="list-view-pf-expand">
+                    <span class="fa fa-angle-right"></span>
+                </div>
+            <div class="list-view-pf-checkbox" style="height:22px"></div>
+            <div class="list-view-pf-actions">
+                <form action="delete" method="get"><button class="btn btn-danger" name="ViewDelete" value="{{key}}">Delete</button></form>
+            </div>
+            <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                    <div class="list-view-pf-description">
+                        <div class="list-group-item-heading list-view-pf-expand">
+                            {{key}}
+                        </div>
+                        <div class="list-group-item-text">
+                            {% for each in value %}{% if forloop.last %}{{each.0}}{% else %}{{each.0}} / {% endif %}{% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="list-group-item-container container-fluid hidden">
+                <div class="close">
+                    <span class="pficon pficon-close"></span>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-3">
+                    </div>
+                </div>
+                <div class="col-md-9 col-sm-9">
+                    <dl class="dl-horizontal">
                         {% for each in value %}
-                        <tr>
-                            {% if forloop.first %}
-                            <td>{{ key }}</td>
-                            {% else %}
-                            <td></td> 
-                            {% endif %}
-                            <td>{{ each.0 }}</td>
-                            <td>{{ each.1 }}</td>
-                        </tr>
+                        <dt>{{each.0}}</dt>
+                        <dd>{{each.1}}</dd>
                         {% endfor %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
+
+
+
+    <script>
+  $(document).ready(function () {
+
+    // toggle dropdown menu
+    $('.list-view-pf-actions').on('show.bs.dropdown', function () {
+      var $this = $(this);
+      var $dropdown = $this.find('.dropdown');
+      var space = $(window).height() - $dropdown[0].getBoundingClientRect().top - $this.find('.dropdown-menu').outerHeight(true);
+      $dropdown.toggleClass('dropup', space < 10);
+    });
+
+    // click the list-view heading then expand a row
+    $(".list-group-item-header").click(function(event){
+      if(!$(event.target).is("button, a, input, .fa-ellipsis-v")){
+        $(this).find(".fa-angle-right").toggleClass("fa-angle-down")
+          .end().parent().toggleClass("list-view-pf-expand-active")
+            .find(".list-group-item-container").toggleClass("hidden");
+      } else {
+      }
+    })
+
+    // click the close button, hide the expand row and remove the active status
+    $(".list-group-item-container .close").on("click", function (){
+      $(this).parent().addClass("hidden")
+        .parent().removeClass("list-view-pf-expand-active")
+          .find(".fa-angle-right").removeClass("fa-angle-down");
+    })
+
+  });
+
+</script>
+
+
+{% else %}
+<h2>No Views Added</h2>
+{% endif %}
+
 {% endblock %}

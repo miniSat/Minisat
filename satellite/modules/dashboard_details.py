@@ -6,7 +6,6 @@ def get_vms(ip_list=[]):
     final_dict = {}
     error = []
     count = 0
-    # final_vms = []
     for tuple in ip_list:
         ip = tuple[2]
         if vm_funcs.isOnline(ip):
@@ -14,6 +13,7 @@ def get_vms(ip_list=[]):
                 "virsh -c qemu+ssh://root@" +
                 ip +
                 "/system list --all").readlines()
+
             for vm in range(2, len(vm_list) - 1):
                 vm_names = vm_list[vm].split()
                 vm_details = os.popen(
@@ -30,6 +30,10 @@ def get_vms(ip_list=[]):
                 vm_det.append(vm_status[1])
                 vm_det.append(tuple[1])
                 vm_det.append(ip)
+
+                if vm_det[2] == 'running':
+                    vm_det[2] = vm_funcs.get_status(vm_det[3], vm_det[4], vm_det[1])
+
                 final_dict[count] = vm_det
                 count = count + 1
         else:
@@ -53,6 +57,8 @@ def running_containers(compute=[]):
             for j in range(1, len(cont_list)):
                 li = cont_list[j].split()
                 newli = []
+                if not li[-2].endswith('/tcp'):
+                    li[-2] = "No Port Assigned"
                 if '(Paused)' in li:
                     newli.extend([li[-1], li[1], li[-2], tuple[1], "Paused", li[0], tuple[2]])
                 else:
@@ -63,4 +69,5 @@ def running_containers(compute=[]):
             error.append(tuple[1])
     if len(error):
         data['error'] = error
+    # print(data)
     return data

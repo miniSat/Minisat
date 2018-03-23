@@ -1,0 +1,37 @@
+---
+- hosts: all
+  name: installing
+  remote_user: root
+  tasks:
+    - name: install qemu-kvm
+      dnf:
+        name: qemu-kvm
+        state: latest
+    - name: install qemu-img
+      dnf:
+        name: qemu-img
+        state: latest
+    - name: install virt-manager
+      dnf:
+        name: virt-manager
+        state: latest
+    - name: install libvirt
+      dnf:
+        name: libvirt
+        state: latest
+    - name: install libvirt-python
+      dnf:
+        name: libvirt-python
+        state: latest
+    - name: libvirt-client
+      dnf:
+        name: libvirt-client
+        state: latest
+    - name: install virt-install
+      dnf:
+        name: virt-install
+        state: latest
+    - name: install virt-viewer
+      dnf:
+        name: virt-viewer
+        state: latest

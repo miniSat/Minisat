@@ -3,3 +3,4 @@ docker
 flake8
 pytest
 selenium
+validators

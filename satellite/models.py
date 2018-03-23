@@ -1,6 +1,5 @@
 from django.db import models
 
-
 # import the models class
 
 # Create your models here.
@@ -23,9 +22,9 @@ class Compute_resource_model(models.Model):
 # Model for profile
 class Profile_model(models.Model):
     profile_name = models.CharField(max_length=10)
-    ram = models.IntegerField()
-    cpus = models.IntegerField()
-    disk_size = models.IntegerField()
+    ram = models.CharField(max_length=6)
+    cpus = models.CharField(max_length=1)
+    disk_size = models.CharField(max_length=5)
 
     def __str__(self):
         return self.profile_name
@@ -46,6 +45,7 @@ class Create_host_model(models.Model):
     vm_os = models.CharField(max_length=15)
     select_vm_profile = models.CharField(max_length=10)
     select_compute = models.CharField(max_length=10)
+    activation_name = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
 
     def __str__(self):
@@ -65,6 +65,7 @@ class Container_model(models.Model):
         return self.container_name
 
 
+# Model for product
 class Product_model(models.Model):
     product_name = models.CharField("Name", max_length=20)
     product_location = models.CharField("Location", max_length=100)
@@ -73,6 +74,7 @@ class Product_model(models.Model):
         return self.product_name
 
 
+# Model for views
 class View_model(models.Model):
     view_name = models.CharField(max_length=20)
     select_product = models.CharField(max_length=20)
@@ -81,9 +83,22 @@ class View_model(models.Model):
         return self.view_name
 
 
+# Model for activation key
 class Activation_model(models.Model):
     activation_name = models.CharField(max_length=20)
     select_view = models.CharField(max_length=20)
 
     def __str__(self):
         return self.activation_name
+
+
+# Model for host group
+class Host_group_model(models.Model):
+    host_group_name = models.CharField(max_length=20)
+    select_compute = models.CharField(max_length=20)
+    select_profile = models.CharField(max_length=20)
+    select_os = models.CharField(max_length=20)
+    select_activation = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.host_group_name
