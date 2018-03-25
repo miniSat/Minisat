@@ -706,3 +706,7 @@ def get_vm_status(request, compute_ip, vm_name, vm_ip):
 def change_repo_state(request, compute_ip, vm_ip, repo_id, repo_flag, vm_name):
     get_repo_state = vm.change_repo(compute_ip, vm_ip, repo_id, repo_flag, vm_name)
     return JsonResponse({'flag': get_repo_state})
+
+
+def error404(request):
+    return render(request, 'error404.html')
