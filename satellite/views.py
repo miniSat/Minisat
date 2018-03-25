@@ -708,5 +708,5 @@ def change_repo_state(request, compute_ip, vm_ip, repo_id, repo_flag, vm_name):
     return JsonResponse({'flag': get_repo_state})
 
 
-def error404(request):
-    return render(request, 'error404.html')
+def error_404(request):
+    return render(request, 'error/error404.html')
