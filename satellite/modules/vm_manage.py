@@ -10,11 +10,11 @@ from satellite.models import (
 
 
 def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_loc):
+    kickstart_name = kickstart_loc.split('/')[-1]
     final_cmd = 'virt-install --connect qemu+ssh://root@' + compute_ip + '/system --name ' + name + ' --ram ' + str(
-        ram) + ' --vcpus ' + str(
-        cpus) + ' --disk path=/var/lib/libvirt/images/' + name + '.qcow2,bus=virtio,size=' + str(
-        disk_size) + ' --location ' + location_url + ' --extra-args=\'ks=' + kickstart_loc + \
-        ' ksdevice=ens3\' --network bridge:virbr0 > /dev/null 2>&1 &'
+        ram) + ' --vcpus ' + str(cpus) + ' --disk path=/var/lib/libvirt/images/' + name + '.qcow2,bus=virtio,size=' \
+        + str(disk_size) + ' --location ' + location_url + ' --initrd-inject=' + kickstart_loc + \
+        ' --extra-args=\'ks=file:/' + kickstart_name + ' ksdevice=ens3\' --network bridge:virbr0 > /dev/null 2>&1 &'
     response = os.system(final_cmd)
     if response == 0:
         return True
