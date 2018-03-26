@@ -299,7 +299,7 @@ def post_create_host(request):
         else:
             repo = vm.get_repo(create_host.activation_name)
 
-        kickstart_location = kickstart.kick_gen(create_host.password, location_url, repo)
+        kickstart_location = kickstart.kick_gen(create_host.vm_name, create_host.password, location_url, repo)
 
         vm.vm_create(
             compute_ip,

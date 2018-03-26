@@ -4,7 +4,7 @@ httpd.service should be running
 """
 
 
-def kick_gen(passwd, location, repo):
+def kick_gen(vm_name, passwd, location, repo):
     with open("/tmp/ks.cfg", "w+") as ks:
         ks.write("install \n"
                  "keyboard 'us' \n"
@@ -12,10 +12,11 @@ def kick_gen(passwd, location, repo):
                  "\nlang en_US \n"
                  "firewall --enabled \n"
                  "reboot \n"
-                 "timezone Africa/Abidjan --isUtc \n"
+                 "timezone Asia/Kolkata --isUtc \n"
                  "graphical \n"
                  "url --url=\"" + location +
                  "\" \nauth  --useshadow  --passalgo=sha512 \n"
+                 "user --name=" + vm_name + " --groups=wheel --plaintext --password=" + vm_name + " \n"
                  "firstboot --disable \n"
                  "selinux --enforcing \n"
                  "bootloader --location=mbr \n"
@@ -24,6 +25,8 @@ def kick_gen(passwd, location, repo):
                  "part swap --fstype=\"swap\" --size=2048 \n"
                  "part / --fstype=\"ext4\" --grow --size=1 \n"
                  "%post \n"
+                 "hostnamectl set-hostname " + vm_name + " \n"
+                 # "useradd " + vm_name + " \n"
                  "systemctl restart sshd \n"
                  "systemctl enable sshd \n"
                  )
