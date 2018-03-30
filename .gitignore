@@ -10,3 +10,4 @@ __pycache__
 geckodriver.log
 satellite/__init__.pyc
 docs/build
+docs/_build
