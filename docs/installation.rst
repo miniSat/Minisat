@@ -7,9 +7,9 @@ Installation
 + A minimum 250GB storage and 4GB memory
 + Developed and tested on Fedora 27
 
-**Pre-requisites**
+**Prerequisites**
 
-+ All system should have Libvirt API installed for VM provisioning.
++ All system should have Libvirt API installed for virtual machine provisioning.
 
 ::
 
@@ -36,18 +36,16 @@ Installation
 
 *From Docker*
 
-To run Minisat using docker, first clone the Github Minisat repository using and go to directory Minisat
+To containerize Minisat, first clone the Github Minisat repository using and go to directory Minisat
 ::
 
     git clone https://github.com/miniSat/minisat.git
     cd Minisat
 
-Now build docker image for Minisat using
+Build docker image using
 ::
 
     docker build -t minisat:latest .
-
-Hang on building docker image may take time depending on your internet speed.
 
 After building the image now run the image using
 ::
