@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Minisat'
-copyright = '2018, Khomesh,Yadnesh,Shailesh,Ganesh'
+copyright = '2018, Minisat'
 author = 'Khomesh,Yadnesh,Shailesh,Ganesh'
 
 # The short X.Y version
@@ -133,7 +133,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'Minisat.tex', 'Minisat Documentation',
-     'Khomesh,Yadnesh,Shailesh,Ganesh', 'manual'),
+     'Minisat', 'manual'),
 ]
 
 

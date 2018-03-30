@@ -10,6 +10,12 @@ Welcome to Minisat's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   overview
+   components
+   installation
+   usage
+   contribute
+
 
 
 Indices and tables
