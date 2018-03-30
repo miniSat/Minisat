@@ -1,6 +1,6 @@
 Django==2.0
-docker
 flake8
 pytest
 selenium
 validators
+sphinx
