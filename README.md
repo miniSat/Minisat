@@ -47,7 +47,7 @@ $ docker build -t minisat:latest .
 ```
 - Run the image
 ```sh
-$ docker container -it -p 8000:8000 minisat:latest 0.0.0.0:8000
+$ docker container run -it -p 8000:8000 minisat:latest 0.0.0.0:8000
 ```
 - Head to http://localhost:8000 for Minisat UI
 ### Create test environment
