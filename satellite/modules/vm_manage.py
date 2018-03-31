@@ -1,3 +1,7 @@
+"""
+This file is to manage virtual machines in Minisat
+"""
+
 import os
 import time
 import re
