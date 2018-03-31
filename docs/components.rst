@@ -62,3 +62,60 @@ Profile allows user to set various essential parameters to create a virtual mach
 	    
 	Use meaningful profile name which will give the correct idea about all the other details included with it.	 
 
+
+Host
+----
+
+Minisat is host-based virtualization in which one can have access and control over virtual machine from single server.
+
+++++++++++++++++
+Operating System
+++++++++++++++++
+
+Operating System is the most important program which runs on computer. You can use any linux based operating system for your virtual machine.
+For our simplicity we have set-up the server where we have rsync the mirros of Fedora 25, Fedora 26 and so on.
+You can use any mirror of linux based operating system.
+
+* Add new
+
+    Here you have to fill up two fields
+
+    * Operating System Name
+
+    The name can be anything you want to give but good practice is giving actual name of operating system which will give the exact idea of Virtual machine OS.
+
+    * Location
+
+    Here you have to provide the location from where it will fetch the operating system.
+
+* Already Existing
+
+    All the operating systems you have added while be visible in this section.
+
++++++++++++
+Create Host
++++++++++++
+
+In this user have to fill various details such as
+
+* Name
+* Compute Resource
+* Profile
+* Operating System
+* Activation Name
+* Host Group
+* Root Password
+
+Except Name and Root Password user have to select other details from drop down as they are created earlier.
+
+If you Have already created **Host Group** then you have to only enter
+
+* Name
+* Host Group
+* Root Password
+
+All the remaining fields are filled automatically.
+
+
+
+
