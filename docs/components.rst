@@ -25,7 +25,7 @@ Compute Resource is the very first step in provisioning virtual machines and run
 
     .. note::
 	
-  	  All the above details are very much essential to set up a compute resource
+  	  All the above details are very much essential to set up a compute resource.
 
 
 
@@ -60,7 +60,7 @@ Profile allows user to set various essential parameters to create a virtual mach
     
     .. note :: 
 	    
-	Use meaningful profile name which will give the correct idea about all the other details included with it.	 
+	Use appropiate profile name which will give the correct idea about all the other details included with it.	 
 
 
 Host
@@ -144,5 +144,31 @@ This is important as it is required at the stage of creating host.
 .. note ::
 
 	All the above three have **validation**. No name should be repeated.
+
+Containers
+----------
+
+Containers are a solution to the problem of how to get software to run reliably when moved from one computing environment to another.
+
+For now, Minisat can run Docker containers only. Support for other
+kind of containers like `LXC <https://linuxcontainers.org/>`_ , `CoreOS's rkt <https://coreos.com/rkt/>`_  will soon be added.
+
++++++++++++++
+New Container
++++++++++++++
+
+- Docker image name and tag name is to be known before running it on any compute resource.
+- Container is assigned a name so as to identify on the dashboard.
+- Host port and container port are mapped to each other which makes services running inside container accessible from outside.
+- If image is not available locally, then they are pulled from Docker registry and then run accordingly.
+
+++++++++++++
+Local Images
+++++++++++++
+
+- Docker images available on remote compute resources are displayed with details that are required often.
+- Any new image found on any compute resource will be enlisted here.
+
+
 
 
