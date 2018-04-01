@@ -1,10 +1,18 @@
 """
-kickgen function create a kickstart and save it in /var/www/html folder
-httpd.service should be running
+This file generate the kickstart file for virtual machine
 """
 
 
 def kick_gen(vm_name, passwd, location, repo):
+    """Generate kickstart file
+
+    :param vm_name: Name of virtual machine
+    :param passwd: Password of virtual machine
+    :param location: Location of operating system
+    :param repo: List of repo needed to add in virtual machine
+
+    :return: location of kickstart file
+    """
     with open("/tmp/ks.cfg", "w+") as ks:
         ks.write("install \n"
                  "keyboard 'us' \n"
@@ -26,7 +34,6 @@ def kick_gen(vm_name, passwd, location, repo):
                  "part / --fstype=\"ext4\" --grow --size=1 \n"
                  "%post \n"
                  "hostnamectl set-hostname " + vm_name + " \n"
-                 # "useradd " + vm_name + " \n"
                  "systemctl restart sshd \n"
                  "systemctl enable sshd \n"
                  )
