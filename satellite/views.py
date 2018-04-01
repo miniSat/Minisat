@@ -69,7 +69,7 @@ def get_virtual_mc(request):
 
     :param request: HttpRequest to gather facts of virtual machines.
 
-    :returns:       Dictionary of all virtual machines along with their facts. 
+    :returns:       Dictionary of all virtual machines along with their facts.
     """
     compute_name = Compute_resource_model.objects.values_list()
     get_vms = dash.get_vms(compute_name)
@@ -82,7 +82,7 @@ def get_running_containers(request):
 
     :param request: HttpRequest to gather facts of containers.
 
-    :returns:       Dictionary of all containers along with their facts. 
+    :returns:       Dictionary of all containers along with their facts.
     """
     compute_name = Compute_resource_model.objects.values_list()
     get_containers = dash.running_containers(compute_name)
@@ -878,7 +878,7 @@ def post_host_group(request):
     Save the user submitted values under a view name in database.
 
     :param request: HttpRequest with user submitted values in the form.
-    
+
     :returns:       HttpResponse to redirect to host group page along with other values needed by the template.
     """
     form = Host_group_form(request.POST)
@@ -923,7 +923,7 @@ def host_group_data(request):
     :param request: HttpRequest for with host group name.
 
     :returns:       Json object with host group name, compute, profile, operating system, activation key.
-    """    
+    """
     host_group = request.GET.get("host_group")
     host_data = list(Host_group_model.objects.all().filter(host_group_name=host_group).values_list(flat=True))
     data = {
@@ -1010,7 +1010,7 @@ def get_vm_status(request, compute_ip, vm_name, vm_ip):
 
 
 def change_repo_state(request, compute_ip, vm_ip, repo_id, repo_flag, vm_name):
-     """
+    """
     Toggle the repository between enabled to disabled.
 
     :param request:         HttpRequest to change repo state.
