@@ -116,7 +116,7 @@
                             <span class="fa fa-angle-right"></span>
                         </div>
 
-                        <div class="list-view-pf list-group-item-heading">
+                        <div class="list-view-pf list-group-item-heading" style="font-size:14px">
                             {{act_key}}
                         </div>
                         <div class="list-group-item-text">
@@ -146,31 +146,44 @@
                 </div>
             </div>
             <div class="col-md-9 col-sm-9">
-                <div class="col-md-1"></div>
-                <div class="col-md-8">
-                <table>
-                <tbody>
-                {% for view_key,view_values in act_value.items %}
-                    <tr>
-                        <td>{{view_key}}</td>
+                <!--<div class="col-md-1"></div>-->
+                <!--<div class="col-md-8">-->
+                <!--<table>-->
+                <!--<tbody>-->
+                <!--{% for view_key,view_values in act_value.items %}-->
+                    <!--<tr>-->
+                        <!--<td>{{view_key}}</td>-->
 
-                    </tr>
-                    {% for product_name,product_values in view_values.items %}
-                    <tr>
-                        <td>{{product_name}}</td>
+                    <!--</tr>-->
+                    <!--{% for product_name,product_values in view_values.items %}-->
+                    <!--<tr>-->
+                        <!--<td>{{product_name}}</td>-->
 
-                        <td>{{product_values}}</td>
-                    </tr>
-                    {% endfor %}
+                        <!--<td>{{product_values}}</td>-->
+                    <!--</tr>-->
+                    <!--{% endfor %}-->
 
-                    {% if not forloop.last %}
-                    <hr>
-                    {% endif %}
+                    <!--{% if not forloop.last %}-->
+                    <!--<hr>-->
+                    <!--{% endif %}-->
 
-                    {% endfor %}
-                </tbody>
-                    </table>
-                </div>
+                    <!--{% endfor %}-->
+                <!--</tbody>-->
+                    <!--</table>-->
+                    <dl class="dl-horizontal">
+                    {% for view_key,view_values in act_value.items %}
+                        <dt>{{view_key}}</dt>
+                        {% for product_name,product_values in view_values.items %}
+                            <dd>{{product_name}}
+                                {{product_values}}</dd>
+                        {% endfor %}
+                        {% if not forloop.last %}
+                            <hr>
+                        {% endif %}
+
+                     {% endfor %}
+                    </dl>
+
             </div>
         </div>
         </div>
