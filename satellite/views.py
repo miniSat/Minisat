@@ -44,8 +44,7 @@ from satellite.modules import vm_manage as vm
 from satellite.modules import (
     kickstart,
     ssh_connect as ssh,
-    dashboard_details as dash,
-    compute_details as cmp_det
+    dashboard_details as dash
 )
 
 
@@ -102,17 +101,11 @@ def compute_resource(request):
     if not compute_resource_list:
         compute_resource_list = False
     # We create object of Compute_resource_model and fetch data and store in
-    # compute_resource_list variable
-    compute_ips = Compute_resource_model.objects.all().values_list('ip_address', flat=True)
-    final_compute_details = {}
-    for each_ip in compute_ips:
-        final_compute_details[each_ip] = cmp_det.get_compute_details(each_ip)
     return render(request, 'infrastructure/compute_resource.html',
                   {'title_name': 'Compute Resource',
                    'form': form,
                    'compute_obj': compute_resource_list,
-                   'message': False,
-                   'compute_details': final_compute_details
+                   'message': False
                    })
 
 
@@ -499,7 +492,7 @@ def vm_start(request):
     :param request: HttpRequest from home page which brings vm_name and compute_name values.
 
     :returns:       Json object with current status of the virtual machine and a flag which shows whether the virutal
-                    virtual machine was successfully turned on or not.
+                    machine was successfully turned on or not.
     """
     data = {}
     vm_name = request.GET.get('vm_name', None)
@@ -517,8 +510,7 @@ def vm_pause(request):
 
     :param request: HttpRequest from home page which brings vm_name and compute_name values.
 
-    :returns:       Json object with current status of the virtual machine and a flag which shows whether the virutal
-                    virtual machine was successfully turned off or not.
+   :returns:        Json object with current status of the virtual machine and a flag which shows whether the virtual                      machine was successfully turned off or not.
     """
     data = {}
     vm_name = request.GET.get('vm_name', None)
@@ -588,7 +580,7 @@ def destroy_container(request):
     :param request: HttpRequest from home page which brings container name and compute_name values.
 
     :returns:       Json object with current status of the container and a flag which shows whether the
-                    container was successfully turned off or not.
+                    container was successfully destroyed or not.
     """
     cont_name = request.GET.get('cont_name', None)
     compute_name = request.GET.get('compute_name', None)
@@ -623,7 +615,7 @@ def post_product(request):
 
     :param request: HttpRequest with user submitted values in the form.
 
-    :returns:       HttpResponse to redirect to profile page along with other values needed by the template.
+    :returns:       HttpResponse to redirect to product page along with other values needed by the template.
     """
     form = Product_form(request.POST)
     product_list = Product_model.objects.all()
@@ -707,7 +699,7 @@ def get_updated_views():
 
     :param request: None
 
-    :returns:       Dictionary with all existing views with their product urls.
+    :returns:       Dictionary with all existing views along with their respective product urls.
     """
     view_dict = {}
     viewList = View_model.objects.all().values_list('view_name', flat=True).distinct()
