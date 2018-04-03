@@ -4,7 +4,8 @@ Usage
 Creating Virtual Machines
 -------------------------
 
-Follow the steps carefully so that you dont get any error while creating virtual machine. The steps are very easy only need is to follow them in order.
+Follow the steps carefully so that you don't get any error while provisioning virtual machine. 
+Follow the below steps 
 
 ++++++
 Step 1
@@ -15,7 +16,7 @@ First you need to create compute resource.
 To do so click on Infrastructure -> Compute Resource
 
 * Fill all the details
-* Make sure there is no repeatation of name, remote system is reachable from your system and root password is correct.
+* Make sure there is no repetition of name, remote system is reachable from your system and root password is correct.
 * All the fields have validation.
 
 ++++++
@@ -26,10 +27,10 @@ Once done with compute resource move to profiles.
 
 Click on Infrastructure -> Profile
 
-* Name your Profile, fill the fields of RAM, VCPUS and Disk Space
+* Name your Profile, fill the fields of RAM, virtual CPUs and Disk Space
 * Name should not get repeated.
 
-Once you click *Submit* Profile gets added to database and is visible in **View Existing** Section.
+Once you click *Submit* Profile gets added to database and is enlisted in **View Existing** Section.
 
 ++++++
 Step 3
@@ -50,26 +51,27 @@ Now, you have to add Packages for you Virtual machine.
 	Here enter the name for your activation key and select one or more Views of your desire.
 
 .. note::
+	
+	Adding packages is optional. If you want to add them, then only follow **Step 3** else skip it.
 
-	Activation is very essential at time of creating host.
 
 ++++++
 Step 4
 ++++++
 
 The next thing that comes into picture is Host Group.
-If you want to use same compute, profile, operating system and activation key again and again then *host group* plays vital role.
+If you want to use same compute, profile, operating system and activation key frequently then *host group* plays vital role.
 
 Click Host Group -> Host Group
 
 * Name the host group as per convenience.
 * Select Compute Resource, Profile, Operating System and Activation key from their *drop down* respectively.
 
-Once you create host group its entry is inserted in database and can be visible under **View Existing** section.
+Once host group is created its entry is inserted in database and will be enlisted under **View Existing** section.
 
 .. note::
 
-	Host Group is optional but important at time of eliminating repeatation.
+	Host Group is optional but important at time of eliminating repetition.
 
 ++++++
 Step 5
@@ -81,13 +83,18 @@ Click Host -> Create Host
 
 - Here you have to provide the name to host.
 
-- Select all the fields of your requirement.
+- Select all the fields which are required.
 
-- You will notice that when you select *host group* here fields such as compute, profile, operating system and activation key are filled automatically.
+- Selecting *host group* will fill the fields such as compute, profile, operating system and activation key automatically.
 
-- At the end you have to provide **root** password for your Virtual Machine.
+.. note::
+	
+	Choosing `host group` and `activation key` is optional.
 
-Finally, just hit the ``Create Instance`` button and your Virtual Machine deployment starts at background.
+
+- At the end you have to provide **root** password for your virtual machine.
+
+Finally, just hit the ``Create Instance`` button and your virtual machine deployment starts at background.
 
 
 
@@ -120,18 +127,19 @@ Step 2
 
 The previous step will now allow the server to perform SSH on remote Docker server and gather container related facts.
 
-To run a container from Docker image
+To deploy a Docker container on a compute resource
 
 * Enter name for container
 * Enter the Docker image and tag name
 * Provide the host port and container port
 * Select compute resource
+* To run containers in background select the *checkbox* provided there.
 
 ++++++
 Step 3
 ++++++
 
-Finally hit ``Run`` to run container.
+Finally hit ``Run`` to run image.
 
 Check running containers on dashboard under Docker containers tab.
 
