@@ -1,15 +1,19 @@
-# Choose Alpine as base image
-FROM alpine:latest
+# Choose Fedora as base image
+FROM fedora
 
 # Install required packages
-RUN apk add --no-cache sqlite \
-            python3 \
-            py-pip \            
-            openssh  \
-            sshpass \        
+RUN dnf install sqlite \
+	    curl \
+            ssh-contact  \
+            sshpass \  
+	    libvirt \      
             libvirt-client \
             virt-install \
-            git
+            git -y
+
+# Install Docker Machine
+RUN curl -L https://github.com/docker/machine/releases/download/v0.14.0/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine && \
+    install /tmp/docker-machine /usr/local/bin/docker-machine
 
 # Create a directory /workspace
 RUN mkdir /workspace
@@ -34,3 +38,4 @@ RUN python3 Minisat/manage.py migrate
 
 # Run Minisat server
 ENTRYPOINT  [ "python3","Minisat/manage.py","runserver" ]
+
