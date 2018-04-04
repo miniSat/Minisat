@@ -36,54 +36,68 @@
                 </button>
             </div>
             <div class="col-md-2"></div>
-            <div class="navbar-collapse collapse" >
+            <div class="col-md-6">
+                <div class="navbar-collapse collapse">
 
-                <ul class="nav navbar-nav" style="color:red;font-size:13px;">
-                    <li class="nav-item dropdown" >
+                    <ul class="nav navbar-nav" style="color:red;font-size:13px;">
+                        <li class="nav-item dropdown">
 
-                        <a class=" dropdown-toggle effect-underline " href="#" data-toggle="dropdown" >Host<b
-                                class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/create_host">Create Host</a></li>
-                            <li><a href="/operating_system">Operating System</a></li>
-                        </ul>
+                            <a class=" dropdown-toggle effect-underline " href="#" data-toggle="dropdown">Host<b
+                                    class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/create_host">Create Host</a></li>
+                                <li><a href="/operating_system">Operating System</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle effect-underline" href="#"> Host Group <b
+                                    class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/host_group"> Host Group</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle  effect-underline" href="#"> Infrastructure
+                                <b
+                                        class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/compute_resource"> Compute Resource </a></li>
+                                <li><a href="/profile"> Profile </a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle  effect-underline" href="#"> Content <b
+                                    class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/product">Product</a></li>
+                                <li><a href="/view">View</a></li>
+                                <li><a href="/activation">Activation Key</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle  effect-underline" href="#"> Containers <b
+                                    class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/new_container">New Container</a></li>
+                                <li><a href="/local_images">Local Images</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-2">
+                 <ul class="nav navbar-nav" style="float:right;outline:none;font-size:13px;">
+                    <li class="nav-item">
+                        <a  href="https://minisatblog.wordpress.com/" >Blog</a>
                     </li>
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle effect-underline" href="#" > Host Group <b
-                                class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/host_group" > Host Group</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle  effect-underline" href="#"> Infrastructure <b
-                                class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/compute_resource"> Compute Resource </a></li>
-                            <li><a href="/profile"> Profile </a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle  effect-underline" href="#" > Content <b
-                                class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/product">Product</a></li>
-                            <li><a href="/view">View</a></li>
-                            <li><a href="/activation">Activation Key</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle  effect-underline" href="#">  Containers <b
-                                class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/new_container">New Container</a></li>
-                            <li><a href="/local_images">Local Images</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                 </ul>
+                 <ul class="nav navbar-nav" style="float:right;outline:none;font-size:20px;">
+                     <li class="nav-item">
+                         <a class="pf pficon-info" href="https://minisat.gitbooks.io/minisat/content/" ></a>
+                     </li>
+                 </ul>
             </div>
         </div>
-</div>
     </nav>
 </header>
 {% block content %}
@@ -100,6 +114,8 @@
 {% block vmpackages %}
 {% endblock %}
 {% block change_host_group %}
+{% endblock %}
+{% block error_content%}
 {% endblock %}
 </body>
 </html>

@@ -1,8 +1,19 @@
+"""
+dashboard_details fetch data from remote compute system and virtual machine to display on
+dashboard
+"""
+
 import os
 from . import vm_manage as vm_funcs
 
 
 def get_vms(ip_list=[]):
+    """Get list of virtual machine and their details from remote compute resources
+
+    :param ip_list: list of IP address of remote compute resources
+
+    :return final_dict: Contain details of all the virtual machine on all compute
+    """
     final_dict = {}
     error = []
     count = 0
@@ -44,6 +55,12 @@ def get_vms(ip_list=[]):
 
 
 def running_containers(compute=[]):
+    """Get list of virtual machine and their details from remote compute resources
+
+    :param compute: list of IP address of remote compute resources
+
+    :return data: Contain details of all the container on all compute
+    """
     data = {}
     error = []
     data['error'] = ""
@@ -69,5 +86,4 @@ def running_containers(compute=[]):
             error.append(tuple[1])
     if len(error):
         data['error'] = error
-    # print(data)
     return data

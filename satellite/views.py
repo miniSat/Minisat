@@ -44,8 +44,7 @@ from satellite.modules import vm_manage as vm
 from satellite.modules import (
     kickstart,
     ssh_connect as ssh,
-    dashboard_details as dash,
-    compute_details as cmp_det
+    dashboard_details as dash
 )
 
 
@@ -54,21 +53,36 @@ from satellite.modules import (
 
 def home(request):
     """
-    We can pass the home.html as parameter to our render() function.
+    Renders the home page.
 
-    :param request: .html page
-    :return: home.html
+    :param request: HttpRequest for loading the home page.
+
+    :returns:       HttpResponse with template name and the parameters needed by the template.
     """
     return render(request, 'home.html', {'title_name': "Dashboard"})
 
 
 def get_virtual_mc(request):
+    """
+    Get all virtual machines running on all local imagess.
+
+    :param request: HttpRequest to gather facts of virtual machines.
+
+    :returns:       Dictionary of all virtual machines along with their facts.
+    """
     compute_name = Compute_resource_model.objects.values_list()
     get_vms = dash.get_vms(compute_name)
     return JsonResponse(get_vms)
 
 
 def get_running_containers(request):
+    """
+    Get all containers running on all compute resources.
+
+    :param request: HttpRequest to gather facts of containers.
+
+    :returns:       Dictionary of all containers along with their facts.
+    """
     compute_name = Compute_resource_model.objects.values_list()
     get_containers = dash.running_containers(compute_name)
     return JsonResponse(get_containers)
@@ -76,31 +90,36 @@ def get_running_containers(request):
 
 def compute_resource(request):
     """
-    We can pass the second parameter as infrastructure/compute_resource.html and third parameter as Dictionary to our.
-    render() fuction
-    :param request: .html page and Dictionary
-    :return: compute_resource.html
+    Renders the compute resource page.
+
+    :param request: HttpRequest for loading the compute resource page.
+
+    :returns:       HttpResponse with template name and the parameters needed by the template.
     """
     form = Compute_resource_form()
     compute_resource_list = Compute_resource_model.objects.all()
     if not compute_resource_list:
         compute_resource_list = False
     # We create object of Compute_resource_model and fetch data and store in
-    # compute_resource_list variable
-    compute_ips = Compute_resource_model.objects.all().values_list('ip_address', flat=True)
-    final_compute_details = {}
-    for each_ip in compute_ips:
-        final_compute_details[each_ip] = cmp_det.get_compute_details(each_ip)
     return render(request, 'infrastructure/compute_resource.html',
                   {'title_name': 'Compute Resource',
                    'form': form,
                    'compute_obj': compute_resource_list,
-                   'message': False,
-                   'compute_details': final_compute_details
+                   'message': False
                    })
 
 
 def post_data(request):
+    """
+    Receive post request from compute resource form.
+    Validate the data.
+    Check if the entered IP Address in alive.
+    Add the system as compute for virtual machines and Docker containers.
+
+    :param request: HttpRequest with user submitted values in the form.
+
+    :returns:       HttpResponse to redirect to compute resource page along with other values needed by the template
+    """
     form = Compute_resource_form(request.POST)
     compute_resource_list = Compute_resource_model.objects.all()
     message = ""
@@ -142,6 +161,13 @@ def post_data(request):
 
 
 def profile(request):
+    """
+    Renders the profile page.
+
+    :param request: HttpRequest for loading the profile page.
+
+    :returns:       HttpResponse with template name and the parameters needed by the template.
+    """
     form = Profile_form()
     profile_list = Profile_model.objects.all()
     if not profile_list:
@@ -155,6 +181,15 @@ def profile(request):
 
 
 def post_profile(request):
+    """
+    Receive post request from profile form.
+    Validate the data.
+    Save the user submitted values under a profile name in database.
+
+    :param request: HttpRequest with user submitted values in the form.
+
+    :returns:       HttpResponse to redirect to profile page along with other values needed by the template.
+    """
     form = Profile_form(request.POST)
     profile_list = Profile_model.objects.all()
     message = ""
@@ -185,6 +220,14 @@ def post_profile(request):
 
 
 def create_host(request):
+    """
+    Renders the create host page.
+    Hide the form unless a single value of compute resource, profile and operating system exists.
+
+    :param request: HttpRequest for loading the create host page.
+
+    :returns:       HttpResponse with template name and the parameters needed by the template.
+    """
     form = Create_host_form()
     error = False
     os_name = Operating_system_model.objects.values_list("os_name", flat=True)
@@ -224,6 +267,13 @@ def create_host(request):
 
 
 def operating_system(request):
+    """
+    Renders the operating system page.
+
+    :param request: HttpRequest for loading the operating system page.
+
+    :returns:       HttpResponse with template name and the parameters needed by the template.
+    """
     form = Operating_system_form()
     operating_system_list = Operating_system_model.objects.all()
     return render(request,
@@ -235,6 +285,15 @@ def operating_system(request):
 
 
 def post_operating_system(request):
+    """
+    Receive post request from operating system form.
+    Validate the data by accepting unique urls and names for operating system.
+    Save the user submitted values under a operating system name in database.
+
+    :param request: HttpRequest with user submitted values in the form.
+
+    :returns:       HttpResponse to redirect to profile page along with other values needed by the template.
+    """
     form = Operating_system_form(request.POST)
     operating_system_list = Operating_system_model.objects.all()
     message = ""
@@ -269,6 +328,16 @@ def post_operating_system(request):
 
 
 def post_create_host(request):
+    """
+    Receive post request from create host form.
+    Validate the data.
+    Check whether activation key is added. If yes, pass the corresponding urls of repositories to kickstart file.
+    Call the function vm_create. Pass necessary arguments to it to provision a virtual machine.
+
+    :param request: HttpRequest with user submitted values in the form.
+
+    :returns:       HttpResponse to redirect to home (dashboard) page along with other values needed by the template.
+    """
     form = Create_host_form(request.POST)
     if form.is_valid():
         create_host = Create_host_model(
@@ -299,7 +368,7 @@ def post_create_host(request):
         else:
             repo = vm.get_repo(create_host.activation_name)
 
-        kickstart_location = kickstart.kick_gen(create_host.password, location_url, repo)
+        kickstart_location = kickstart.kick_gen(create_host.vm_name, create_host.password, location_url, repo)
 
         vm.vm_create(
             compute_ip,
@@ -314,6 +383,13 @@ def post_create_host(request):
 
 
 def new_container(request):
+    """
+    Renders the new container page.
+
+    :param request: HttpRequest for loading the new container page.
+
+    :returns:       HttpResponse with template name and the parameters needed by the template.
+    """
     form = newContainerform
     compute_name = Compute_resource_model.objects.values_list(
         "name", flat=True)
@@ -326,6 +402,17 @@ def new_container(request):
 
 
 def post_new_container(request):
+    """
+    Receive post request from new container form.
+    Validate the data.
+    Check if the container is to be kept running in background.
+    Call run_cont method, pass the parameters needed to run container along with the flag to decide whether the
+    container is to be kept running in background or not.
+
+    :param request: HttpRequest with user submitted values in the form.
+
+    :returns:       HttpResponse to redirect to new container page along with other values needed by the template.
+    """
     form = newContainerform(request.POST)
     if form.is_valid():
         new_cont = Container_model(
@@ -348,6 +435,13 @@ def post_new_container(request):
 
 
 def local_images(request):
+    """
+    Renders the local images page.
+
+    :param request: HttpRequest for loading the local images page.
+
+    :returns:       HttpResponse with template name and the parameters needed by the template.
+    """
     compute_name = Compute_resource_model.objects.values_list("name", flat=True)
     if not compute_name:
         compute_name = False
@@ -360,6 +454,15 @@ def local_images(request):
 
 
 def post_local_images(request):
+    """
+    Receive get request from local images form.
+    Get the compute name whose local Docker images have to be displayed.
+    Call get_docker_images, pass the details of the compute resource selected by the user.
+
+    :param request: HttpRequest with user submitted values in the form.
+
+    :returns:       HttpResponse to redirect to local images page along with other values needed by the template
+    """
     docker_images = {}
     com_name = request.GET.get('com_name', None)
     com_det = Compute_resource_model.objects.filter(name=com_name).values_list()
@@ -368,12 +471,29 @@ def post_local_images(request):
 
 
 def vm_info(request, cname, vm_id):
+    """
+    Renders the vm_info page.
+
+    :param request: HttpRequest for loading the profile page.
+    :param cname:   Compute resource name.
+    :param vm_id:   UUID of a virtual machine running on a compute resource.
+
+    :returns:       HttpResponse with template name and the parameters needed by the template.
+    """
     compute = Compute_resource_model.objects.filter(name=cname).values_list()[0]
     compute_ip = compute[2]
     return render(request, 'VM_info.html', {'compute_ip': compute_ip, 'vm_id': vm_id})
 
 
 def vm_start(request):
+    """
+    Turn on a virtual machine.
+
+    :param request: HttpRequest from home page which brings vm_name and compute_name values.
+
+    :returns:       Json object with current status of the virtual machine and a flag which shows whether the virutal
+                    machine was successfully turned on or not.
+    """
     data = {}
     vm_name = request.GET.get('vm_name', None)
     vm_compute_name = request.GET.get('compute_name', None)
@@ -385,6 +505,13 @@ def vm_start(request):
 
 
 def vm_pause(request):
+    """
+    Turn off a virtual machine.
+
+    :param request: HttpRequest from home page which brings vm_name and compute_name values.
+
+   :returns:        Json object with current status of the virtual machine and a flag which shows whether the virtual                      machine was successfully turned off or not.
+    """
     data = {}
     vm_name = request.GET.get('vm_name', None)
     vm_compute_name = request.GET.get('compute_name', None)
@@ -396,6 +523,14 @@ def vm_pause(request):
 
 
 def vm_delete(request):
+    """
+    Delete a virtual machine.
+
+    :param request: HttpRequest from home page which brings vm_name and compute_name values.
+
+    :returns:       Json object with current status of the virtual machine and a flag which shows whether the virutal
+                    virtual machine was successfully deleted or not.
+    """
     data = {}
     vm_name = request.GET.get('vm_name', None)
     vm_compute_name = request.GET.get('compute_name', None)
@@ -407,6 +542,14 @@ def vm_delete(request):
 
 
 def start_container(request):
+    """
+    Start a container.
+
+    :param request: HttpRequest from home page which brings container name and compute_name values.
+
+    :returns:       Json object with current status of the container and a flag which shows whether the
+                    container was successfully turned on or not.
+    """
     cont_name = request.GET.get('cont_name', None)
     compute_name = request.GET.get('compute_name', None)
     container_status = start_cont(cont_name, compute_name)
@@ -415,6 +558,14 @@ def start_container(request):
 
 
 def stop_container(request):
+    """
+    Stop a container.
+
+    :param request: HttpRequest from home page which brings container name and compute_name values.
+
+    :returns:       Json object with current status of the container and a flag which shows whether the
+                    container was successfully turned off or not.
+    """
     cont_name = request.GET.get('cont_name', None)
     compute_name = request.GET.get('compute_name', None)
     container_status = stop_cont(cont_name, compute_name)
@@ -423,6 +574,14 @@ def stop_container(request):
 
 
 def destroy_container(request):
+    """
+    Destroy a container.
+
+    :param request: HttpRequest from home page which brings container name and compute_name values.
+
+    :returns:       Json object with current status of the container and a flag which shows whether the
+                    container was successfully destroyed or not.
+    """
     cont_name = request.GET.get('cont_name', None)
     compute_name = request.GET.get('compute_name', None)
     container_status = destroy_cont(cont_name, compute_name)
@@ -431,6 +590,13 @@ def destroy_container(request):
 
 
 def product(request):
+    """
+    Renders the product page.
+
+    :param request: HttpRequest for loading the product page.
+
+    :returns:       HttpResponse with template name and the parameters needed by the template.
+    """
     form = Product_form()
     product_list = Product_model.objects.all()
     return render(request,
@@ -442,6 +608,15 @@ def product(request):
 
 
 def post_product(request):
+    """
+    Receive post request from product form.
+    Validate the data.
+    Save the user submitted values under a product name in database.
+
+    :param request: HttpRequest with user submitted values in the form.
+
+    :returns:       HttpResponse to redirect to product page along with other values needed by the template.
+    """
     form = Product_form(request.POST)
     product_list = Product_model.objects.all()
     message = ""
@@ -473,6 +648,15 @@ def post_product(request):
 
 
 def delete(request):
+    """
+    Receive get request from compute resource, profile, product, operating system, view and hosts form.
+    Validate the data.
+    Delete the corresponding entry from database when received a request from the above forms.
+
+    :param request: HttpRequest with user submitted values in the form.
+
+    :returns:       HttpResponse to redirect to respective page who sent a request to delete a value.
+    """
     if request.GET.get('ComputeDelete'):
         Compute_resource_model.objects.filter(name=request.GET.get('ComputeDelete')).delete()
         name = request.GET.get('ComputeDelete')
@@ -509,6 +693,14 @@ def delete(request):
 
 
 def get_updated_views():
+    """
+    Create a dictionary with view name as key and the products under that key as value.
+    Display this dictionary in view existing tab of content view.
+
+    :param request: None
+
+    :returns:       Dictionary with all existing views along with their respective product urls.
+    """
     view_dict = {}
     viewList = View_model.objects.all().values_list('view_name', flat=True).distinct()
     for each in viewList:
@@ -524,6 +716,14 @@ def get_updated_views():
 
 
 def get_updated_activations():
+    """
+    Create a dictionary with activation name as key and the views under that key as value.
+    Display this dictionary in view existing tab of activation key view.
+
+    :param request: None
+
+    :returns:       Dictionary with all existing views with their views and product urls.
+    """
     act_dict = {}
     acts = Activation_model.objects.all().values_list('activation_name', flat=True).distinct()
     for act in acts:
@@ -542,6 +742,13 @@ def get_updated_activations():
 
 
 def content_view(request):
+    """
+    Renders the content view page.
+
+    :param request: HttpRequest for loading the content view page.
+
+    :returns:       HttpResponse with template name and the parameters needed by the template.
+    """
     form = View_form()
     product_list = Product_model.objects.all()
     return render(request, 'Content/content_view.html',
@@ -553,6 +760,15 @@ def content_view(request):
 
 
 def post_content_view(request):
+    """
+    Receive post request from content view form.
+    Validate the data.
+    Save the user submitted values under a view name in database.
+
+    :param request: HttpRequest with user submitted values in the form.
+
+    :returns:       HttpResponse to redirect to content view page along with other values needed by the template.
+    """
     form = View_form(request.POST)
     view_name = request.POST.get('view_name')
     product_list = Product_model.objects.all()
@@ -577,6 +793,13 @@ def post_content_view(request):
 
 
 def activation_view(request):
+    """
+    Renders the activation key page.
+
+    :param request: HttpRequest for loading the activation key page.
+
+    :returns:       HttpResponse with template name and the parameters needed by the template.
+    """
     form = Activation_form()
     return render(request, 'Content/activation_key.html',
                   {'title_name': 'Activation Key', 'form': form, 'view_dict': get_updated_views(), 'message': False,
@@ -584,6 +807,15 @@ def activation_view(request):
 
 
 def post_activation_view(request):
+    """
+    Receive post request from acitvation key form.
+    Validate the data.
+    Save the user submitted values under a view name in database.
+
+    :param request: HttpRequest with user submitted values in the form.
+
+    :returns:       HttpResponse to redirect to activation page along with other values needed by the template.
+    """
     form = Activation_form(request.POST)
     activation_name = request.POST.get('activation_name')
     view_list = request.POST.getlist('views[]')
@@ -607,6 +839,13 @@ def post_activation_view(request):
 
 
 def host_group_view(request):
+    """
+    Renders the host group page.
+
+    :param request: HttpRequest for loading the host group page.
+
+    :returns:       HttpResponse with template name and the parameters needed by the template.
+    """
     select_compute = Compute_resource_model.objects.values_list("name", flat=True)
     select_profile = Profile_model.objects.values_list("profile_name", flat=True)
     select_os = Operating_system_model.objects.values_list("os_name", flat=True)
@@ -625,6 +864,15 @@ def host_group_view(request):
 
 
 def post_host_group(request):
+    """
+    Receive post request from host group form.
+    Validate the data.
+    Save the user submitted values under a view name in database.
+
+    :param request: HttpRequest with user submitted values in the form.
+
+    :returns:       HttpResponse to redirect to host group page along with other values needed by the template.
+    """
     form = Host_group_form(request.POST)
     select_compute = Compute_resource_model.objects.values_list("name", flat=True)
     select_profile = Profile_model.objects.values_list("profile_name", flat=True)
@@ -661,6 +909,13 @@ def post_host_group(request):
 
 
 def host_group_data(request):
+    """
+    Receive a post request with host group name.
+
+    :param request: HttpRequest for with host group name.
+
+    :returns:       Json object with host group name, compute, profile, operating system, activation key.
+    """
     host_group = request.GET.get("host_group")
     host_data = list(Host_group_model.objects.all().filter(host_group_name=host_group).values_list(flat=True))
     data = {
@@ -674,6 +929,18 @@ def host_group_data(request):
 
 
 def get_vm_packages(request, compute_ip, compute_name, vm_ip, vm_name):
+    """
+    Get the packages installed in the virtual machine.
+    Called from vm_info page.
+
+    :param request:         HttpRequest to fetch packages.
+    :param compute_ip:      IP address of compute resource, where the virtual machine is running.
+    :param compute_name:    Name of compute resource, where the virtual machine is running.
+    :param vm_ip:           IP address of virtual machine, whose packages need to fetched.
+    :param vm_name:         Name of virtual machine, whose packages need to fetched.
+
+    :returns:               Json object with list of all the packages installed in the virtual machine.
+    """
     data = {}
     compute_ip = compute_ip.replace('-', '.')
     vm_ip = vm_ip.replace('-', '.')
@@ -683,6 +950,16 @@ def get_vm_packages(request, compute_ip, compute_name, vm_ip, vm_name):
 
 
 def get_vm_facts(request, compute_ip, vm_id):
+    """
+    Get the details of a the virtual machine.
+    Called from vm_info page.
+
+    :param request:         HttpRequest to fetch facts.
+    :param compute_ip:      IP address of compute resource, where the virtual machine is running.
+    :param vm_id:           UUID of the targeted virtual machine.
+
+    :returns:               Json object with list of all the details about the virtual machine.
+    """
     compute_ip = compute_ip.replace('-', '.')
     compute_name = Compute_resource_model.objects.filter(ip_address=compute_ip).values_list()[0][1]
     details = vm.vm_details(compute_name, compute_ip, vm_id)
@@ -692,6 +969,17 @@ def get_vm_facts(request, compute_ip, vm_id):
 
 
 def get_added_repo(request, compute_ip, vm_ip, vm_name):
+    """
+    Get the details of all the repositories added in the virtual machine.
+    Called from vm_info page.
+
+    :param request:         HttpRequest to fetch packages.
+    :param compute_ip:      IP address of compute resource, where the virtual machine is running.
+    :param vm_ip:           IP address of the virtual machine whose repositories need to found.
+    :param vm_name:         Name of virtual machine, whose repositories need to fetched.
+
+    :returns:               Json object with list of all the details about the repositories in virtual machine.
+    """
     compute_ip = compute_ip.replace('-', '.')
     vm_ip = vm_ip.replace('-', '.')
     result = vm.get_vm_repo(compute_ip, vm_ip, vm_name)
@@ -699,10 +987,43 @@ def get_added_repo(request, compute_ip, vm_ip, vm_name):
 
 
 def get_vm_status(request, compute_ip, vm_name, vm_ip):
+    """
+    Get the current state of a virtual machine.
+
+    :param request:         HttpRequest to get status.
+    :param compute_ip:      IP address of compute resource, where the virtual machine is running.
+    :param vm_ip:           IP address of the virtual machine whose state need to found.
+    :param vm_name:         Name of virtual machine, whose state need to fetched.
+
+    :returns:               Json object with list of all the details about the state of the virtual machine.
+    """
     result = vm.vm_status(compute_ip, vm_name, vm_ip)
     return JsonResponse(result)
 
 
 def change_repo_state(request, compute_ip, vm_ip, repo_id, repo_flag, vm_name):
+    """
+    Toggle the repository between enabled to disabled.
+
+    :param request:         HttpRequest to change repo state.
+    :param compute_ip:      IP address of compute resource, where the virtual machine is running.
+    :param vm_ip:           IP address of the virtual machine whose repo state needs to found.
+    :param repo_id:         Repository id of which is to be toggled.
+    :param repo_flag:       Decide whether it is to be enabled or disabled.
+    :param vm_name:         Name of virtual machine, whose state need to fetched.
+
+    :returns:               Json object with changed state of a particular repository from the virtual machine.
+    """
     get_repo_state = vm.change_repo(compute_ip, vm_ip, repo_id, repo_flag, vm_name)
     return JsonResponse({'flag': get_repo_state})
+
+
+def error_404(request):
+    """
+    Renders the error page.
+
+    :param request: HttpRequest for loading the error page.
+
+    :returns:       HttpResponse with template name and the parameters needed by the template.
+    """
+    return render(request, 'error/error404.html')

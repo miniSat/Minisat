@@ -39,7 +39,17 @@ python3 manage.py migrate
 ```sh
 python3 manage.py runserver 
 ```
-
+### Containerize Minisat
+- Build Docker image
+```sh
+$ cd Minisat/
+$ docker build -t minisat:latest .
+```
+- Run the image
+```sh
+$ docker container run -it -p 8000:8000 minisat:latest 0.0.0.0:8000
+```
+- Head to http://localhost:8000 for Minisat UI
 ### Create test environment
 All minisat pull request are tested in [Travis-ci](https://travis-ci.org/miniSat/minisat). Sometimes tests fail, and when they do you can visit the test job that failed and view its console output. 
 
