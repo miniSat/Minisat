@@ -1,12 +1,10 @@
-# MinisatUI
+# Minisat
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)
 ![travis-ci](https://travis-ci.org/miniSat/Minisat.svg?branch=master)
 
-Web interface for Minisat.
-
-Minisat is a centralize web interface to provision virtual machine and run docker container on remote hosts.
+Minisat is a centralizes web interface, built on [Django framework](https://www.djangoproject.com/start/overview/), to provision virtual machines and run Docker containers on remote hosts.
 
 ### Dependencies
 ```sh
