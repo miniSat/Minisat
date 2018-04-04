@@ -5,12 +5,15 @@ This file is to manage virtual machines in Minisat
 import os
 import time
 import re
-from satellite.models import (
-    Product_model,
-    Activation_model,
-    View_model,
-    Create_host_model
-)
+try:
+    from satellite.models import (
+        Product_model,
+        Activation_model,
+        View_model,
+        Create_host_model
+    )
+except:
+    print("")
 
 
 def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_loc):

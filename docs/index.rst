@@ -14,6 +14,7 @@ Welcome to Minisat's documentation!
    components
    installation
    usage
+   methods
    contribute
 
 
