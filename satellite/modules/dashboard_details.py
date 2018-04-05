@@ -12,7 +12,7 @@ def get_vms(ip_list=[]):
 
     :param ip_list: list of IP address of remote compute resources
 
-    :return final_dict: Contain details of all the virtual machine on all compute
+    :returns final_dict: Contain details of all the virtual machine on all compute
     """
     final_dict = {}
     error = []
@@ -59,7 +59,7 @@ def running_containers(compute=[]):
 
     :param compute: list of IP address of remote compute resources
 
-    :return data: Contain details of all the container on all compute
+    :returns data: Contain details of all the container on all compute
     """
     data = {}
     error = []

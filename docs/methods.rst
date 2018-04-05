@@ -1,27 +1,27 @@
 Methods
 =======
 
-Methods to make SSH connection with remote hosts
+Make SSH connection
 ------------------------------------------------
 .. automodule:: satellite.modules.ssh_connect
     :members:
 
-Methods to manage virtual machine
+Manage virtual machine
 ---------------------------------
 .. automodule:: satellite.modules.vm_manage
     :members:
 
-Methods to create kickstart file
+Create kickstart file
 --------------------------------
 .. automodule:: satellite.modules.kickstart
     :members:
 
-Methods to manage Docker container
+Manage Docker container
 ----------------------------------
 .. automodule:: satellite.modules.docker_manage
     :members:
 
-Methods to fet h data for dashboard
+Fetch data for dashboard
 -----------------------------------
 .. automodule:: satellite.modules.dashboard_details
     :members:

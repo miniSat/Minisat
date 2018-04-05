@@ -1,5 +1,5 @@
 """
-This file is to manage virtual machines in Minisat
+This module is to manage virtual machines in Minisat
 """
 
 import os
@@ -27,7 +27,7 @@ def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_lo
     :param location_url: URL location of OS
     :param kickstart_loc: location of kickstart
 
-    :return: Boolean, True if success or False
+    :returns: Boolean, True if success or False
     """
     kickstart_name = kickstart_loc.split('/')[-1]
     final_cmd = 'virt-install --connect qemu+ssh://root@' + compute_ip + '/system --name ' + name + ' --ram ' + str(
@@ -60,7 +60,7 @@ def virsh_start_vm(vm_name, com_ip):
     :param vm_name: Name of virtual machine
     :param com_ip: Compute IP on which virtual machine is running
 
-    :return: start_vm_flag
+    :returns: start_vm_flag
     """
     cmd = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system start " + str(vm_name)
     start_vm_flag = os.system(cmd)
@@ -73,7 +73,7 @@ def virsh_pause_vm(vm_name, com_ip):
     :param vm_name: Name of virtual machine
     :param com_ip: Compute IP on which virtual machine is running
 
-    :return: shut_vm_flag
+    :returns: shut_vm_flag
     """
     cmd = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system shutdown " + str(vm_name)
     shut_vm_flag = os.system(cmd)
@@ -87,7 +87,7 @@ def virsh_delete_vm(vm_name, com_ip):
     :param vm_name: Name of virtual machine
     :param com_ip: Compute IP on which virtual machine is running
 
-    :return: delete_vm_flag
+    :returns: delete_vm_flag
     """
     cmd = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system shutdown " + str(vm_name)
     cmd2 = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system undefine " + str(vm_name)
@@ -104,7 +104,7 @@ def vm_ip(vm_name, compute_ip):
     :param vm_name: Name of virtual machine
     :param compute_ip: Compute IP on which virtual machine is running
 
-    :return vm_ipaddress: contain IP address of virtual machine
+    :returns vm_ipaddress: contain IP address of virtual machine
     """
     response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_name).readlines()
     vm_mac = response[2].split(" ")[-1]
@@ -129,8 +129,8 @@ def get_memory(compute_ip, vm_name, vm_ip):
     :param vm_name: Name of virtual machine
     :param vm_ip: IP address of virtual machine
 
-    :return total_mem: Total memory of virtual machine
-    :return free_mem: Free memory of virtual machine
+    :returns total_mem: Total memory of virtual machine
+    :returns free_mem: Free memory of virtual machine
     """
     vm_ip = vm_ip.split("/")[0]
     root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
@@ -155,9 +155,7 @@ def vm_details(compute_name, compute_ip, vm_id):
     :param compute_ip: IP address of compute on which virtual machine is running
     :param vm_id: UUID of virtual machine
 
-    :return details: Dictionary of ID, name, state(Running or shut),
-    virtual CPUS, Total memory allocated, Free memory, virtual machine IP address, virtual machine MAC address,
-    Compute name
+    :returns details: Dictionary of ID, name, state(Running or shut), virtual CPUS, Total memory allocated, Free memory, virtual machine IP address, virtual machine MAC address, Compute name
     """
     details = {}
     details["Id"] = vm_id
@@ -189,7 +187,7 @@ def get_packages(compute_ip, vm_ip, root_passwd):
     :param vm_ip: IP address of virtual machine
     :param root_passwd: Root password of virtual machine
 
-    :return package_info: List of all packages in virtual machine
+    :returns package_info: List of all packages in virtual machine
     """
     vm_ip = vm_ip.split("/")[0]
     package_info = os.popen("ssh root@" + compute_ip + " 'sshpass -p " + root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " rpm -qa'").readlines()
@@ -202,7 +200,7 @@ def get_repo(activation_name):
 
     :param activation_name: Name of activation
 
-    :return repo: Dictionary of repo name and repo URL included in that activation
+    :returns repo: Dictionary of repo name and repo URL included in that activation
     """
     repo = {}
     product = []
@@ -226,7 +224,7 @@ def get_status(compute_name, compute_ip, vm_name):
     :param compute_ip: Compute IP on which virtual machine is running
     :param vm_name: Name of virtual machine
 
-    :return: Running or Initializing
+    :returns: Running or Initializing
     """
     try:
         root_passwd = Create_host_model.objects.filter(select_compute=compute_name, vm_name=vm_name).values_list()[0][6]
@@ -250,7 +248,7 @@ def filter_repo(repo_info):
 
     :param repo_info: Raw repo data
 
-    :return repo_info: Cleaned repo data
+    :returns repo_info: Cleaned repo data
     """
     repo_info = [x for x in repo_info if not x.startswith('Last')]
     repo_info = [x for x in repo_info if not x.startswith('repo')]
@@ -268,7 +266,7 @@ def get_vm_repo(compute_ip, vm_ip, vm_name):
     :param vm_ip: IP address of virtual machine
     :param vm_name: Name of virtual machine
 
-    :return repo_info: Contain of list of enabled and disabled repo
+    :returns repo_info: Contain of list of enabled and disabled repo
     """
     vm_root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
     cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf repolist enabled -y'"
@@ -320,7 +318,7 @@ def vm_status(compute_ip, vm_name, vm_ip):
     :param vm_name: Name of virtual machine
     :param vm_ip: IP address of virtual machine
 
-    :return: Running or Initializing or Shutdown
+    :returns: Running or Initializing or Shutdown
     """
     status = {}
     compute_ip = compute_ip.replace('-', '.')
@@ -345,7 +343,7 @@ def change_repo(compute_ip, vm_ip, repo_id, repo_flag, vm_name):
     :param repo_flag: flag of repo (enable or disable)
     :param vm_name: Name of virtual machine
 
-    :return : success or failed
+    :returns: success or failed
     """
     compute_ip = compute_ip.replace('-', '.')
     vm_ip = vm_ip.replace('-', '.')
