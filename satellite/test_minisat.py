@@ -6,8 +6,8 @@ from django.test import TestCase  # NOQA
 import os
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
-
 # Create your tests here.
+
 
 def test_pep8():
     """
