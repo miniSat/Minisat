@@ -1,5 +1,5 @@
 """
-This file generate the kickstart file for virtual machine
+This module generate the kickstart file for virtual machine
 """
 
 
@@ -11,7 +11,7 @@ def kick_gen(vm_name, passwd, location, repo):
     :param location: Location of operating system
     :param repo: List of repo needed to add in virtual machine
 
-    :return: location of kickstart file
+    :returns: location of kickstart file
     """
     with open("/tmp/ks.cfg", "w+") as ks:
         ks.write("install \n"

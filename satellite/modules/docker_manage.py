@@ -1,5 +1,5 @@
 """
-This file is to manage Docker container in Minisat
+This module is to manage Docker container in Minisat
 """
 
 import os
@@ -12,7 +12,7 @@ def make_connection(ip_address, name):
     :param ip_address: IP address of remote machine
     :param name: Name of docker-machine connection
 
-    :return: True if success or False
+    :returns: True if success or False
     """
     add_docker_machine = "docker-machine create --driver generic --generic-ip-address " + ip_address + \
                          " --generic-ssh-user root --generic-ssh-key ~/.ssh/id_rsa " + name + " > /dev/null 2>&1 &"
@@ -29,7 +29,7 @@ def get_docker_images(compute=[]):
 
     :param compute: Name of compute resources
 
-    :return docker_dict: Dictionary of docker images available
+    :returns docker_dict: Dictionary of docker images available
     """
     name = compute[0][1]
     images_list = []
@@ -81,7 +81,7 @@ def start_cont(cont_name, compute_name):
     :param cont_name: Name of container
     :param compute_name: Name of compute
 
-    :return: Paused if success else 0
+    :returns: Paused if success else 0
     """
     start_cmd = "docker-machine ssh " + compute_name + " docker unpause " + cont_name
     cont_response = os.system(start_cmd)
@@ -98,7 +98,7 @@ def stop_cont(cont_name, compute_name):
     :param cont_name: Name of container
     :param compute_name: Name of compute
 
-    :return: Running if success else 0
+    :returns: Running if success else 0
     """
     start_cmd = "docker-machine ssh " + compute_name + " docker pause " + cont_name
     cont_response = os.popen(start_cmd)
@@ -115,7 +115,7 @@ def destroy_cont(cont_name, compute_name):
     :param cont_name: Name of container
     :param compute_name: Name of compute
 
-    :return: Destroyed if success else 0
+    :returns: Destroyed if success else 0
     """
     stop_cmd = "docker-machine ssh " + compute_name + " docker container rm -f " + cont_name
     cont_response = os.popen(stop_cmd)

@@ -1,3 +1,7 @@
+"""
+URL dispatcher for Minisat
+"""
+
 from django.urls import (
     path
 )

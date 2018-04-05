@@ -1,5 +1,5 @@
 """
-This file is to make connection with newly added compute resources
+This module is to make connection with newly added compute resources
 """
 
 import os
@@ -11,7 +11,7 @@ def copy_ssh_id(ip_address, password):
     :param ip_address: IP address of remote system (Compute resource)
     :param password: Root password of remote system
 
-    :return: True
+    :returns: True
     """
     make_ssh = "sshpass -p " + password + " ssh-copy-id -o StrictHostKeyChecking=no root@" + ip_address
     os.system(make_ssh)
@@ -24,7 +24,7 @@ def make_connection(ip_address, password):
     :param ip_address: IP address of remote system (Compute resource)
     :param password: Root password of remote system
 
-    :return: calls the copy_ssh_id(ip_address, password) to copy SSH key else error
+    :returns: Calls the copy_ssh_id(ip_address, password) to copy SSH key else error
     """
     copy_id = "sshpass -p " + password + " ssh -o StrictHostKeyChecking=no root@" + ip_address + " hostname"
     copy_id_status = os.system(copy_id)

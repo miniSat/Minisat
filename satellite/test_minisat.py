@@ -1,18 +1,26 @@
+"""
+This Module is for testing Minisat.
+"""
+
 from django.test import TestCase  # NOQA
 import os
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
-
-
 # Create your tests here.
 
 
 def test_pep8():
+    """
+    Testing PEP 8 standards
+    """
     response = os.system("flake8 --ignore=E501,E122,E722 minisat satellite")
     assert response == 0
 
 
 def test_web_ui():
+    """"
+    Check Minisat is working properly by visiting all availabe pages
+    """
     options = Options()
     options.add_argument('-headless')
     driver = webdriver.Firefox(firefox_options=options)
@@ -34,6 +42,9 @@ def test_web_ui():
 
 
 def test_profile():
+    """
+    Test Profile page
+    """
     options = Options()
     options.add_argument('-headless')
     driver = webdriver.Firefox(firefox_options=options)
@@ -61,6 +72,9 @@ def test_profile():
 
 
 def test_operating_system():
+    """
+    Test Operating System page
+    """
     options = Options()
     options.add_argument('-headless')
     driver = webdriver.Firefox(firefox_options=options)
@@ -84,6 +98,9 @@ def test_operating_system():
 
 
 def test_product():
+    """
+    Test product page
+    """
     options = Options()
     options.add_argument('-headless')
     driver = webdriver.Firefox(firefox_options=options)
