@@ -1,5 +1,7 @@
 """
 This Module is for testing Minisat.
+All testcase are tested on `Travis-CI <https://travis-ci.org/miniSat/Minisat>`_ and triggered when new pull request is opened.
+Most of the tesing is done by **Selenium** and in **headless mode**.
 """
 
 from django.test import TestCase  # NOQA
@@ -11,15 +13,21 @@ from selenium.webdriver.firefox.options import Options
 
 def test_pep8():
     """
-    Testing PEP 8 standards
+    Testing PEP 8 standards.
+    Flake8 is use to check PEP 8.
+
+    Error E501 (line too long error), E122 (Continuation line missing indentation or outdented),
+    E722 (do not use bare except) are ignored.
     """
     response = os.system("flake8 --ignore=E501,E122,E722 minisat satellite")
     assert response == 0
 
 
 def test_web_ui():
-    """"
-    Check Minisat is working properly by visiting all availabe pages
+    """
+    Check Minisat is working properly by visiting all availabe pages.
+    It visits Dashboard, compute_resource, profile, create_host, operating_system,
+    new_container, local_images.
     """
     options = Options()
     options.add_argument('-headless')
@@ -44,6 +52,8 @@ def test_web_ui():
 def test_profile():
     """
     Test Profile page
+    Some testcase are already designed with their expected output.
+    If testcase fails it will split error.
     """
     options = Options()
     options.add_argument('-headless')
@@ -74,6 +84,8 @@ def test_profile():
 def test_operating_system():
     """
     Test Operating System page
+    Some testcase are already designed with their expected output.
+    If testcase fails it will split error.
     """
     options = Options()
     options.add_argument('-headless')
@@ -100,6 +112,8 @@ def test_operating_system():
 def test_product():
     """
     Test product page
+    Some testcase are already designed with their expected output.
+    If testcase fails it will split error.
     """
     options = Options()
     options.add_argument('-headless')
