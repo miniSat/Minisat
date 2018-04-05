@@ -4,19 +4,16 @@ Usage
 Creating Virtual Machines
 -------------------------
 
-Follow the steps to provisioning virtual machine. 
+Follow the steps to provision a virtual machine. 
 
 ++++++
 Step 1
 ++++++
 
-First create compute resource.
-
-To do so click on Infrastructure -> Compute Resource
+First create compute resource by clicking on Infrastructure -> Compute Resource.
 
 * Fill all the details
-* Make sure there is no repetition of name, compute resource is reachable from Minisat server and root password should be correct.
-* All the fields have validation.
+* Make sure there is no repetition of compute name, compute resource is reachable by Minisat server and root password should be correct.
 
 ++++++
 Step 2
@@ -35,19 +32,19 @@ Click *Submit* Profile gets added to database and is enlisted in **View Existing
 Step 3
 ++++++
 
-Now, add Packages for the Virtual machine.
+Now, add Packages for the virtual machine.
 
 * Click on Content -> Product
 
-	Enter the name of package and give URL from where it should fetch the package repository.
+	Enter the name of *Product* and URL from where it should fetch the package repository.
 
 * Click on Content -> View
 
-	Enter the name for View and select the product from the list avialable. Select one or more products to encapsulate into single View.
+	Enter the name for *View* and select the product from the list avialable. Select one or more products to encapsulate them into single *View*.
 
 * Click on Content -> Activation key
 
-	Here enter the name for activation key and select one or more Views as per requirment.
+	Here enter the name for activation key and select one or more *View* as per requirement.
 
 .. note::
 	
@@ -59,32 +56,31 @@ Step 4
 ++++++
 
 The next thing that comes into picture is Host Group.
-To use same compute, profile, operating system and activation key frequently then *host group* plays vital role.
+To make use of the same compute resources, profiles, operating systems and activation keys frequently, they can be bundled together under a single unit called *Host Group*.
 
 Click Host Group -> Host Group
 
-* Name the host group as per convenience.
-* Select Compute Resource, Profile, Operating System and Activation key from their *drop down* respectively.
+* Name the *Host Group*.
+* Select Compute Resource, Profile, Operating System and Activation key from their respective drop down options.
 
-Once host group is created its entry is inserted in database and will be enlisted under **View Existing** section.
+Once a *Host Group* is created, a virtual machine is provisioned with less efforts as selecting a host group populates the other
+parameters necessary to provision a virtual machine.
 
 .. note::
 
-	Host Group is optional but important at time of eliminating repetition.
+	*Host Group* are advantageous when multiple virtual machines are to provisioned with little or no changes in their specifications. 
 
 ++++++
 Step 5
 ++++++
 
-This is the final step of provisioning the virtual machine on remote machine.
+This is the final step of provisioning a virtual machine on remote machine.
 
 Click Host -> Create Host
 
-- Here provide name to host.
+- Name the virtual machine so as to identify it on the dashboard.
 
-- Select all the fields which are required.
-
-- Selecting *host group* will fill the fields such as compute, profile, operating system and activation key automatically.
+- Selecting *Host Group* will populate the fields such as compute, profile, operating system and activation key according to the values the *Host Group* consists of.
 
 .. note::
 	
@@ -108,7 +104,7 @@ Step 1
 
 First create compute resource.
 
-To do so click on Infrastructure -> Compute Resource
+Click on Infrastructure -> Compute Resource
 
 * Fill all the details
 * Make sure there is no current existance of name and IP address in database.
