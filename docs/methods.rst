@@ -25,3 +25,8 @@ Fetch data for dashboard
 -----------------------------------
 .. automodule:: satellite.modules.dashboard_details
     :members:
+
+Testcase of Minisat
+-------------------
+.. automodule:: satellite.test_minisat
+    :members:
