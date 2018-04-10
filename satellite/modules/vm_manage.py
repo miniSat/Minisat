@@ -16,6 +16,18 @@ except:
     print("")
 
 
+def create_vm_temp_file(name, compute_ip):
+    if not os.path.exists("/tmp/Minisat/vm/"):
+        os.makedirs("/tmp/Minisat/vm/")
+    file_name = "/tmp/Minisat/vm/" + name + ".info"
+    with open(file_name, "w+") as file:
+        file.write("\n" +
+            name + "\n" +
+            "initializing\n" +
+            compute_ip
+            )
+
+
 def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_loc):
     """Create virtual machine on remote system
 
@@ -34,6 +46,7 @@ def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_lo
         ram) + ' --vcpus ' + str(cpus) + ' --disk path=/var/lib/libvirt/images/' + name + '.qcow2,bus=virtio,size=' \
         + str(disk_size) + ' --location ' + location_url + ' --initrd-inject=' + kickstart_loc + \
         ' --extra-args=\'ks=file:/' + kickstart_name + ' ksdevice=ens3\' --network bridge:virbr0 > /dev/null 2>&1 &'
+    create_vm_temp_file(name, compute_ip)
     response = os.system(final_cmd)
     if response == 0:
         return True
@@ -106,9 +119,9 @@ def vm_ip(vm_name, compute_ip):
 
     :returns vm_ipaddress: contain IP address of virtual machine
     """
-    response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_name).readlines()
-    vm_mac = response[2].split(" ")[-1]
     try:
+        response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_name).readlines()
+        vm_mac = response[2].split(" ")[-1]
         response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system net-dhcp-leases default | grep " + vm_mac).readlines()
         if len(response) > 1:
             for each in range(len(response)):
