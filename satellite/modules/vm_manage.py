@@ -22,10 +22,9 @@ def create_vm_temp_file(name, compute_ip):
     file_name = "/tmp/Minisat/vm/" + name + ".info"
     with open(file_name, "w+") as file:
         file.write("\n" +
-            name + "\n" +
-            "initializing\n" +
-            compute_ip
-            )
+                   name + "\n" +
+                   "initializing\n" +
+                   compute_ip)
 
 
 def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_loc):
@@ -248,10 +247,10 @@ def get_status(compute_name, compute_ip, vm_name):
     ping = "ssh root@" + compute_ip + " ping -c 2 " + vm_ipaddress
     ping_response = os.system(ping)
     response = os.system(cmd)
-    if response == 0 or ping_response == 0:
-        return "running"
-    elif response == 65280:
+    if response == 65280:
         return "initializing"
+    elif response == 0 and ping_response == 0:
+        return "running"
 
 
 def filter_repo(repo_info):

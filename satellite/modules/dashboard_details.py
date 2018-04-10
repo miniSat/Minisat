@@ -25,7 +25,7 @@ def get_vms(ip_list=[]):
 
     :returns final_dict: Contain details of all the virtual machine on all compute
     """
-    update_vm()
+    update_vm_file()
     final_dict = {}
     error = []
     count = 0
@@ -67,7 +67,6 @@ def get_vms(ip_list=[]):
         vm_det = []
         with open(file) as fi:
             data = fi.readlines()
-            print(data)
             vm_det.append(data[0][:-1])
             vm_det.append(data[1][:-1])
             vm_det.append(data[2][:-1])
