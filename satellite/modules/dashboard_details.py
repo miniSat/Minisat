@@ -8,14 +8,15 @@ from . import vm_manage as vm_funcs
 
 
 def update_vm_file():
-    for file in os.listdir("/tmp/Minisat/vm/"):
-        file = "/tmp/Minisat/vm/" + file
-        with open(file) as fi:
-            data = fi.readlines()
-            name = data[1][:-1]
-            compute_ip = data[3]
-            if vm_funcs.vm_ip(name, compute_ip) != '-':
-                os.remove(file)
+    if os.path.exists("/tmp/Minisat/vm"):
+        for file in os.listdir("/tmp/Minisat/vm/"):
+            file = "/tmp/Minisat/vm/" + file
+            with open(file) as fi:
+                data = fi.readlines()
+                name = data[1][:-1]
+                compute_ip = data[3]
+                if vm_funcs.vm_ip(name, compute_ip) != '-':
+                    os.remove(file)
 
 
 def get_vms(ip_list=[]):
@@ -62,18 +63,19 @@ def get_vms(ip_list=[]):
         else:
             error.append(tuple[1])
     # file create
-    for file in os.listdir("/tmp/Minisat/vm/"):
-        file = "/tmp/Minisat/vm/" + file
-        vm_det = []
-        with open(file) as fi:
-            data = fi.readlines()
-            vm_det.append(data[0][:-1])
-            vm_det.append(data[1][:-1])
-            vm_det.append(data[2][:-1])
-            vm_det.append("")
-            vm_det.append("")
-            final_dict[count] = vm_det
-            count += 1
+    if os.path.exists("/tmp/Minisat/vm"):
+        for file in os.listdir("/tmp/Minisat/vm/"):
+            file = "/tmp/Minisat/vm/" + file
+            vm_det = []
+            with open(file) as fi:
+                data = fi.readlines()
+                vm_det.append(data[0][:-1])
+                vm_det.append(data[1][:-1])
+                vm_det.append(data[2][:-1])
+                vm_det.append("")
+                vm_det.append("")
+                final_dict[count] = vm_det
+                count += 1
 
     if len(error):
         final_dict['error'] = error
