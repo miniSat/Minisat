@@ -14,12 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from satellite import views
 from django.urls import (
     path,
     include
 )
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('satellite.urls')),
 ]
+
+handler404 = views.error_404
+handler500 = views.error_404

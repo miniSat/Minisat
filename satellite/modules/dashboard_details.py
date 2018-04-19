@@ -1,8 +1,32 @@
+"""
+dashboard_details fetch data from remote compute system and virtual machine to display on
+dashboard
+"""
+
 import os
 from . import vm_manage as vm_funcs
 
 
+def update_vm_file():
+    if os.path.exists("/tmp/Minisat/vm"):
+        for file in os.listdir("/tmp/Minisat/vm/"):
+            file = "/tmp/Minisat/vm/" + file
+            with open(file) as fi:
+                data = fi.readlines()
+                name = data[1][:-1]
+                compute_ip = data[3]
+                if vm_funcs.vm_ip(name, compute_ip) != '-':
+                    os.remove(file)
+
+
 def get_vms(ip_list=[]):
+    """Get list of virtual machine and their details from remote compute resources
+
+    :param ip_list: list of IP address of remote compute resources
+
+    :returns final_dict: Contain details of all the virtual machine on all compute
+    """
+    update_vm_file()
     final_dict = {}
     error = []
     count = 0
@@ -38,12 +62,33 @@ def get_vms(ip_list=[]):
                 count = count + 1
         else:
             error.append(tuple[1])
+    # file create
+    if os.path.exists("/tmp/Minisat/vm"):
+        for file in os.listdir("/tmp/Minisat/vm/"):
+            file = "/tmp/Minisat/vm/" + file
+            vm_det = []
+            with open(file) as fi:
+                data = fi.readlines()
+                vm_det.append(data[0][:-1])
+                vm_det.append(data[1][:-1])
+                vm_det.append(data[2][:-1])
+                vm_det.append("")
+                vm_det.append("")
+                final_dict[count] = vm_det
+                count += 1
+
     if len(error):
         final_dict['error'] = error
     return final_dict
 
 
 def running_containers(compute=[]):
+    """Get list of virtual machine and their details from remote compute resources
+
+    :param compute: list of IP address of remote compute resources
+
+    :returns data: Contain details of all the container on all compute
+    """
     data = {}
     error = []
     data['error'] = ""
@@ -69,5 +114,4 @@ def running_containers(compute=[]):
             error.append(tuple[1])
     if len(error):
         data['error'] = error
-    # print(data)
     return data
