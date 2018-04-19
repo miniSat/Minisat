@@ -1,8 +1,19 @@
+"""
+This module is to manage Docker container in Minisat
+"""
+
 import os
 import time
 
 
 def make_connection(ip_address, name):
+    """Make Docker connection using docker-machine
+
+    :param ip_address: IP address of remote machine
+    :param name: Name of docker-machine connection
+
+    :returns: True if success or False
+    """
     add_docker_machine = "docker-machine create --driver generic --generic-ip-address " + ip_address + \
                          " --generic-ssh-user root --generic-ssh-key ~/.ssh/id_rsa " + name + " > /dev/null 2>&1 &"
     result = os.system(add_docker_machine)
@@ -14,6 +25,12 @@ def make_connection(ip_address, name):
 
 
 def get_docker_images(compute=[]):
+    """Get Docker images available in all the compute resources
+
+    :param compute: Name of compute resources
+
+    :returns docker_dict: Dictionary of docker images available
+    """
     name = compute[0][1]
     images_list = []
     get_images = os.popen("docker-machine ssh " + name + " docker images").readlines()
@@ -29,6 +46,11 @@ def get_docker_images(compute=[]):
 
 
 def run_cont(new_cont, stat):
+    """Run the container
+
+    :param new_cont: Class of container details
+    :param stat: Running status
+    """
     if stat == "on":
         stat_cmd = " -t "
     else:
@@ -54,6 +76,13 @@ def run_cont(new_cont, stat):
 
 
 def start_cont(cont_name, compute_name):
+    """Start a container
+
+    :param cont_name: Name of container
+    :param compute_name: Name of compute
+
+    :returns: Paused if success else 0
+    """
     start_cmd = "docker-machine ssh " + compute_name + " docker unpause " + cont_name
     cont_response = os.system(start_cmd)
     time.sleep(4)
@@ -64,6 +93,13 @@ def start_cont(cont_name, compute_name):
 
 
 def stop_cont(cont_name, compute_name):
+    """Stop a container
+
+    :param cont_name: Name of container
+    :param compute_name: Name of compute
+
+    :returns: Running if success else 0
+    """
     start_cmd = "docker-machine ssh " + compute_name + " docker pause " + cont_name
     cont_response = os.popen(start_cmd)
     time.sleep(4)
@@ -74,6 +110,13 @@ def stop_cont(cont_name, compute_name):
 
 
 def destroy_cont(cont_name, compute_name):
+    """Destroy a container
+
+    :param cont_name: Name of container
+    :param compute_name: Name of compute
+
+    :returns: Destroyed if success else 0
+    """
     stop_cmd = "docker-machine ssh " + compute_name + " docker container rm -f " + cont_name
     cont_response = os.popen(stop_cmd)
     time.sleep(4)

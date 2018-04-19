@@ -1,20 +1,51 @@
+"""
+This module is to manage virtual machines in Minisat
+"""
+
 import os
 import time
 import re
-from satellite.models import (
-    Product_model,
-    Activation_model,
-    View_model,
-    Create_host_model
-)
+try:
+    from satellite.models import (
+        Product_model,
+        Activation_model,
+        View_model,
+        Create_host_model
+    )
+except:
+    print("")
+
+
+def create_vm_temp_file(name, compute_ip):
+    if not os.path.exists("/tmp/Minisat/vm/"):
+        os.makedirs("/tmp/Minisat/vm/")
+    file_name = "/tmp/Minisat/vm/" + name + ".info"
+    with open(file_name, "w+") as file:
+        file.write("\n" +
+                   name + "\n" +
+                   "initializing\n" +
+                   compute_ip)
 
 
 def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_loc):
+    """Create virtual machine on remote system
+
+    :param compute_ip: Remote system IP address
+    :param name: Name of virtual machine
+    :param ram: RAM size for virtual machine
+    :param cpus: Number of virtual CPUS for virtual machine
+    :param disk_size: Disk size for virtual machine
+    :param location_url: URL location of OS
+    :param kickstart_loc: location of kickstart
+
+    :returns: Boolean, True if success or False
+    """
     kickstart_name = kickstart_loc.split('/')[-1]
     final_cmd = 'virt-install --connect qemu+ssh://root@' + compute_ip + '/system --name ' + name + ' --ram ' + str(
         ram) + ' --vcpus ' + str(cpus) + ' --disk path=/var/lib/libvirt/images/' + name + '.qcow2,bus=virtio,size=' \
         + str(disk_size) + ' --location ' + location_url + ' --initrd-inject=' + kickstart_loc + \
         ' --extra-args=\'ks=file:/' + kickstart_name + ' ksdevice=ens3\' --network bridge:virbr0 > /dev/null 2>&1 &'
+    create_vm_temp_file(name, compute_ip)
     response = os.system(final_cmd)
     if response == 0:
         return True
@@ -23,6 +54,12 @@ def vm_create(compute_ip, name, ram, cpus, disk_size, location_url, kickstart_lo
 
 
 def isOnline(host):
+    """Check whether host is online or offline
+
+    :param host: IP of remote system
+
+    :returns: True if online else False
+    """
     response = os.system("ping -c 1 " + host + ">/dev/null 2>&1")
     if response == 0:
         return True
@@ -31,6 +68,12 @@ def isOnline(host):
 
 
 def virsh_start_vm(vm_name, com_ip):
+    """Starts the virtual machine on remote system
+    :param vm_name: Name of virtual machine
+    :param com_ip: Compute IP on which virtual machine is running
+
+    :returns: start_vm_flag
+    """
     cmd = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system start " + str(vm_name)
     start_vm_flag = os.system(cmd)
     time.sleep(6)
@@ -38,6 +81,12 @@ def virsh_start_vm(vm_name, com_ip):
 
 
 def virsh_pause_vm(vm_name, com_ip):
+    """Shutdown the virtual machine on remote system
+    :param vm_name: Name of virtual machine
+    :param com_ip: Compute IP on which virtual machine is running
+
+    :returns: shut_vm_flag
+    """
     cmd = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system shutdown " + str(vm_name)
     shut_vm_flag = os.system(cmd)
     time.sleep(6)
@@ -45,6 +94,13 @@ def virsh_pause_vm(vm_name, com_ip):
 
 
 def virsh_delete_vm(vm_name, com_ip):
+    """Delete the virtual machine on remote system
+
+    :param vm_name: Name of virtual machine
+    :param com_ip: Compute IP on which virtual machine is running
+
+    :returns: delete_vm_flag
+    """
     cmd = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system shutdown " + str(vm_name)
     cmd2 = "virsh -c qemu+ssh://root@" + str(com_ip) + "/system undefine " + str(vm_name)
     os.system(cmd)
@@ -55,9 +111,16 @@ def virsh_delete_vm(vm_name, com_ip):
 
 
 def vm_ip(vm_name, compute_ip):
-    response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_name).readlines()
-    vm_mac = response[2].split(" ")[-1]
+    """Find the IP address of virtual machine
+
+    :param vm_name: Name of virtual machine
+    :param compute_ip: Compute IP on which virtual machine is running
+
+    :returns vm_ipaddress: contain IP address of virtual machine
+    """
     try:
+        response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domiflist " + vm_name).readlines()
+        vm_mac = response[2].split(" ")[-1]
         response = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system net-dhcp-leases default | grep " + vm_mac).readlines()
         if len(response) > 1:
             for each in range(len(response)):
@@ -72,6 +135,15 @@ def vm_ip(vm_name, compute_ip):
 
 
 def get_memory(compute_ip, vm_name, vm_ip):
+    """Find memory consumption of virtual machine
+
+    :param compute_ip: Compute IP on which virtual machine is running
+    :param vm_name: Name of virtual machine
+    :param vm_ip: IP address of virtual machine
+
+    :returns total_mem: Total memory of virtual machine
+    :returns free_mem: Free memory of virtual machine
+    """
     vm_ip = vm_ip.split("/")[0]
     root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
     cmd = "ssh root@" + str(compute_ip) + " 'sshpass -p " + str(root_passwd) + " ssh -o StrictHostKeyChecking=no root@" + str(vm_ip) + " free'"
@@ -85,6 +157,18 @@ def get_memory(compute_ip, vm_name, vm_ip):
 
 
 def vm_details(compute_name, compute_ip, vm_id):
+    """Find details of virtual machine
+
+    In this function virtual machine details like ID, name, state(Running or shut),
+    virtual CPUs, Total memory allocated, Free memory, virtual machine IP address, virtual machine MAC address,
+    Compute name (on which it is provisioned).
+
+    :param compute_name: Name of compute on which virtual machine is running
+    :param compute_ip: IP address of compute on which virtual machine is running
+    :param vm_id: UUID of virtual machine
+
+    :returns details: Dictionary of ID, name, state(Running or shut), virtual CPUS, Total memory allocated, Free memory, virtual machine IP address, virtual machine MAC address, Compute name
+    """
     details = {}
     details["Id"] = vm_id
     vm_name = os.popen("virsh -c qemu+ssh://root@" + compute_ip + "/system domname " + vm_id).readline()
@@ -109,6 +193,14 @@ def vm_details(compute_name, compute_ip, vm_id):
 
 
 def get_packages(compute_ip, vm_ip, root_passwd):
+    """Get packages installed in virtual machine
+
+    :param compute_ip: IP address of compute on which virtual machine  is running
+    :param vm_ip: IP address of virtual machine
+    :param root_passwd: Root password of virtual machine
+
+    :returns package_info: List of all packages in virtual machine
+    """
     vm_ip = vm_ip.split("/")[0]
     package_info = os.popen("ssh root@" + compute_ip + " 'sshpass -p " + root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " rpm -qa'").readlines()
     package_info = package_info[2:]
@@ -116,6 +208,12 @@ def get_packages(compute_ip, vm_ip, root_passwd):
 
 
 def get_repo(activation_name):
+    """Get repo list included in Activation name
+
+    :param activation_name: Name of activation
+
+    :returns repo: Dictionary of repo name and repo URL included in that activation
+    """
     repo = {}
     product = []
     view_list = list(Activation_model.objects.filter(activation_name=activation_name).values_list())
@@ -132,6 +230,14 @@ def get_repo(activation_name):
 
 
 def get_status(compute_name, compute_ip, vm_name):
+    """Get status of virtual machine
+
+    :param compute_name: Name of compute on which virtual machine is running
+    :param compute_ip: Compute IP on which virtual machine is running
+    :param vm_name: Name of virtual machine
+
+    :returns: Running or Initializing
+    """
     try:
         root_passwd = Create_host_model.objects.filter(select_compute=compute_name, vm_name=vm_name).values_list()[0][6]
     except IndexError:
@@ -141,13 +247,21 @@ def get_status(compute_name, compute_ip, vm_name):
     ping = "ssh root@" + compute_ip + " ping -c 2 " + vm_ipaddress
     ping_response = os.system(ping)
     response = os.system(cmd)
-    if response == 0 or ping_response == 0:
-        return "running"
-    elif response == 65280:
+    if response == 65280:
         return "initializing"
+    elif response == 0 and ping_response == 0:
+        return "running"
 
 
 def filter_repo(repo_info):
+    """Filter the repos
+
+    Remove all unnecessary data from repos
+
+    :param repo_info: Raw repo data
+
+    :returns repo_info: Cleaned repo data
+    """
     repo_info = [x for x in repo_info if not x.startswith('Last')]
     repo_info = [x for x in repo_info if not x.startswith('repo')]
     repo_info = [x.split(None, 1) for x in repo_info]
@@ -156,6 +270,16 @@ def filter_repo(repo_info):
 
 
 def get_vm_repo(compute_ip, vm_ip, vm_name):
+    """Get virtual machine repo
+
+    Find repo added in virtual machine and its status whether its enable or disable
+
+    :param compute_ip: IP address of compute on which virual machine is running
+    :param vm_ip: IP address of virtual machine
+    :param vm_name: Name of virtual machine
+
+    :returns repo_info: Contain of list of enabled and disabled repo
+    """
     vm_root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
     cmd = "ssh root@" + compute_ip + " 'sshpass -p " + vm_root_passwd + " ssh -o StrictHostKeyChecking=no root@" + vm_ip + " dnf repolist enabled -y'"
     repo_info = os.popen(cmd).readlines()
@@ -200,6 +324,14 @@ def get_vm_repo(compute_ip, vm_ip, vm_name):
 
 
 def vm_status(compute_ip, vm_name, vm_ip):
+    """Get status of virtual machine
+
+    :param compute_ip: Compute IP on which virtual machine is running
+    :param vm_name: Name of virtual machine
+    :param vm_ip: IP address of virtual machine
+
+    :returns: Running or Initializing or Shutdown
+    """
     status = {}
     compute_ip = compute_ip.replace('-', '.')
     vm_ip = vm_ip.replace('-', '.')
@@ -215,6 +347,16 @@ def vm_status(compute_ip, vm_name, vm_ip):
 
 
 def change_repo(compute_ip, vm_ip, repo_id, repo_flag, vm_name):
+    """Change the repo status
+
+    :param compute_ip: IP address of compute on which virtual machine is running
+    :param vm_ip: IP address of virtual machine
+    :param repo_id: repo ID
+    :param repo_flag: flag of repo (enable or disable)
+    :param vm_name: Name of virtual machine
+
+    :returns: success or failed
+    """
     compute_ip = compute_ip.replace('-', '.')
     vm_ip = vm_ip.replace('-', '.')
     vm_root_passwd = Create_host_model.objects.filter(vm_name=vm_name).values_list()[0][6]
