@@ -1,7 +1,7 @@
 Components
 ==========
 
-Everything which is required to provision a virtual machine or Docker container are wrapped under components.
+Everything which is required to provision a virtual machine and Docker container are wrapped under components.
 Read further for complete details.
 
 Infrastructure
@@ -16,14 +16,14 @@ Compute Resource is the very first step in provisioning virtual machines and run
 
 + Create New
 
-    Initially we need to add compute which includes following parameters
+    Initially, add compute resource which includes following parameters
 
     - Compute resource Name.
     - IP Address of remote machine.
     - The **root** password of the remote machine.
 
 
-    .. note::
+.. note::
 	
   	  All the above details are very much essential to set up a compute resource.
 
@@ -31,12 +31,12 @@ Compute Resource is the very first step in provisioning virtual machines and run
 
 + View Existing
 
-    If you have already set-up the compute resource earlier you can check it in "View Existing" section. It displays all the available compute resource list.
+    Once a compute resource is added, it is enlisted under **View Existing** section.
 
-Compute Resource has various validation such as
+Compute Resource has various validations such as
 
 	- A unique name should be given to each compute resource.
-	- IP should be valid, reachable and sshd service should be running.
+	- IP address should be valid, reachable and sshd service on compute resource should be running.
 	- Root password should be entered correctly.
 
 
@@ -48,7 +48,7 @@ Profile allows user to set various essential parameters to create a virtual mach
 
 + Create New
 
-    After creating compute resource one has to create profile which has fields as
+    The following parameters are asked to add a profile
 
     - Profile Name
     - RAM (in MB)
@@ -56,7 +56,7 @@ Profile allows user to set various essential parameters to create a virtual mach
     - Disk Space (in GB)
 + View Existing
 
-    Previously created profiles are visible under this section. You can use same profile multiple times.
+    Previously created profiles are visible under this section. Same profile can be used multiple times.
     
     .. note :: 
 	    
@@ -72,31 +72,31 @@ Minisat is host-based virtualization in which one can have access and control ov
 Operating System
 ++++++++++++++++
 
-Operating System is the most important program which runs on computer. You can use any linux based operating system for your virtual machine.
-For our simplicity we have set-up the server where we have rsync the mirros of Fedora 25, Fedora 26 and so on.
-You can use any mirror of linux based operating system.
+Operating System is the most important program which runs on computer. Any distribution of Linux can be used as guest operating system for the virtual machine.
+Operating system url from mirrors of `Fedora <https://admin.fedoraproject.org/mirrormanager/>`_, `CentOS <https://www.centos.org/download/mirrors/>`_ can be added. 
+Else, use a tool called rsync to fetch the operating system tree, host these files on a local HTTP server and provide the local url in location field. The latter method will be more reliable and quicker to provision virtual machines.
 
-* Add new
+* Create new
 
-    Here you have to fill up two fields
+    Fill the two fields
 
     * Operating System Name
 
-    The name can be anything you want to give but good practice is giving actual name of operating system which will give the exact idea of Virtual machine OS.
+    Name of the operating system which will give the exact idea of the guest operating system.
 
     * Location
 
-    Here you have to provide the location from where it will fetch the operating system.
+    Provide the location from where the server can fetch the operating system tree.
 
 * Already Existing
 
-    All the operating systems you have added while be visible in this section.
+    All existing operating systems are enlisted under this section.
 
 +++++++++++
 Create Host
 +++++++++++
 
-In this user have to fill various details such as
+To provision a virtual machine the following parameters need to filled, some are optional though
 
 * Name
 * Compute Resource
@@ -114,7 +114,7 @@ If you Have already created **Host Group** then you have to only enter
 * Host Group
 * Root Password
 
-All the remaining fields are filled automatically.
+All the remaining fields are filled according to the selected host group.
 
 
 Content
@@ -124,31 +124,77 @@ Content
 Product
 +++++++
 
-The user has to give a name to the package and URL from where that package is going to be fetched.
-It has two fields **Add New** and **View Existing**.
+While provisioning a virtual machine, packages can be added to a virtual machine. A single repository is identified under the term **Product**.
+
+* Create New
+
+    Consists of two fields
+
+    * Product Name
+        * The repository will be recognized with the product name instead of the repository URL.
+        * Mapping a repository URL to a name, makes identifying a repository URL with the help of product name easy.
+    * Product URL
+        * The location from where the repository for a package can be added.
+    
+    .. note ::
+        A single product name will hold only one URL of a repository not more than that.
+    
+* View Existing
+
+    All existing products are enlisted here along with their repository URL.
 
 ++++
 View
 ++++
 
-View is a layer of abstraction where we can encapsulate two or more products into a single view.
-Products added by user will be visible here and user has to give name to the view and select the product of it's choice from the list.
+A single view consists of multiple products along with their corresponding repository URLs. 
+
+* Create New
+
+    Consists of 
+
+        * View Name 
+            * Multiple products will be recognized with a single name, **View Name**.
+            * If a view is selected, all the underlying products consisted in that view are added. 
+
+        * Select Products
+            * To create a view, one or more products can be selected.
+            * The view will now consist of the selected products.
+
+* View Existing
+
+    All existing view are enlisted here along with the  included products and their corresponding repository URLs.
 
 ++++++++++++++
 Activation Key
 ++++++++++++++
 
-Activation key is a top layer abstraction. Two or more views are encapsualted under single **Activation Key**.
-This is important as it is required at the stage of creating host.
+A single activation key consists of multiple views, and each of these views will consist of multiple products.
+**Activation Key**, **View**, **Product** exhibit a hierarchy, **Product** being at the top, followed by **View**, and **Activation Key** being at the bottom.
+The hierarchical structure allows the server to inherit views from activation key and products from view.
 
-.. note ::
+Create New
 
-	All the above three have **validation**. No name should be repeated.
+* Consists of
+
+    * Activation Name
+        * Multiple views are bundled inside a single activation key along with the products that they consist of.
+        * If an activation key is selected, all the underlying views along with products consisted in that view are added.
+
+    * Select View
+        * To create an activation key, one or more views can be selected.
+        * The key will now consist of the selected views.
+
+* View Existing
+
+    All existing activation keys are enlisted here along with the multiple views and products that they consist of.
 
 Containers
 ----------
 
-Containers are a solution to the problem of how to get software to run reliably when moved from one computing environment to another.
+**Containerization** is a solution to reliable sofware delivery. They offer better consistency between testing environments and production environment.
+Deployment of application with containers is perfect for `microservices <http://microservices.io/>`_ approach. 
+
 
 For now, Minisat can run Docker containers only. Support for other
 kind of containers like `LXC <https://linuxcontainers.org/>`_ , `CoreOS's rkt <https://coreos.com/rkt/>`_  will soon be added.
@@ -158,15 +204,15 @@ New Container
 +++++++++++++
 
 - Docker image name and tag name is to be known before running it on any compute resource.
-- Container is assigned a name so as to identify on the dashboard.
+- Container is assigned a name so as to identify it on the dashboard.
 - Host port and container port are mapped to each other which makes services running inside container accessible from outside.
-- If image is not available locally, then they are pulled from Docker registry and then run accordingly.
+- If image is not available  on the selected compute resource, then it is pulled from Docker registry and then run accordingly.
 
 ++++++++++++
 Local Images
 ++++++++++++
 
-- Docker images available on remote compute resources are displayed with details that are required often.
+- Docker images available on remote compute resources are displayed with details such as **Image Name & Tag**, **Image ID**, **Created**, **Size**.
 - Any new image found on any compute resource will be enlisted here.
 
 
