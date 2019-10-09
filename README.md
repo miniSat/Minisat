@@ -4,7 +4,7 @@
 ![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)
 ![travis-ci](https://travis-ci.org/miniSat/Minisat.svg?branch=master)
 
-Minisat is a centralizes web interface, built on [Django framework](https://www.djangoproject.com/start/overview/), to provision virtual machines and run Docker containers on remote hosts.
+Minisat is a infrastructure management tool, built on [Django framework](https://www.djangoproject.com/start/overview/), to provision virtual machines and run Docker containers on remote hosts.
 
 ### Dependencies
 - Install QEMU and libvirt packages
