@@ -1,4 +1,4 @@
-Django==2.0
+Django==2.2.24
 flake8
 pytest
 selenium
